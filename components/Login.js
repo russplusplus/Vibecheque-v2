@@ -30,12 +30,15 @@ const Login = props => {
         }
         setIsLoginLoading(true)
         // Firebase login
-        auth()
-            .signInWithEmailAndPassword(emailInput, passwordInput)
-            .then(() => {
-                console.log('User signed in!');
-                props.history.push('/cameraPage');
-            })
+        props.dispatch({
+            type: 'LOGIN',
+            history: props.history,
+            payload: {
+                email: emailInput,
+                password: passwordInput
+            }
+        })
+        
         setIsLoginLoading(false)
     }
 
@@ -55,21 +58,14 @@ const Login = props => {
         }
         setIsRegisterLoading(true);
         // Firebase register
-        auth()
-            .createUserWithEmailAndPassword(emailInput, passwordInput)
-            .then(() => {
-                props.history.push('/cameraPage')
-                console.log('User account created & signed in!')
-            })
-            .catch(error => {
-                if (error.code === 'auth/email-already-in-use') {
-                    console.log('That email address is already in use!');
-                }
-              
-                if (error.code === 'auth/invalid-email') {
-                    console.log('That email address is invalid!');
-                }
-            })
+        props.dispatch({
+            type: 'SIGN_UP',
+            history: props.history,
+            payload: {
+                email: emailInput,
+                password: passwordInput
+            }
+        })
         setIsRegisterLoading(false);
     }
 
