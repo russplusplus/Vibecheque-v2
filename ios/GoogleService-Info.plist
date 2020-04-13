@@ -34,5 +34,7 @@
 	<string>1:973891374140:ios:ecc29b28fce27d3550c739</string>
 	<key>DATABASE_URL</key>
 	<string>https://vibecheque-543ff.firebaseio.com</string>
+	<key>NSCameraUsageDescription</key>
+	<string>Your message to user when the camera is accessed for the first time</string>
 </dict>
 </plist>

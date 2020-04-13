@@ -8,7 +8,7 @@ function* signUp(action) {
         let user = yield auth().createUserWithEmailAndPassword(action.payload.email, action.payload.password)
         console.log('user:', user)
         yield AsyncStorage.setItem("user", JSON.stringify(user))
-        action.history.push('/cameraPage');
+        action.history.push('/camera');
         console.log('User signed up and in!');
     } 
     catch (err) {
