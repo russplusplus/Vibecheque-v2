@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, TextInput, ActivityIndicator, Button, AsyncStorage, ImageBackground, TouchableOpacity } from 'react-native';
 import { connect } from 'react-redux';
+import auth from '@react-native-firebase/auth';
 
 const Login = props => {
 
@@ -29,44 +30,13 @@ const Login = props => {
         }
         setIsLoginLoading(true)
         // Firebase login
-        props.dispatch({
-            type: 'LOGIN',
-            history: props.history,
-            payload: {
-                email: emailInput,
-                password: passwordInput
-            }})
-        console.log('after dispatch')
+        auth()
+            .signInWithEmailAndPassword(emailInput, passwordInput)
+            .then(() => {
+                console.log('User signed in!');
+                props.history.push('/cameraPage');
+            })
         setIsLoginLoading(false)
-        
-        // Old login
-        // fetch('https://murmuring-lake-71708.herokuapp.com/login', {
-        //     method: 'POST',
-        //     headers: {
-        //         Accept: 'application/json',
-        //         'Content-Type': 'application/json',
-        //     },
-        //     body: JSON.stringify({
-        //         "username": emailInput,
-        //         "password": passwordInput
-        //     })
-        // })
-        //     .then((response) => {
-        //         return response.json()
-        //     })
-        //     .then((myJson) => {
-        //         if (myJson.errorMessage) {
-        //             console.log('error:', myJson.errorMessage)
-        //             setMessage(myJson.errorMessage)
-        //         } else {
-        //             console.log('token:', myJson)
-        //             deviceStorage("access_token", myJson.access_token)
-        //             props.history.push('/camera');
-        //         }
-                
-        //     }).catch((error) => {
-        //         console.log('in catch, error:', error)
-        //     });
     }
 
     register = async () => {
@@ -85,32 +55,22 @@ const Login = props => {
         }
         setIsRegisterLoading(true);
         // Firebase register
-        props.dispatch({
-            type: 'SIGN_UP',
-            history: props.history,
-            payload: {
-                email: emailInput,
-                password: passwordInput
-        }})
-
-        // Old register
-        // fetch('https://murmuring-lake-71708.herokuapp.com/register', {
-        //     method: 'POST',
-        //     headers: {
-        //         Accept: 'application/json',
-        //         'Content-Type': 'application/json',
-        //     },
-        //     body: JSON.stringify({
-        //         "username": usernameInput,
-        //         "password": passwordInput
-        //     })
-        // })
-        // .then((response) => {
-        //     return response.json()
-        // })
-        // .then((myJson) => {
-        //     setMessage(myJson.registerMessage)
-        // })
+        auth()
+            .createUserWithEmailAndPassword(emailInput, passwordInput)
+            .then(() => {
+                props.history.push('/cameraPage')
+                console.log('User account created & signed in!')
+            })
+            .catch(error => {
+                if (error.code === 'auth/email-already-in-use') {
+                    console.log('That email address is already in use!');
+                }
+              
+                if (error.code === 'auth/invalid-email') {
+                    console.log('That email address is invalid!');
+                }
+            })
+        setIsRegisterLoading(false);
     }
 
     return (

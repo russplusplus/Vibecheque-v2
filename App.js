@@ -6,8 +6,9 @@
  * @flow strict-local
  */
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { NativeRouter, Route, Switch } from "react-router-native";
+import auth from '@react-native-firebase/auth';
 
 import {
   SafeAreaView,
@@ -37,11 +38,25 @@ const store = createStore(rootReducer, applyMiddleware(sagaMiddleware));
 sagaMiddleware.run(rootSaga);
 
 export default function App() {
+  const [initializing, setInitializing] = useState(true);
+
+
+  // handle user state changes
+  function onAuthStateChanged(user) {
+    console.log(user);
+    if (initializing) setInitializing(false);
+  }
+
+  useEffect(() => {
+    const subscriber = auth().onAuthStateChanged(onAuthStateChanged);
+    return subscriber; // this line supposedly unsubscribes on unmount 
+  }, []);
+  
+
   return (
     <>
       <Provider store={store}>
         <NativeRouter>
-
           <Switch>
             <Route exact path="/" component={Login} />
             <Route exact path="/camera" component={CameraPage} />

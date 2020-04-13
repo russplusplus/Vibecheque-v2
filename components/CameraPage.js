@@ -1,9 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, TextInput, StyleSheet, Button, AsyncStorage, Platform, TouchableOpacity, ImageBackground } from 'react-native';
 
-
-import Logout from './Logout';
-
 import { connect } from 'react-redux';
 
 const CameraPage = props => {
