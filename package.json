@@ -1,5 +1,5 @@
 {
-  "name": "Vibecheque",
+  "name": "vibecheque",
   "version": "0.0.1",
   "private": true,
   "scripts": {
@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "@react-native-firebase/app": "^6.4.0",
+    "@react-native-firebase/auth": "^6.4.0",
     "react": "16.11.0",
     "react-native": "0.62.2",
     "react-redux": "^7.2.0",
@@ -30,5 +31,17 @@
   },
   "jest": {
     "preset": "react-native"
-  }
+  },
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/russplusplus/Vibecheque-v2.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/russplusplus/Vibecheque-v2/issues"
+  },
+  "homepage": "https://github.com/russplusplus/Vibecheque-v2#readme",
+  "description": ""
 }
