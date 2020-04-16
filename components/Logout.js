@@ -26,7 +26,7 @@ class Logout extends React.Component {
                             </Text>
                         </TouchableOpacity>
                         <TouchableOpacity 
-                            onPress={() => this.props.closeLogoutModal()} 
+                            onPress={() => this.props.setIsLogoutMode()} 
                             style={{ 
                                 width: '75%', 
                                 borderWidth: 2,
