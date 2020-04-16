@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, TextInput, ActivityIndicator, Button, AsyncStorage, ImageBackground, TouchableOpacity } from 'react-native';
+import { View, Text, TextInput, ActivityIndicator, Button, ImageBackground, TouchableOpacity } from 'react-native';
 import { connect } from 'react-redux';
 import auth from '@react-native-firebase/auth';
+import AsyncStorage from '@react-native-community/async-storage';
 
 const Login = props => {
 
@@ -68,6 +69,22 @@ const Login = props => {
         })
         setIsRegisterLoading(false);
     }
+
+    checkIfLoggedIn = async () => {
+        try {
+            const user = await AsyncStorage.getItem("user")
+            console.log('user:', user)
+            if (user) {
+                props.history.push('/camera')
+            }
+        } catch (error) {
+            console.log('error retrieving user info')
+        }
+    }
+
+    useEffect(() =>  {
+        checkIfLoggedIn()
+    }, [])
 
     return (
         <>

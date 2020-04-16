@@ -3,8 +3,13 @@ import { View, Text, TextInput, StyleSheet, Button, AsyncStorage, Platform, Touc
 
 import { connect } from 'react-redux';
 import { RNCamera } from 'react-native-camera';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
+
+FontAwesome.loadFont()
 
 class CameraPage extends React.Component {
+
+    
 
     takePicture = async () => {
         if (this.camera) {
@@ -12,7 +17,8 @@ class CameraPage extends React.Component {
           const data = await this.camera.takePictureAsync(options);
           console.log(data.uri);
         }
-    };
+    }
+
     render() {
 
         return (
@@ -31,13 +37,23 @@ class CameraPage extends React.Component {
                             buttonPositive: 'Ok',
                             buttonNegative: 'Cancel',
                         }}
+                        androidRecordAudioPermissionOptions={{
+                            title: 'Permission to use audio recording',
+                            message: 'We need your permission to use your audio',
+                            buttonPositive: 'Ok',
+                            buttonNegative: 'Cancel',
+                        }}
                         captureAudio={false}
-                    />
-                    <View style={{ flex: 0, flexDirection: 'row', justifyContent: 'center' }}>
-                        <TouchableOpacity onPress={this.takePicture.bind(this)} style={styles.capture}>
-                            <Text style={{ fontSize: 14 }}> SNAP </Text>
-                        </TouchableOpacity>
-                    </View>
+                    >
+                        <View style={{ flex: 0, flexDirection: 'row', justifyContent: 'center' }}>
+                            <TouchableOpacity onPress={this.takePicture.bind(this)}>
+                                <FontAwesome
+                                    name='circle-thin'
+                                    style={{ color: 'white', fontSize: 67}}
+                                />
+                            </TouchableOpacity>
+                        </View>
+                    </RNCamera>
                 </View>
             </>
         )
@@ -55,16 +71,7 @@ const styles = StyleSheet.create({
       flex: 1,
       justifyContent: 'flex-end',
       alignItems: 'center',
-    },
-    capture: {
-      flex: 0,
-      backgroundColor: '#fff',
-      borderRadius: 5,
-      padding: 15,
-      paddingHorizontal: 20,
-      alignSelf: 'center',
-      margin: 20,
-    },
+    }
 });
 
 const mapReduxStateToProps = reduxState => ({
