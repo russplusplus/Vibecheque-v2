@@ -23,7 +23,7 @@ class CameraPage extends React.Component {
     logout = () => {
         this.props.dispatch({
             type: 'LOGOUT',
-            history: props.history
+            history: this.props.history
         })
     }
 
