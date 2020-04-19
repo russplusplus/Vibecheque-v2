@@ -8,6 +8,8 @@ import { RNCamera } from 'react-native-camera';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
+import storage from '@react-native-firebase/storage';
+
 import Logout from './Logout';
 
 
@@ -17,7 +19,8 @@ Ionicons.loadFont()
 class CameraPage extends React.Component {
 
     state = {
-        isLogoutMode: false
+        isLogoutMode: false,
+        cameraType: RNCamera.Constants.Type.back
     }
 
     logout = () => {
@@ -25,6 +28,14 @@ class CameraPage extends React.Component {
             type: 'LOGOUT',
             history: this.props.history
         })
+    }
+
+    reverseCamera = () => {
+        this.setState({
+            // these might just be 1 or 0, look into that with a real device
+            cameraType: this.state.cameraType === RNCamera.Constants.Type.back ? RNCamera.Constants.Type.front : RNCamera.Constants.Type.back
+        })
+        console.log(this.state.cameraType)
     }
 
     setIsLogoutMode = () => {
@@ -35,9 +46,14 @@ class CameraPage extends React.Component {
 
     takePicture = async () => {
         if (this.camera) {
-          const options = { quality: 0.5, base64: true };
-          const data = await this.camera.takePictureAsync(options);
-          console.log(data.uri);
+            const options = { quality: 0.5, base64: true };
+            const data = await this.camera.takePictureAsync(options);
+            console.log(data.uri);
+            var d = new Date();
+            var filename = d.getTime();
+            console.log('filename:', filename)
+            const ref = storage().ref('images/' + String(filename));
+            await ref.putFile(data.uri);
         }
     }
 
@@ -51,7 +67,7 @@ class CameraPage extends React.Component {
                             this.camera = ref;
                         }}
                         style={styles.preview}
-                        type={RNCamera.Constants.Type.back}
+                        type={this.state.cameraType}
                         flashMode={RNCamera.Constants.FlashMode.off}
                         androidCameraPermissionOptions={{
                             title: 'Permission to use camera',
@@ -105,7 +121,6 @@ class CameraPage extends React.Component {
             </>
         )
     }
-
 }
 
 const styles = StyleSheet.create({
@@ -123,6 +138,7 @@ const styles = StyleSheet.create({
         flexDirection: 'column', 
         justifyContent: 'space-between',
         margin: '3%',
+        marginTop: Platform.OS === 'ios' ? '8%' : '3%'
     },
     topIcons: {
         flexDirection: 'row',
