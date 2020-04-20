@@ -11,7 +11,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import storage from '@react-native-firebase/storage';
 
 import Logout from './Logout';
-
+import ReviewImage from './ReviewImage';
 
 FontAwesome.loadFont()
 Ionicons.loadFont()
@@ -20,7 +20,9 @@ class CameraPage extends React.Component {
 
     state = {
         isLogoutMode: false,
-        cameraType: RNCamera.Constants.Type.back
+        isReviewMode: false,
+        cameraType: RNCamera.Constants.Type.back,
+        capturedImageUri: ''
     }
 
     logout = () => {
@@ -38,9 +40,16 @@ class CameraPage extends React.Component {
         console.log(this.state.cameraType)
     }
 
-    setIsLogoutMode = () => {
+    toggleLogoutMode = () => {
+        console.log('in toggleLogoutMode')
         this.setState({
             isLogoutMode: (this.state.isLogoutMode ? false : true)
+        })
+    }
+
+    toggleReviewMode = () => {
+        this.setState({
+            isReviewMode: (this.state.isReviewMode ? false : true)
         })
     }
 
@@ -48,20 +57,30 @@ class CameraPage extends React.Component {
         if (this.camera) {
             const options = { quality: 0.5, base64: true };
             const data = await this.camera.takePictureAsync(options);
-            console.log(data.uri);
-            var d = new Date();
-            var filename = d.getTime();
-            console.log('filename:', filename)
-            const ref = storage().ref('images/' + String(filename));
-            await ref.putFile(data.uri);
+            console.log('uri:', data.uri);
+            this.setState({
+                capturedImageUri: data.uri
+            })
+            console.log('after setState')
+            this.toggleReviewMode()
         }
+    }
+
+    sendImage = async () => {
+        var d = new Date();
+        var filename = d.getTime();
+        console.log('filename:', filename)
+        const ref = storage().ref('images/' + String(filename));
+        await ref.putFile(this.state.capturedImageUri);
+        this.toggleReviewMode()
     }
 
     render() {
         return (
             <>
                 <View style={styles.container}>
-                    <Logout visible={this.state.isLogoutMode} logout={this.logout} setIsLogoutMode={this.setIsLogoutMode}/>
+                    <Logout visible={this.state.isLogoutMode} logout={this.logout} toggleLogoutMode={this.toggleLogoutMode}/>
+                    <ReviewImage visible={this.state.isReviewMode} sendImage={this.sendImage} toggleReviewMode={this.toggleReviewMode} capturedImageUri={this.state.capturedImageUri}/>
                     <RNCamera
                         ref={ref => {
                             this.camera = ref;
@@ -85,7 +104,7 @@ class CameraPage extends React.Component {
                     >
                         <View style={styles.iconContainer}>
                             <View style={styles.topIcons}>
-                                <TouchableOpacity onPress={this.setIsLogoutMode}>
+                                <TouchableOpacity onPress={this.toggleLogoutMode}>
                                     <Ionicons
                                         name='md-return-left'
                                         style={styles.logoutIcon}

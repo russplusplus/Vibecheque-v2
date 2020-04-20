@@ -12,7 +12,32 @@ function* signUp(action) {
         console.log('User signed up and in!');
     } 
     catch (err) {
-        console.log(err)
+        switch (err.code) {
+            case 'auth/invalid-email':
+                yield put({
+                    type: 'SET_LOGIN_MESSAGE',
+                    payload: 'Please enter a valid email address.'
+                })
+                break;
+            case 'auth/user-not-found':
+                yield put({
+                    type: 'SET_LOGIN_MESSAGE',
+                    payload: 'User not found.'
+                })
+                break;
+            case 'auth/wrong-password':
+                yield put({
+                    type: 'SET_LOGIN_MESSAGE',
+                    payload: 'Incorrect password.'
+                })
+                break;
+            case 'auth/email-already-in-use':
+                yield put({
+                    type: 'SET_LOGIN_MESSAGE',
+                    payload: 'Email address already in use.'
+                })
+                break;
+        }
     }
     
 }

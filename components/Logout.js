@@ -17,7 +17,7 @@ class Logout extends React.Component {
                         </Text>
                     </TouchableOpacity>
                     <TouchableOpacity 
-                        onPress={() => this.props.setIsLogoutMode()} 
+                        onPress={() => this.props.toggleLogoutMode()} 
                         style={styles.cancelButton}>
                         <Text
                             style={styles.cancelButtonText}>
