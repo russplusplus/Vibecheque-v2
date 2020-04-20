@@ -1,11 +1,10 @@
 import { put, select, takeEvery } from 'redux-saga/effects';
-import { AsyncStorage } from 'react-native';
+import AsyncStorage from '@react-native-community/async-storage';
 
 function* logout(action) {
     try {
-        yield AsyncStorage.removeItem("token");
-        yield AsyncStorage.removeItem("userId");
-        console.log('Successfully deleted token and userId')
+        yield AsyncStorage.removeItem("user");
+        console.log('Successfully deleted user object')
     } catch (error) {
         console.log('AsyncStorage remove error:', error.message);
     }

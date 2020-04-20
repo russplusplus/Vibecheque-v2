@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, TextInput, ActivityIndicator, Button, AsyncStorage, ImageBackground, TouchableOpacity } from 'react-native';
+import { View, Text, TextInput, ActivityIndicator, Button, ImageBackground, TouchableOpacity, Image, StyleSheet } from 'react-native';
 import { connect } from 'react-redux';
 import auth from '@react-native-firebase/auth';
+import AsyncStorage from '@react-native-community/async-storage';
+import { Dimensions } from 'react-native';
 
 const Login = props => {
 
@@ -69,25 +71,41 @@ const Login = props => {
         setIsRegisterLoading(false);
     }
 
+    checkIfLoggedIn = async () => {
+        try {
+            const user = await AsyncStorage.getItem("user")
+            console.log('user:', user)
+            if (user) {
+                props.history.push('/camera')
+            }
+        } catch (error) {
+            console.log('error retrieving user info')
+        }
+    }
+
+    useEffect(() =>  {
+        checkIfLoggedIn()
+    }, [])
+
     return (
         <>
-            <ImageBackground
-                        style={{ flex: 1, justifyContent: 'flex-end', alignItems: 'center' }}
-                        source={require('../assets/Vibecheque_6.png')}>
+            <View
+                style={{ flex: 1,  alignItems: 'center', backgroundColor: '#FFFAAC' }}
+                >
                 <Text 
-                    style={{ color: '#CC375E', fontSize: 24, marginHorizontal: '15%', marginBottom: '35%', textAlign: 'center'}}>
+                    style={styles.message}>
                     {props.reduxState.loginMessage}
                 </Text>
-                
+                <Image source={require('../assets/Vibecheque_logo.png')} style={styles.logo}/>
                 <TextInput
-                    style={{ marginBottom: 2, fontSize: 24, borderWidth: 2, borderColor: 'black', backgroundColor: 'white', padding: 4, width: '50%'}}
+                    style={styles.emailInput}
                     onChangeText={(text) => setEmailInput(text)}
                     placeholder='email'
                     keyboardType='email-address'
                     autoCapitalize='none'    
                 />
                 <TextInput
-                    style={{ marginBottom: '2%', fontSize: 24, borderWidth: 2, borderColor: 'black', backgroundColor: 'white', padding: 4, width: '50%'}}
+                    style={styles.passwordInput}
                     onChangeText={(text) => setPasswordInput(text)}
                     placeholder="password"
                     secureTextEntry={true}
@@ -96,14 +114,7 @@ const Login = props => {
                 <ActivityIndicator/> :
                 <TouchableOpacity
                     onPress={login}
-                    style={{ 
-                        width: '30%', 
-                        borderWidth: 2,
-                        borderColor: 'black',
-                        borderRadius: 10,
-                        backgroundColor: 'transparent',
-                        alignItems: 'center',
-                        marginBottom: 6}}>
+                    style={styles.loginButton}>
                     <Text
                         style={{
                             fontSize: 26}}>
@@ -115,14 +126,7 @@ const Login = props => {
                 <ActivityIndicator/> :
                 <TouchableOpacity
                     onPress={register}
-                    style={{ 
-                        marginBottom: '52%',
-                        width: '30%', 
-                        borderWidth: 2,
-                        borderColor: 'black',
-                        borderRadius: 10,
-                        backgroundColor: 'transparent',
-                        alignItems: 'center'}}>
+                    style={styles.registerButton}>
                     <Text
                         style={{
                             fontSize: 26}}>
@@ -130,7 +134,7 @@ const Login = props => {
                     </Text>
                 </TouchableOpacity>
                 }
-            </ImageBackground>
+            </View>
         </>
     )
 }
@@ -138,5 +142,58 @@ const Login = props => {
 const mapReduxStateToProps = reduxState => ({
     reduxState
 });
+
+const styles = StyleSheet.create({
+    message: { 
+        color: '#CC375E', 
+        fontSize: 24, 
+        marginHorizontal: '15%', 
+        marginTop: '40%', 
+        textAlign: 'center',
+        height: '10%'
+    },
+    logo: {
+        resizeMode: 'contain', 
+        width: '100%', 
+        height: '17%',
+        marginTop: '5%'
+    },
+    emailInput: { 
+        marginBottom: 2, 
+        fontSize: 24, 
+        borderWidth: 2, 
+        borderColor: 'black', 
+        backgroundColor: 'white', 
+        padding: 4, 
+        width: '50%'
+    },
+    passwordInput: { 
+        marginBottom: '2%', 
+        fontSize: 24, 
+        borderWidth: 2, 
+        borderColor: 'black', 
+        backgroundColor: 'white', 
+        padding: 4, 
+        width: '50%'
+    },
+    loginButton: {
+        width: '30%', 
+        borderWidth: 2,
+        borderColor: 'black',
+        borderRadius: 10,
+        backgroundColor: 'transparent',
+        alignItems: 'center',
+        marginBottom: 6
+    },
+    registerButton: {
+        marginBottom: '52%',
+        width: '30%', 
+        borderWidth: 2,
+        borderColor: 'black',
+        borderRadius: 10,
+        backgroundColor: 'transparent',
+        alignItems: 'center'
+    }
+})
 
 export default connect(mapReduxStateToProps)(Login);
