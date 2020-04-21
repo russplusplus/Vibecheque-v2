@@ -10,6 +10,10 @@ function* signUp(action) {
         yield AsyncStorage.setItem("user", JSON.stringify(user))
         action.history.push('/camera');
         console.log('User signed up and in!');
+        yield put({
+            type: 'SET_LOGIN_MESSAGE',
+            payload: ''
+        })
     } 
     catch (err) {
         switch (err.code) {

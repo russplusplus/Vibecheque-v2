@@ -39,7 +39,7 @@ const styles = StyleSheet.create({
         marginTop: Platform.OS === 'ios' ? '45%' : '25%', 
         marginBottom: Platform.OS === 'ios' ? '45%' : '25%', 
         backgroundColor: '#FFFAAC', 
-        borderWidth: 3, 
+        borderWidth: 2, 
         borderColor: 'black', 
         borderRadius: 10
     },
@@ -50,7 +50,7 @@ const styles = StyleSheet.create({
     },
     yesButton: {
         width: '75%', 
-        borderWidth: 3,
+        borderWidth: 2,
         borderColor: 'black',
         borderRadius: 10,
         backgroundColor: '#9EE7FF',
@@ -63,7 +63,7 @@ const styles = StyleSheet.create({
     },
     cancelButton: { 
         width: '75%', 
-        borderWidth: 3,
+        borderWidth: 2,
         borderColor: 'black',
         borderRadius: 10,
         backgroundColor: '#CC375E',

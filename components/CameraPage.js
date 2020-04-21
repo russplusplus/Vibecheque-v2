@@ -172,7 +172,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         borderColor: 'black',
-        borderWidth: 3,
+        borderWidth: 2,
         backgroundColor: '#FFFAAC',
         width: '14%',
         aspectRatio: 1,
@@ -182,7 +182,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         borderColor: 'black',
-        borderWidth: 3,
+        borderWidth: 2,
         backgroundColor: '#9EE7FF',
         width: '14%',
         aspectRatio: 1,
@@ -198,7 +198,7 @@ const styles = StyleSheet.create({
     },
     inboxText: {
         color: 'black',
-        fontSize: 44
+        fontSize: 40
     },
     captureIcon: {
         color: 'white', 
