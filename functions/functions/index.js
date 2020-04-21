@@ -21,12 +21,3 @@ exports.addUser = functions.auth.user().onCreate(user => {
       email: user.email,
     });
 });
-// exports.addUser = functions.https.onCall((data, context) => {
-//   console.log('in addUser function');
-//   usersRef.push({
-//     [data.uid]: {
-//       isBanned: 0,
-//       favoriteImage: '',
-//     },
-//   });
-// });
