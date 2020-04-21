@@ -12,6 +12,10 @@ function* login(action) {
         yield AsyncStorage.setItem("user", JSON.stringify(user))
         action.history.push('/camera');
         console.log('User signed in!');
+        yield put({
+            type: 'SET_LOGIN_MESSAGE',
+            payload: ''
+        })
     } 
     catch (err) {
         console.log('error code:', err.code, typeof(err.code))

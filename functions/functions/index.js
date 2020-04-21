@@ -13,11 +13,13 @@ exports.helloWorld = functions.https.onCall((data, context) => {
 });
 
 exports.addUser = functions.auth.user().onCreate(user => {
-  admin.database().ref('users').push({
-    [user.uid]: {
-      isBanned: 0
-    }
-  })
+  admin
+    .database()
+    .ref(`users/${user.uid}`)
+    .set({
+      isBanned: 0,
+      email: user.email,
+    });
 });
 // exports.addUser = functions.https.onCall((data, context) => {
 //   console.log('in addUser function');
