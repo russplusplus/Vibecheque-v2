@@ -16,4 +16,30 @@ exports.addUser = functions.auth.user().onCreate(user => {
     });
 });
 
-
+exports.addImage = functions.storage.object('/images').onFinalize(async (object) => {
+  console.log(object)
+  let filename = object.name.substring(7)
+  admin  
+    .database()
+    .ref('users')
+    .once('value')
+    .then(snapshot => {
+      console.log('snapshot:', snapshot.val())
+      let uidArr = []
+      for (uid in snapshot.val()) {
+        uidArr.push(uid)
+      }
+      console.log('uidArr:', uidArr)
+      let recipientUid = uidArr[Math.floor(Math.random() * uidArr.length)]
+      console.log('recipientUid:', recipientUid)
+      admin
+      .database()
+      .ref(`images/${filename}`)
+      .set({
+        from: 'fromUser',
+        to: recipientUid,
+        isResponse: false
+      })
+    })
+  
+});
