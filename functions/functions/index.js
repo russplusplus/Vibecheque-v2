@@ -2,10 +2,6 @@ const functions = require('firebase-functions');
 const admin = require('firebase-admin');
 admin.initializeApp();
 
-exports.helloWorld = functions.https.onCall((data, context) => {
-  return 'Hello from Firebase!';
-});
-
 exports.addUser = functions.auth.user().onCreate(user => {
   admin
     .database()
@@ -17,7 +13,9 @@ exports.addUser = functions.auth.user().onCreate(user => {
 });
 
 exports.addImage = functions.storage.object('/images').onFinalize(async (object) => {
-  console.log(object)
+  console.log('storage object:', object)
+  console.log('object.metadata.fromUid:', object.metadata.fromUid)
+  let senderUid = object.metadata.fromUid
   let filename = object.name.substring(7)
   admin  
     .database()
@@ -30,13 +28,20 @@ exports.addImage = functions.storage.object('/images').onFinalize(async (object)
         uidArr.push(uid)
       }
       console.log('uidArr:', uidArr)
-      let recipientUid = uidArr[Math.floor(Math.random() * uidArr.length)]
+
+      // randomly select recipient
+      let recipientUid
+      let i = 0
+      do {
+        recipientUid = uidArr[Math.floor(Math.random() * uidArr.length)]
+        i++
+      } while (recipientUid === senderUid && i < 100)
       console.log('recipientUid:', recipientUid)
       admin
       .database()
       .ref(`images/${filename}`)
       .set({
-        from: 'fromUser',
+        from: senderUid,
         to: recipientUid,
         isResponse: false
       })
