@@ -130,7 +130,8 @@ android {
 
     defaultConfig {
         applicationId "com.vibecheque"
-        minSdkVersion rootProject.ext.minSdkVersion
+        minSdkVersion 21
+        //minSdkVersion rootProject.ext.minSdkVersion  //this was the default, but produced a dex error. Multidex is enabled by default for minSdkVersion 21 and up
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
         versionName "1.0"
@@ -224,3 +225,4 @@ task copyDownloadableDepsToLibs(type: Copy) {
 }
 
 apply from: file("../../node_modules/@react-native-community/cli-platform-android/native_modules.gradle"); applyNativeModulesAppBuildGradle(project)
+apply plugin: 'com.google.gms.google-services'
