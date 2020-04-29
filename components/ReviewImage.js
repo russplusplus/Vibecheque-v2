@@ -53,18 +53,19 @@ const styles = StyleSheet.create({
         alignItems: 'flex-end',
     },
     cancel: {
-        justifyContent: 'center',
+        flexDirection: 'column',
+        justifyContent: 'flex-end',
         alignItems: 'center',
         borderColor: 'black',
         borderWidth: 2,
-        backgroundColor: '#FFFAAC',
+        backgroundColor: '#CC375E',
         width: '14%',
         aspectRatio: 1,
         borderRadius: 10
     },
     sendImage: {
         flexDirection: 'column',
-        justifyContent: 'center',
+        justifyContent: 'flex-end',
         alignItems: 'center',
         alignSelf: 'flex-end',
         borderColor: 'black',
@@ -76,13 +77,10 @@ const styles = StyleSheet.create({
     },
     cancelIcon: {
         color: 'black',
-        fontSize: 44,
-        
-        // borderWidth: 2,
-        // borderColor: 'black'
+        fontSize: 44
     },
     sendImageIcon: {
-        color: 'white',
+        color: 'black',
         fontSize: 44
     }
 })
