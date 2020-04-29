@@ -1,9 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, TextInput, ActivityIndicator, Button, ImageBackground, TouchableOpacity, Image, StyleSheet } from 'react-native';
+import { View, Text, TextInput, ActivityIndicator, Button, ImageBackground, TouchableOpacity, StyleSheet, Platform } from 'react-native';
 import { connect } from 'react-redux';
 import auth from '@react-native-firebase/auth';
 import AsyncStorage from '@react-native-community/async-storage';
-import { Dimensions } from 'react-native';
+import { Image, KeyboardAvoidingView, ScrollView, TouchableWithoutFeedback, Keyboard } from 'react-native';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import { KeyboardAwareView } from 'react-native-keyboard-aware-view'
+
+import messaging from '@react-native-firebase/messaging';
+
 
 const Login = props => {
 
@@ -12,6 +17,7 @@ const Login = props => {
     const [registerMode, setRegisterMode] = useState(false);
     const [isRegisterLoading, setIsRegisterLoading] = useState(false);
     const [isLoginLoading, setIsLoginLoading] = useState(false);
+    const [marginBottom, setMarginBottom] = useState('52%')
 
     setMessage = (message) => {
         props.dispatch({
@@ -83,15 +89,18 @@ const Login = props => {
         }
     }
 
+    // pressAnywhere = () => {
+    //     Keyboard.dismiss
+    //     setMarginBottom('52%')
+    // }
+
     useEffect(() =>  {
         checkIfLoggedIn()
     }, [])
 
     return (
         <>
-            <View
-                style={{ flex: 1,  alignItems: 'center', backgroundColor: '#FFFAAC' }}
-                >
+            <View style={styles.container}>
                 <Text 
                     style={styles.message}>
                     {props.reduxState.loginMessage}
@@ -102,7 +111,8 @@ const Login = props => {
                     onChangeText={(text) => setEmailInput(text)}
                     placeholder='email'
                     keyboardType='email-address'
-                    autoCapitalize='none'    
+                    autoCapitalize='none'
+                    //onFocus={() => setMarginBottom('2%')}    
                 />
                 <TextInput
                     style={styles.passwordInput}
@@ -144,17 +154,23 @@ const mapReduxStateToProps = reduxState => ({
 });
 
 const styles = StyleSheet.create({
+    container: { 
+        flex: 1,  
+        justifyContent: 'flex-start',
+        alignItems: 'center', 
+        backgroundColor: '#FFFAAC'
+    },
     message: { 
         color: '#CC375E', 
         fontSize: 24, 
         marginHorizontal: '15%', 
-        marginTop: '40%', 
+        marginTop: Platform.OS === 'ios' ? '45%' : '35%', 
         textAlign: 'center',
-        height: '10%'
+        height: Platform.OS === 'ios' ? '10%' : '12%',
     },
     logo: {
-        resizeMode: 'contain', 
-        width: '100%', 
+        resizeMode: Platform.OS === 'ios' ? 'contain' : 'cover', 
+        width: '100%',
         height: '17%',
         marginTop: '5%'
     },
@@ -186,7 +202,7 @@ const styles = StyleSheet.create({
         marginBottom: 6
     },
     registerButton: {
-        marginBottom: '52%',
+        //marginBottom: '52%',
         width: '30%', 
         borderWidth: 2,
         borderColor: 'black',

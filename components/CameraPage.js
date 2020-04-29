@@ -55,7 +55,7 @@ class CameraPage extends React.Component {
 
     takePicture = async () => {
         if (this.camera) {
-            const options = { quality: 0.5, base64: true };
+            const options = { quality: 1, base64: true };
             const data = await this.camera.takePictureAsync(options);
             console.log('uri:', data.uri);
             this.setState({
@@ -73,6 +73,18 @@ class CameraPage extends React.Component {
         const ref = storage().ref('images/' + String(filename));
         await ref.putFile(this.state.capturedImageUri);
         this.toggleReviewMode()
+    }
+
+    requestUserPermission = async () => {
+        const settings = await messaging().requestPermission();
+
+        if (settings) {
+            console.log('Permission settings:', settings);
+        }
+    }
+
+    componentDidMount = () => {
+        requestUserPermission()
     }
 
     render() {

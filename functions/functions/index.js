@@ -14,9 +14,15 @@ exports.addUser = functions.auth.user().onCreate(user => {
 
 exports.addImage = functions.storage.object('/images').onFinalize(async (object) => {
   console.log('storage object:', object)
+
+  // Sender UID is attached as metadata to storage object
   console.log('object.metadata.fromUid:', object.metadata.fromUid)
   let senderUid = object.metadata.fromUid
+
+  // 'images/xxxxxxx' => 'xxxxxxx'
   let filename = object.name.substring(7)
+
+  // Get users from database to randomly assign recipient
   admin  
     .database()
     .ref('users')
@@ -25,11 +31,12 @@ exports.addImage = functions.storage.object('/images').onFinalize(async (object)
       console.log('snapshot:', snapshot.val())
       let uidArr = []
       for (uid in snapshot.val()) {
+        // add [if not banned...]
         uidArr.push(uid)
       }
       console.log('uidArr:', uidArr)
 
-      // randomly select recipient
+      // randomly select from array of suitable UIDs
       let recipientUid
       let i = 0
       do {
@@ -37,6 +44,8 @@ exports.addImage = functions.storage.object('/images').onFinalize(async (object)
         i++
       } while (recipientUid === senderUid && i < 100)
       console.log('recipientUid:', recipientUid)
+
+      // add entry to images table 
       admin
       .database()
       .ref(`images/${filename}`)
