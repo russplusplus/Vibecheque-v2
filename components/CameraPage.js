@@ -13,6 +13,8 @@ import storage from '@react-native-firebase/storage';
 import Logout from './Logout';
 import ReviewImage from './ReviewImage';
 
+import messaging from '@react-native-firebase/messaging';
+
 FontAwesome.loadFont()
 Ionicons.loadFont()
 
@@ -84,7 +86,7 @@ class CameraPage extends React.Component {
     }
 
     componentDidMount = () => {
-        requestUserPermission()
+        this.requestUserPermission()
     }
 
     render() {
