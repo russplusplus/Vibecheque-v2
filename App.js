@@ -9,6 +9,7 @@
 import React, { useState, useEffect } from 'react';
 import { NativeRouter, Route, Switch } from "react-router-native";
 import auth from '@react-native-firebase/auth';
+import messaging from '@react-native-firebase/messaging';
 
 import {
   SafeAreaView,
@@ -17,6 +18,7 @@ import {
   View,
   Text,
   StatusBar,
+  Alert,
 } from 'react-native';
 
 import { createStore, applyMiddleware } from 'redux';
@@ -50,6 +52,13 @@ export default function App() {
   useEffect(() => {
     const subscriber = auth().onAuthStateChanged(onAuthStateChanged);
     return subscriber; // this line supposedly unsubscribes on unmount 
+  }, []);
+
+  useEffect(() => {
+    const unsubscribe = messaging().onMessage(async remoteMessage => {
+      Alert.alert('A new FCM message arrived!', JSON.stringify(remoteMessage));
+    });
+    return unsubscribe;
   }, []);
   
 
