@@ -71,13 +71,21 @@ class CameraPage extends React.Component {
     }
 
     sendImage = async () => {
-        var d = new Date();
-        var filename = d.getTime();
+        
+        
+        
+        // try this, if it's slow, get the token in useEffect
+        let registrationToken = await messaging().getToken()
+        console.log('token:', registrationToken)
+        
+        // generate filename from current time in milliseconds
+        let d = new Date();
+        let filename = d.getTime();
         console.log('filename:', filename)
         const ref = storage().ref('images/' + String(filename));
         const metadata = {
             customMetadata: {
-                fromUid: this.state.uid
+                fromToken: registrationToken
             }
         }
         await ref.putFile(this.state.capturedImageUri, metadata);
