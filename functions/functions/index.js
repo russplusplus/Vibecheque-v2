@@ -31,7 +31,7 @@ exports.addImage = functions.storage.object('/images').onFinalize(async (object)
       console.log('snapshot:', snapshot.val())
       let uidArr = []
       for (uid in snapshot.val()) {
-        // add [if not banned...]
+        // add [if not banned...], [if in geographic radius...]
         uidArr.push(uid)
       }
       console.log('uidArr:', uidArr)
@@ -54,6 +54,9 @@ exports.addImage = functions.storage.object('/images').onFinalize(async (object)
         to: recipientUid,
         isResponse: false
       })
+      // .then(() => {
+      //   console.log('in final .then!')
+      // })
     })
   
 });

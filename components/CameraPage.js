@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, TextInput, StyleSheet, Button, AsyncStorage, Platform, TouchableOpacity, ImageBackground } from 'react-native';
+import { View, Text, TextInput, StyleSheet, Button, Platform, TouchableOpacity, ImageBackground } from 'react-native';
+import AsyncStorage from '@react-native-community/async-storage';
 
 import EStyleSheet from 'react-native-extended-stylesheet';
 
@@ -24,7 +25,8 @@ class CameraPage extends React.Component {
         isLogoutMode: false,
         isReviewMode: false,
         cameraType: RNCamera.Constants.Type.back,
-        capturedImageUri: ''
+        capturedImageUri: '',
+        uid: ''
     }
 
     logout = () => {
@@ -69,11 +71,24 @@ class CameraPage extends React.Component {
     }
 
     sendImage = async () => {
-        var d = new Date();
-        var filename = d.getTime();
+        
+        
+        
+        // try this, if it's slow, get the token in useEffect
+        let registrationToken = await messaging().getToken()
+        console.log('token:', registrationToken)
+        
+        // generate filename from current time in milliseconds
+        let d = new Date();
+        let filename = d.getTime();
         console.log('filename:', filename)
         const ref = storage().ref('images/' + String(filename));
-        await ref.putFile(this.state.capturedImageUri);
+        const metadata = {
+            customMetadata: {
+                fromToken: registrationToken
+            }
+        }
+        await ref.putFile(this.state.capturedImageUri, metadata);
         this.toggleReviewMode()
     }
 
@@ -85,7 +100,20 @@ class CameraPage extends React.Component {
         }
     }
 
+    retrieveUid = async () => {
+        try {
+            let user = JSON.parse(await AsyncStorage.getItem("user"));
+            console.log('user.user:', user.user.uid)
+            this.setState({
+                uid: user.user.uid
+            })
+        } catch (error) {
+            console.log('AsyncStorage retrieval error:', error.message);
+        }
+    }
+
     componentDidMount = () => {
+        this.retrieveUid()
         this.requestUserPermission()
     }
 
