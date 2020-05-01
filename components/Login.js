@@ -4,26 +4,49 @@ import { connect } from 'react-redux';
 import auth from '@react-native-firebase/auth';
 import AsyncStorage from '@react-native-community/async-storage';
 import { Image, KeyboardAvoidingView, ScrollView, TouchableWithoutFeedback, Keyboard } from 'react-native';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import { KeyboardAwareView } from 'react-native-keyboard-aware-view'
+import { getPhoneNumber } from 'react-native-device-info';
 
 import messaging from '@react-native-firebase/messaging';
 
-
 const Login = props => {
 
-    const [emailInput, setEmailInput] = useState('');
-    const [passwordInput, setPasswordInput] = useState('');
-    const [registerMode, setRegisterMode] = useState(false);
+    const [phoneNumber, setPhoneNumber] = useState('');
     const [isRegisterLoading, setIsRegisterLoading] = useState(false);
     const [isLoginLoading, setIsLoginLoading] = useState(false);
-    const [marginBottom, setMarginBottom] = useState('52%')
+    const [confirm, setConfirm] = useState(null);
+    const [code, setCode] = useState('');
+    const [loginMode, setLoginMode] = useState('');
+    const [emailInput, setEmailInput] = useState('');
+    const [passwordInput, setPasswordInput] = useState('');
 
     setMessage = (message) => {
         props.dispatch({
             type: 'SET_LOGIN_MESSAGE',
             payload: message
         })
+    }
+
+    sendCode = async () => {
+        console.log('in sendCode function');
+        if (!phoneNumber) {
+            setMessage('Please enter a valid phone number to proceed.')
+            return
+        }
+        setIsLoginLoading(true)
+
+        const confirmation = await auth().signInWithPhoneNumber(phoneNumber);
+        setConfirm(confirmation);
+        setIsLoginLoading(false);
+    }
+
+    confirmCode = async () => {
+        try {
+          await confirm.confirm(code);
+          console.log('code is valid!')
+          props.history.push('/camera')
+        } catch (error) {
+          console.log('Invalid code.');
+        }
     }
 
     login = async () => {
@@ -37,6 +60,7 @@ const Login = props => {
             return
         }
         setIsLoginLoading(true)
+
         // Firebase login
         props.dispatch({
             type: 'LOGIN',
@@ -65,6 +89,7 @@ const Login = props => {
             return
         }
         setIsRegisterLoading(true);
+
         // Firebase register
         props.dispatch({
             type: 'SIGN_UP',
@@ -89,64 +114,175 @@ const Login = props => {
         }
     }
 
-    // pressAnywhere = () => {
-    //     Keyboard.dismiss
-    //     setMarginBottom('52%')
+    // getDevicePhoneNumber = async () => {
+    //     let phoneNumber = await getPhoneNumber()
+    //     console.log('phoneNumber:', phoneNumber)
+    //     setPhoneNumber(await getPhoneNumber())
     // }
 
     useEffect(() =>  {
         checkIfLoggedIn()
+        console.log('loginMode:', loginMode)
+        // getDevicePhoneNumber() // this doesn't quite work yet. Should figure out later
     }, [])
 
-    return (
-        <>
-            <View style={styles.container}>
-                <Text 
-                    style={styles.message}>
-                    {props.reduxState.loginMessage}
-                </Text>
-                <Image source={require('../assets/Vibecheque_logo.png')} style={styles.logo}/>
-                <TextInput
-                    style={styles.emailInput}
-                    onChangeText={(text) => setEmailInput(text)}
-                    placeholder='email'
-                    keyboardType='email-address'
-                    autoCapitalize='none'
-                    //onFocus={() => setMarginBottom('2%')}    
-                />
-                <TextInput
-                    style={styles.passwordInput}
-                    onChangeText={(text) => setPasswordInput(text)}
-                    placeholder="password"
-                    secureTextEntry={true}
-                />
-                {isLoginLoading ?
-                <ActivityIndicator/> :
-                <TouchableOpacity
-                    onPress={login}
-                    style={styles.loginButton}>
-                    <Text
-                        style={{
-                            fontSize: 26}}>
-                        Login
+    if (loginMode === '') {
+        return (
+            <>
+                <View style={styles.container}>
+                    <Text 
+                        style={styles.message}>
+                        {props.reduxState.loginMessage}
                     </Text>
-                </TouchableOpacity>
-                }
-                {isRegisterLoading ?
-                <ActivityIndicator/> :
-                <TouchableOpacity
-                    onPress={register}
-                    style={styles.registerButton}>
-                    <Text
-                        style={{
-                            fontSize: 26}}>
-                        Register
+                    <Image source={require('../assets/Vibecheque_logo.png')} style={styles.logo}/>
+                    <TouchableOpacity
+                        onPress={() => setLoginMode('phoneNumber')}
+                        style={styles.wideButton}>
+                        <Text
+                            style={{
+                                fontSize: 26}}>
+                            Continue with phone number
+                        </Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                        onPress={() => setLoginMode('email')}
+                        style={styles.wideButton}>
+                        <Text
+                            style={{
+                                fontSize: 26}}>
+                            Continue with email
+                        </Text>
+                    </TouchableOpacity>
+                </View>
+            </>
+        )
+    } else if (loginMode === 'email') {
+        return (
+            <>
+                <View style={styles.container}>
+                    <Text 
+                        style={styles.message}>
+                        {props.reduxState.loginMessage}
                     </Text>
-                </TouchableOpacity>
-                }
-            </View>
-        </>
-    )
+                    <Image source={require('../assets/Vibecheque_logo.png')} style={styles.logo}/>
+                    <TextInput
+                        style={styles.input}
+                        onChangeText={(text) => setEmailInput(text)}
+                        placeholder='email'
+                        keyboardType='email-address'
+                        autoCapitalize='none'
+                    />
+                    <TextInput
+                        style={styles.input}
+                        onChangeText={(text) => setPasswordInput(text)}
+                        placeholder="password"
+                        secureTextEntry={true}
+                    />
+                    {isLoginLoading ?
+                    <ActivityIndicator/> :
+                    <TouchableOpacity
+                        onPress={login}
+                        style={styles.loginButton}>
+                        <Text
+                            style={{
+                                fontSize: 26}}>
+                            Login
+                        </Text>
+                    </TouchableOpacity>
+                    }
+                    {isRegisterLoading ?
+                    <ActivityIndicator/> :
+                    <TouchableOpacity
+                        onPress={register}
+                        style={styles.registerButton}>
+                        <Text
+                            style={{
+                                fontSize: 26}}>
+                            Register
+                        </Text>
+                    </TouchableOpacity>
+                    }
+                    <TouchableOpacity
+                        onPress={() => setLoginMode('')}
+                        style={styles.registerButton}>
+                        <Text
+                            style={{
+                                fontSize: 26}}>
+                            Back
+                        </Text>
+                    </TouchableOpacity>
+                </View>
+            </>
+        )
+    } else {
+        return (
+            <>
+                <View style={styles.container}>
+                    <Text 
+                        style={styles.message}>
+                        {props.reduxState.loginMessage}
+                    </Text>
+                    <Image source={require('../assets/Vibecheque_logo.png')} style={styles.logo}/>
+                    {!confirm ?
+                    <>    
+                        <TextInput
+                            style={styles.input}
+                            onChangeText={text => setPhoneNumber(text)}
+                            placeholder='phone number'
+                            keyboardType='phone-pad'
+                            autoCapitalize='none'
+                        />
+                        {isLoginLoading ?
+                            <ActivityIndicator/> 
+                        :
+                            <TouchableOpacity
+                                onPress={sendCode}
+                                style={styles.loginButton}>
+                                <Text
+                                    style={{
+                                        fontSize: 26}}>
+                                    Send Code
+                                </Text>
+                            </TouchableOpacity>
+                        }
+                    </>
+                    :
+                    <>
+                        <TextInput
+                            style={styles.input}
+                            onChangeText={text => setCode(text)}
+                            placeholder='code'
+                            keyboardType='visible-password'
+                            autoCapitalize='none'
+                        />
+                        {isLoginLoading ?
+                            <ActivityIndicator/> 
+                        :
+                            <TouchableOpacity
+                                onPress={confirmCode}
+                                style={styles.loginButton}>
+                                <Text
+                                    style={{
+                                        fontSize: 26}}>
+                                    Login
+                                </Text>
+                            </TouchableOpacity>
+                        }
+                    </>
+                    }
+                    <TouchableOpacity
+                        onPress={() => setLoginMode('')}
+                        style={styles.loginButton}>
+                        <Text
+                            style={{
+                                fontSize: 26}}>
+                            Back
+                        </Text>
+                    </TouchableOpacity>
+                </View>
+            </>
+        )
+    }
 }
 
 const mapReduxStateToProps = reduxState => ({
@@ -174,17 +310,8 @@ const styles = StyleSheet.create({
         height: '17%',
         marginTop: '5%'
     },
-    emailInput: { 
+    input: { 
         marginBottom: 2, 
-        fontSize: 24, 
-        borderWidth: 2, 
-        borderColor: 'black', 
-        backgroundColor: 'white', 
-        padding: 4, 
-        width: '50%'
-    },
-    passwordInput: { 
-        marginBottom: '2%', 
         fontSize: 24, 
         borderWidth: 2, 
         borderColor: 'black', 
@@ -201,14 +328,23 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         marginBottom: 6
     },
+    wideButton: {
+        width: '80%', 
+        borderWidth: 2,
+        borderColor: 'black',
+        borderRadius: 10,
+        backgroundColor: 'transparent',
+        alignItems: 'center',
+        marginBottom: 6
+    },
     registerButton: {
-        //marginBottom: '52%',
         width: '30%', 
         borderWidth: 2,
         borderColor: 'black',
         borderRadius: 10,
         backgroundColor: 'transparent',
-        alignItems: 'center'
+        alignItems: 'center',
+        marginBottom: 6
     }
 })
 
