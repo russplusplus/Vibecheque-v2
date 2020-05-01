@@ -16,6 +16,7 @@ const Login = props => {
     const [isLoginLoading, setIsLoginLoading] = useState(false);
     const [confirm, setConfirm] = useState(null);
     const [code, setCode] = useState('');
+    const [loginMode, setLoginMode] = useState(null);
 
     setMessage = (message) => {
         props.dispatch({
@@ -99,75 +100,114 @@ const Login = props => {
         }
     }
 
-    getDevicePhoneNumber = async () => {
-        let phoneNumber = await getPhoneNumber()
-        console.log('phoneNumber:', phoneNumber)
-        setPhoneNumber(await getPhoneNumber())
-    }
+    // getDevicePhoneNumber = async () => {
+    //     let phoneNumber = await getPhoneNumber()
+    //     console.log('phoneNumber:', phoneNumber)
+    //     setPhoneNumber(await getPhoneNumber())
+    // }
 
     useEffect(() =>  {
         checkIfLoggedIn()
+        console.log('loginMode:', loginMode)
         // getDevicePhoneNumber() // this doesn't quite work yet. Should figure out later
     }, [])
 
-    return (
-        <>
-            <View style={styles.container}>
-                <Text 
-                    style={styles.message}>
-                    {props.reduxState.loginMessage}
-                </Text>
-                <Image source={require('../assets/Vibecheque_logo.png')} style={styles.logo}/>
-                {!confirm ?
-                <>    
-                    <TextInput
-                        style={styles.input}
-                        onChangeText={text => setPhoneNumber(text)}
-                        placeholder='phone number'
-                        keyboardType='phone-pad'
-                        autoCapitalize='none'
-                    />
-                    {isLoginLoading ?
-                        <ActivityIndicator/> 
+    if (loginMode === null) {
+        return (
+            <>
+                <View style={styles.container}>
+                    <Text 
+                        style={styles.message}>
+                        {props.reduxState.loginMessage}
+                    </Text>
+                    <Image source={require('../assets/Vibecheque_logo.png')} style={styles.logo}/>
+                    <TouchableOpacity
+                        onPress={() => setLoginMode('phoneNumber')}
+                        style={styles.wideButton}>
+                        <Text
+                            style={{
+                                fontSize: 26}}>
+                            Continue with phone number
+                        </Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                        onPress={() => setLoginMode('email')}
+                        style={styles.wideButton}>
+                        <Text
+                            style={{
+                                fontSize: 26}}>
+                            Continue with email
+                        </Text>
+                    </TouchableOpacity>
+                </View>
+            </>
+        )
+    } else if (loginMode === 'email') {
+        return (
+            <>
+                
+            </>
+        )
+    } else {
+        return (
+            <>
+                <View style={styles.container}>
+                    <Text 
+                        style={styles.message}>
+                        {props.reduxState.loginMessage}
+                    </Text>
+                    <Image source={require('../assets/Vibecheque_logo.png')} style={styles.logo}/>
+                    {!confirm ?
+                    <>    
+                        <TextInput
+                            style={styles.input}
+                            onChangeText={text => setPhoneNumber(text)}
+                            placeholder='phone number'
+                            keyboardType='phone-pad'
+                            autoCapitalize='none'
+                        />
+                        {isLoginLoading ?
+                            <ActivityIndicator/> 
+                        :
+                            <TouchableOpacity
+                                onPress={sendCode}
+                                style={styles.loginButton}>
+                                <Text
+                                    style={{
+                                        fontSize: 26}}>
+                                    Send Code
+                                </Text>
+                            </TouchableOpacity>
+                        }
+                    </>
                     :
-                        <TouchableOpacity
-                            onPress={sendCode}
-                            style={styles.loginButton}>
-                            <Text
-                                style={{
-                                    fontSize: 26}}>
-                                Send Code
-                            </Text>
-                        </TouchableOpacity>
+                    <>
+                        <TextInput
+                            style={styles.input}
+                            onChangeText={text => setCode(text)}
+                            placeholder='code'
+                            keyboardType='visible-password'
+                            autoCapitalize='none'
+                        />
+                        {isLoginLoading ?
+                            <ActivityIndicator/> 
+                        :
+                            <TouchableOpacity
+                                onPress={confirmCode}
+                                style={styles.loginButton}>
+                                <Text
+                                    style={{
+                                        fontSize: 26}}>
+                                    Login
+                                </Text>
+                            </TouchableOpacity>
+                        }
+                    </>
                     }
-                </>
-                :
-                <>
-                    <TextInput
-                        style={styles.input}
-                        onChangeText={text => setCode(text)}
-                        placeholder='code'
-                        keyboardType='visible-password'
-                        autoCapitalize='none'
-                    />
-                    {isLoginLoading ?
-                        <ActivityIndicator/> 
-                    :
-                        <TouchableOpacity
-                            onPress={confirmCode}
-                            style={styles.loginButton}>
-                            <Text
-                                style={{
-                                    fontSize: 26}}>
-                                Login
-                            </Text>
-                        </TouchableOpacity>
-                    }
-                </>
-                }
-            </View>
-        </>
-    )
+                </View>
+            </>
+        )
+    }
 }
 
 const mapReduxStateToProps = reduxState => ({
@@ -206,6 +246,15 @@ const styles = StyleSheet.create({
     },
     loginButton: {
         width: '30%', 
+        borderWidth: 2,
+        borderColor: 'black',
+        borderRadius: 10,
+        backgroundColor: 'transparent',
+        alignItems: 'center',
+        marginBottom: 6
+    },
+    wideButton: {
+        width: '80%', 
         borderWidth: 2,
         borderColor: 'black',
         borderRadius: 10,
