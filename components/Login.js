@@ -16,7 +16,9 @@ const Login = props => {
     const [isLoginLoading, setIsLoginLoading] = useState(false);
     const [confirm, setConfirm] = useState(null);
     const [code, setCode] = useState('');
-    const [loginMode, setLoginMode] = useState(null);
+    const [loginMode, setLoginMode] = useState('');
+    const [emailInput, setEmailInput] = useState('');
+    const [passwordInput, setPasswordInput] = useState('');
 
     setMessage = (message) => {
         props.dispatch({
@@ -35,20 +37,7 @@ const Login = props => {
 
         const confirmation = await auth().signInWithPhoneNumber(phoneNumber);
         setConfirm(confirmation);
-        
-        
-        
-        // Firebase login
-        // props.dispatch({
-        //     type: 'LOGIN',
-        //     history: props.history,
-        //     payload: {
-        //         email: emailInput,
-        //         password: passwordInput
-        //     }
-        // })
-        
-        setIsLoginLoading(false)
+        setIsLoginLoading(false);
     }
 
     confirmCode = async () => {
@@ -112,7 +101,7 @@ const Login = props => {
         // getDevicePhoneNumber() // this doesn't quite work yet. Should figure out later
     }, [])
 
-    if (loginMode === null) {
+    if (loginMode === '') {
         return (
             <>
                 <View style={styles.container}>
@@ -145,7 +134,50 @@ const Login = props => {
     } else if (loginMode === 'email') {
         return (
             <>
-                
+                <View style={styles.container}>
+                    <Text 
+                        style={styles.message}>
+                        {props.reduxState.loginMessage}
+                    </Text>
+                    <Image source={require('../assets/Vibecheque_logo.png')} style={styles.logo}/>
+                    <TextInput
+                        style={styles.emailInput}
+                        onChangeText={(text) => setEmailInput(text)}
+                        placeholder='email'
+                        keyboardType='email-address'
+                        autoCapitalize='none'
+                    />
+                    <TextInput
+                        style={styles.passwordInput}
+                        onChangeText={(text) => setPasswordInput(text)}
+                        placeholder="password"
+                        secureTextEntry={true}
+                    />
+                    {isLoginLoading ?
+                    <ActivityIndicator/> :
+                    <TouchableOpacity
+                        onPress={login}
+                        style={styles.loginButton}>
+                        <Text
+                            style={{
+                                fontSize: 26}}>
+                            Login
+                        </Text>
+                    </TouchableOpacity>
+                    }
+                    {isRegisterLoading ?
+                    <ActivityIndicator/> :
+                    <TouchableOpacity
+                        onPress={register}
+                        style={styles.registerButton}>
+                        <Text
+                            style={{
+                                fontSize: 26}}>
+                            Register
+                        </Text>
+                    </TouchableOpacity>
+                    }
+                </View>
             </>
         )
     } else {
