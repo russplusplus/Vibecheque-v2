@@ -8,7 +8,6 @@ import { getPhoneNumber } from 'react-native-device-info';
 
 import messaging from '@react-native-firebase/messaging';
 
-
 const Login = props => {
 
     const [phoneNumber, setPhoneNumber] = useState('');
@@ -50,6 +49,31 @@ const Login = props => {
         }
     }
 
+    login = async () => {
+        console.log('in login function');
+        if (!emailInput && !passwordInput) {
+            setMessage('Please enter an email address and a password to proceed.')
+            return
+        }
+        if (!emailInput || !passwordInput) {
+            setMessage('Please enter an email address AND a password to proceed.')
+            return
+        }
+        setIsLoginLoading(true)
+
+        // Firebase login
+        props.dispatch({
+            type: 'LOGIN',
+            history: props.history,
+            payload: {
+                email: emailInput,
+                password: passwordInput
+            }
+        })
+        
+        setIsLoginLoading(false)
+    }
+
     register = async () => {
         console.log('in register function');
         if (!emailInput) {
@@ -65,6 +89,7 @@ const Login = props => {
             return
         }
         setIsRegisterLoading(true);
+
         // Firebase register
         props.dispatch({
             type: 'SIGN_UP',
@@ -141,14 +166,14 @@ const Login = props => {
                     </Text>
                     <Image source={require('../assets/Vibecheque_logo.png')} style={styles.logo}/>
                     <TextInput
-                        style={styles.emailInput}
+                        style={styles.input}
                         onChangeText={(text) => setEmailInput(text)}
                         placeholder='email'
                         keyboardType='email-address'
                         autoCapitalize='none'
                     />
                     <TextInput
-                        style={styles.passwordInput}
+                        style={styles.input}
                         onChangeText={(text) => setPasswordInput(text)}
                         placeholder="password"
                         secureTextEntry={true}
@@ -177,6 +202,15 @@ const Login = props => {
                         </Text>
                     </TouchableOpacity>
                     }
+                    <TouchableOpacity
+                        onPress={() => setLoginMode('')}
+                        style={styles.registerButton}>
+                        <Text
+                            style={{
+                                fontSize: 26}}>
+                            Back
+                        </Text>
+                    </TouchableOpacity>
                 </View>
             </>
         )
@@ -236,6 +270,15 @@ const Login = props => {
                         }
                     </>
                     }
+                    <TouchableOpacity
+                        onPress={() => setLoginMode('')}
+                        style={styles.loginButton}>
+                        <Text
+                            style={{
+                                fontSize: 26}}>
+                            Back
+                        </Text>
+                    </TouchableOpacity>
                 </View>
             </>
         )
@@ -300,7 +343,8 @@ const styles = StyleSheet.create({
         borderColor: 'black',
         borderRadius: 10,
         backgroundColor: 'transparent',
-        alignItems: 'center'
+        alignItems: 'center',
+        marginBottom: 6
     }
 })
 
