@@ -71,9 +71,6 @@ class CameraPage extends React.Component {
     }
 
     sendImage = async () => {
-        
-        
-        
         // try this, if it's slow, get the token in useEffect
         let registrationToken = await messaging().getToken()
         console.log('token:', registrationToken)
