@@ -429,6 +429,7 @@ DEPENDENCIES:
   - DoubleConversion (from `../node_modules/react-native/third-party-podspecs/DoubleConversion.podspec`)
   - FBLazyVector (from `../node_modules/react-native/Libraries/FBLazyVector`)
   - FBReactNativeSpec (from `../node_modules/react-native/Libraries/FBReactNativeSpec`)
+  - Firebase/Auth
   - Flipper (~> 0.33.1)
   - Flipper-DoubleConversion (= 1.1.7)
   - Flipper-Folly (~> 2.1)
@@ -650,6 +651,6 @@ SPEC CHECKSUMS:
   Yoga: 3ebccbdd559724312790e7742142d062476b698e
   YogaKit: f782866e155069a2cca2517aafea43200b01fd5a
 
-PODFILE CHECKSUM: fd2d29b7857fa1ee6cc4dd83a92fa52b48fd065d
+PODFILE CHECKSUM: 15620a8aa6a369b0d9232f3301a8378564cd0d0d
 
 COCOAPODS: 1.9.0
