@@ -9,6 +9,7 @@ exports.addUser = functions.auth.user().onCreate(user => {
     .set({
       isBanned: 0,
       email: user.email,
+      phoneNumber: user.phoneNumber
     });
 });
 
@@ -54,9 +55,5 @@ exports.addImage = functions.storage.object('/images').onFinalize(async (object)
         to: recipientUid,
         isResponse: false
       })
-      // .then(() => {
-      //   console.log('in final .then!')
-      // })
     })
-  
 });

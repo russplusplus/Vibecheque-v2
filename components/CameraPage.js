@@ -15,6 +15,7 @@ import Logout from './Logout';
 import ReviewImage from './ReviewImage';
 
 import messaging from '@react-native-firebase/messaging';
+import database from '@react-native-firebase/database';
 
 FontAwesome.loadFont()
 Ionicons.loadFont()
@@ -109,8 +110,20 @@ class CameraPage extends React.Component {
         }
     }
 
+    updateRegistrationToken = async () => {
+        let user = JSON.parse(await AsyncStorage.getItem("user"));
+        console.log('CameraPage user retrieval. user:', user)
+        let registrationToken = await messaging().getToken()
+        console.log('updateRegistrationToken token:', registrationToken)
+        await database()
+            .ref(`/users/${user.uid}`)
+            .update({
+                registrationToken: registrationToken
+            })
+    }
+
     componentDidMount = () => {
-        this.retrieveUid()
+        this.updateRegistrationToken()
         this.requestUserPermission()
     }
 
