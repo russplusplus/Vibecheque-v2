@@ -3,6 +3,7 @@ const admin = require('firebase-admin');
 admin.initializeApp();
 
 exports.addUser = functions.auth.user().onCreate(user => {
+  console.log(user)
   admin
     .database()
     .ref(`users/${user.uid}`)

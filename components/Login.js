@@ -41,11 +41,14 @@ const Login = props => {
 
     confirmCode = async () => {
         try {
-          await confirm.confirm(code);
-          console.log('code is valid!')
+          let user = await confirm.confirm(code);
+          console.log('code is valid! user:', user)
+          await AsyncStorage.setItem("user", JSON.stringify(user))
+          setMessage('')
           props.history.push('/camera')
         } catch (error) {
           console.log('Invalid code.');
+          setMessage('Invalid code.')
         }
     }
 
