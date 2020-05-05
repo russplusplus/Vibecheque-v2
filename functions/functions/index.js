@@ -18,8 +18,8 @@ exports.addImage = functions.storage.object('/images').onFinalize(async (object)
   console.log('storage object:', object)
 
   // Sender UID is attached as metadata to storage object
-  console.log('object.metadata.fromUid:', object.metadata.fromUid)
-  let senderUid = object.metadata.fromUid
+  console.log('object.metadata.fromToken:', object.metadata.fromToken)
+  let senderToken = object.metadata.fromToken
 
   // 'images/xxxxxxx' => 'xxxxxxx'
   let filename = object.name.substring(7)
@@ -30,30 +30,33 @@ exports.addImage = functions.storage.object('/images').onFinalize(async (object)
     .ref('users')
     .once('value')
     .then(snapshot => {
-      console.log('snapshot:', snapshot.val())
-      let uidArr = []
-      for (uid in snapshot.val()) {
+      let users = snapshot.val()
+      console.log('snapshot:', users)
+      let tokenArr = []
+      for (user in users) {
+        console.log('user:', users[user])
+        console.log('user.registrationToken:', users[user].registrationToken)
         // add [if not banned...], [if in geographic radius...]
-        uidArr.push(uid)
+        tokenArr.push(users[user].registrationToken)
       }
-      console.log('uidArr:', uidArr)
+      console.log('tokenArr:', tokenArr)
 
       // randomly select from array of suitable UIDs
-      let recipientUid
+      let recipientToken
       let i = 0
       do {
-        recipientUid = uidArr[Math.floor(Math.random() * uidArr.length)]
+        recipientToken = tokenArr[Math.floor(Math.random() * tokenArr.length)]
         i++
-      } while (recipientUid === senderUid && i < 100)
-      console.log('recipientUid:', recipientUid)
+      } while (recipientToken === senderToken && i < 100)
+      console.log('recipientToken:', recipientToken)
 
       // add entry to images table 
       admin
       .database()
       .ref(`images/${filename}`)
       .set({
-        from: senderUid,
-        to: recipientUid,
+        from: senderToken,
+        to: recipientToken,
         isResponse: false
       })
     })
