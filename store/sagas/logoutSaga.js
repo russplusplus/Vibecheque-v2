@@ -8,9 +8,7 @@ function* logout(action) {
     } catch (error) {
         console.log('AsyncStorage remove error:', error.message);
     }
-
     action.history.push('/')
-
 }
 
 function* logoutSaga() {
