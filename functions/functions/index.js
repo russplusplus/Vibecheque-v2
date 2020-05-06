@@ -50,6 +50,23 @@ exports.addImage = functions.storage.object('/images').onFinalize(async (object)
       } while (recipientToken === senderToken && i < 100)
       console.log('recipientToken:', recipientToken)
 
+      const payload = {
+				data: {
+					data_type: "direct_message",
+					title: "New Message from " + senderToken,
+					message: filename,
+					message_id: "test id",
+        }
+      }
+
+      admin.messaging().sendToDevice(recipientToken, payload)
+        .then(function(response) {
+          console.log("Successfully sent message:", response);
+        })
+        .catch(function(error) {
+          console.log("Error sending message:", error);
+        });
+          
       // add entry to images table 
       admin
       .database()
