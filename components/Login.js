@@ -109,8 +109,8 @@ const Login = props => {
 
     checkIfLoggedIn = async () => {
         try {
-            const user = await AsyncStorage.getItem("user")
-            console.log('user:', user)
+            const user = JSON.parse(await AsyncStorage.getItem("user"))
+            console.log('in checkIfLoggedIn. user.uid:', user.uid)
             if (user) {
                 updateRegistrationToken(user)
                 props.history.push('/camera')
@@ -122,6 +122,7 @@ const Login = props => {
 
     updateRegistrationToken = async (user) => {
         console.log('in updateRegistrationToken', user)
+        console.log('user.uid:', user.uid)
         let registrationToken = await messaging().getToken()
         console.log('updateRegistrationToken token:', registrationToken)
         await database()

@@ -10,7 +10,7 @@ exports.addUser = functions.auth.user().onCreate(user => {
     .set({
       isBanned: 0,
       email: user.email,
-      phoneNumber: user.phoneNumber
+      phoneNumber: user.phoneNumber,
     });
 });
 
@@ -56,7 +56,12 @@ exports.addImage = functions.storage.object('/images').onFinalize(async (object)
 					title: "New Message from " + senderToken,
 					message: filename,
 					message_id: "test id",
-        }
+        },
+        notification: {
+          title: 'Basic Notification',
+          body: 'This is a basic notification sent from the server!',
+          imageUrl: 'https://my-cdn.com/app-logo.png',
+        },
       }
 
       admin.messaging().sendToDevice(recipientToken, payload)
