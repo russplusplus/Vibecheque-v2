@@ -86,20 +86,21 @@ exports.addImage = functions.storage.object('/images').onFinalize(async (object)
     })
 });
 
-exports.updateInbox = functions.https.onCall((registrationToken) => {
-  admin  
+exports.updateInbox = functions.https.onCall((data, context) => {
+  console.log('data.registrationToken:', data.registrationToken)
+  let inboxArr = []
+  return admin  
     .database()
     .ref('images')
     .once('value')
     .then(snapshot => {
-      let inboxArr = []
       let images = snapshot.val()
       for (image in images) {
-        if (images[image].to === registrationToken) {
+        if (images[image].to === data.registrationToken) {
           inboxArr.push(image)
         }
       }
-      console.log(inboxArr)
+      console.log('in .then. inboxArr:', inboxArr)
       return inboxArr
     })
 });

@@ -22,6 +22,9 @@ PODS:
   - Firebase/Database (6.13.0):
     - Firebase/CoreOnly
     - FirebaseDatabase (~> 6.1.2)
+  - Firebase/Functions (6.13.0):
+    - Firebase/CoreOnly
+    - FirebaseFunctions (~> 2.5.1)
   - Firebase/Messaging (6.13.0):
     - Firebase/CoreOnly
     - FirebaseMessaging (~> 4.1.9)
@@ -61,6 +64,10 @@ PODS:
     - FirebaseAuthInterop (~> 1.0)
     - FirebaseCore (~> 6.0)
     - leveldb-library (~> 1.22)
+  - FirebaseFunctions (2.5.1):
+    - FirebaseAuthInterop (~> 1.0)
+    - FirebaseCore (~> 6.0)
+    - GTMSessionFetcher/Core (~> 1.1)
   - FirebaseInstanceID (4.2.7):
     - FirebaseCore (~> 6.0)
     - GoogleUtilities/Environment (~> 6.0)
@@ -422,6 +429,11 @@ PODS:
     - Firebase/Database (~> 6.13.0)
     - React
     - RNFBApp
+  - RNFBFunctions (6.4.0):
+    - Firebase/Core (~> 6.13.0)
+    - Firebase/Functions (~> 6.13.0)
+    - React
+    - RNFBApp
   - RNFBMessaging (6.4.0):
     - Firebase/Core (~> 6.13.0)
     - Firebase/Messaging (~> 6.13.0)
@@ -492,6 +504,7 @@ DEPENDENCIES:
   - "RNFBApp (from `../node_modules/@react-native-firebase/app`)"
   - "RNFBAuth (from `../node_modules/@react-native-firebase/auth`)"
   - "RNFBDatabase (from `../node_modules/@react-native-firebase/database`)"
+  - "RNFBFunctions (from `../node_modules/@react-native-firebase/functions`)"
   - "RNFBMessaging (from `../node_modules/@react-native-firebase/messaging`)"
   - "RNFBStorage (from `../node_modules/@react-native-firebase/storage`)"
   - RNVectorIcons (from `../node_modules/react-native-vector-icons`)
@@ -511,6 +524,7 @@ SPEC REPOS:
     - FirebaseCoreDiagnostics
     - FirebaseCoreDiagnosticsInterop
     - FirebaseDatabase
+    - FirebaseFunctions
     - FirebaseInstanceID
     - FirebaseMessaging
     - FirebaseStorage
@@ -594,6 +608,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/@react-native-firebase/auth"
   RNFBDatabase:
     :path: "../node_modules/@react-native-firebase/database"
+  RNFBFunctions:
+    :path: "../node_modules/@react-native-firebase/functions"
   RNFBMessaging:
     :path: "../node_modules/@react-native-firebase/messaging"
   RNFBStorage:
@@ -619,6 +635,7 @@ SPEC CHECKSUMS:
   FirebaseCoreDiagnostics: b59c024493a409f8aecba02c99928d0d8431d159
   FirebaseCoreDiagnosticsInterop: 296e2c5f5314500a850ad0b83e9e7c10b011a850
   FirebaseDatabase: 0144e0706a4761f1b0e8679572eba8095ddb59be
+  FirebaseFunctions: 5af7c35d1c5e41608fecbb667eb6c4e672e318d0
   FirebaseInstanceID: ebd2ea79ee38db0cb5f5167b17a0d387e1cc7b6e
   FirebaseMessaging: 089b7a4991425783384acc8bcefcd78c0af913bd
   FirebaseStorage: 93fe2f8190a01bfb2b2c4932df7d679744c4ef1d
@@ -666,6 +683,7 @@ SPEC CHECKSUMS:
   RNFBApp: 69781cf10ce41f6f6db789e6264dd80119ef2fb7
   RNFBAuth: 50fcc7826344dc96caad8bc4f5b40a64904297b8
   RNFBDatabase: 393536c2bd82bd11de82795c2d5893f04d5bf587
+  RNFBFunctions: 42eb4afb067cd496523a24678b7a582262f6ecc5
   RNFBMessaging: 805710731a2b616030514f6f416e8787de521f41
   RNFBStorage: 24097a1d18534b9c3559f862b8d18365cd573c2c
   RNVectorIcons: 0bb4def82230be1333ddaeee9fcba45f0b288ed4

@@ -112,11 +112,14 @@ class CameraPage extends React.Component {
     }
 
     getInbox = async (registrationToken) => {
-        let response = await functions().httpsCallable('updateInbox')(registrationToken)
+        let data = {
+            registrationToken: registrationToken
+        }
+        let response = await functions().httpsCallable('updateInbox')(data)
+        console.log('response:', response)
         this.setState({
-            inbox: response
-        })
-        console.log(this.state.inbox)
+            inbox: response.data
+        })      
     }
 
     componentDidMount = async () => {
@@ -170,7 +173,7 @@ class CameraPage extends React.Component {
                             </View>
                             <View style={styles.bottomIcons}>
                                 <TouchableOpacity onPress={this.viewInbox} style={styles.viewInbox}>
-                                    <Text style={styles.inboxText}>2</Text>
+                                    <Text style={styles.inboxText}>{this.state.inbox.length}</Text>
                                 </TouchableOpacity>
                                 <TouchableOpacity onPress={this.takePicture.bind(this)}>
                                     <FontAwesome
