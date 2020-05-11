@@ -40,7 +40,7 @@ const store = createStore(rootReducer, applyMiddleware(sagaMiddleware));
 
 sagaMiddleware.run(rootSaga);
 
-export default function App() {
+export default App = () => {
   const [initializing, setInitializing] = useState(true);
   const [notification, setNotification] = useState(false);
 
@@ -57,6 +57,7 @@ export default function App() {
 
   useEffect(() => {
     const unsubscribe = messaging().onMessage(async remoteMessage => {
+      console.log('Received FCM')
       setNotification(true)
       //Alert.alert('A new FCM message arrived!', JSON.stringify(remoteMessage));
     });
@@ -68,7 +69,7 @@ export default function App() {
     <>
       <Provider store={store}>
         <NativeRouter>
-          <Notification visible={notification} setVisible={setNotification} />
+          <Notification isVisible={notification} setIsVisible={setNotification} />
           <Switch>
             <Route exact path="/" component={Login} />
             <Route exact path="/camera" component={CameraPage} />
@@ -80,43 +81,3 @@ export default function App() {
     </>
   );
 };
-
-const styles = StyleSheet.create({
-  // scrollView: {
-  //   backgroundColor: Colors.lighter,
-  // },
-  // engine: {
-  //   position: 'absolute',
-  //   right: 0,
-  // },
-  // body: {
-  //   backgroundColor: Colors.white,
-  // },
-  // sectionContainer: {
-  //   marginTop: 32,
-  //   paddingHorizontal: 24,
-  // },
-  // sectionTitle: {
-  //   fontSize: 24,
-  //   fontWeight: '600',
-  //   color: Colors.black,
-  // },
-  // sectionDescription: {
-  //   marginTop: 8,
-  //   fontSize: 18,
-  //   fontWeight: '400',
-  //   color: Colors.dark,
-  // },
-  // highlight: {
-  //   fontWeight: '700',
-  // },
-  // footer: {
-  //   color: Colors.dark,
-  //   fontSize: 12,
-  //   fontWeight: '600',
-  //   padding: 4,
-  //   paddingRight: 12,
-  //   textAlign: 'right',
-  // },
-});
-
