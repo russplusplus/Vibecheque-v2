@@ -5,7 +5,7 @@ import Modal from 'react-native-modal';
 export default Logout = (props) => {
 
     return (
-        <Modal isVisible={props.isVisible} animationIn='zoomIn'>
+        <Modal isVisible={props.isVisible} animationIn='zoomIn' animationOut='zoomOut'>
             <View style={styles.container}>
                 <Text style={styles.title}>You've received a vibe!</Text>
                 <Text style={styles.subtitle}>View your inbox to see it</Text>
