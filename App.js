@@ -32,6 +32,7 @@ import Login from './components/Login';
 import CameraPage from './components/CameraPage';
 import Favorite from './components/Favorite';
 import ViewInbox from './components/ViewInbox';
+import Notification from './components/Notification';
 
 const sagaMiddleware = createSagaMiddleware();
 
@@ -41,7 +42,7 @@ sagaMiddleware.run(rootSaga);
 
 export default function App() {
   const [initializing, setInitializing] = useState(true);
-
+  const [notification, setNotification] = useState(false);
 
   // handle user state changes
   function onAuthStateChanged(user) {
@@ -56,7 +57,8 @@ export default function App() {
 
   useEffect(() => {
     const unsubscribe = messaging().onMessage(async remoteMessage => {
-      Alert.alert('A new FCM message arrived!', JSON.stringify(remoteMessage));
+      setNotification(true)
+      //Alert.alert('A new FCM message arrived!', JSON.stringify(remoteMessage));
     });
     return unsubscribe;
   }, []);
@@ -66,6 +68,7 @@ export default function App() {
     <>
       <Provider store={store}>
         <NativeRouter>
+          <Notification visible={notification} setVisible={setNotification} />
           <Switch>
             <Route exact path="/" component={Login} />
             <Route exact path="/camera" component={CameraPage} />
