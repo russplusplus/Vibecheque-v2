@@ -15,6 +15,7 @@ import Logout from './Logout';
 import ReviewImage from './ReviewImage';
 
 import messaging from '@react-native-firebase/messaging';
+import database from '@react-native-firebase/database';
 
 FontAwesome.loadFont()
 Ionicons.loadFont()
@@ -97,20 +98,32 @@ class CameraPage extends React.Component {
         }
     }
 
-    retrieveUid = async () => {
-        try {
-            let user = JSON.parse(await AsyncStorage.getItem("user"));
-            console.log('user.user:', user.user.uid)
-            this.setState({
-                uid: user.user.uid
+    // retrieveUid = async () => {
+    //     try {
+    //         let user = JSON.parse(await AsyncStorage.getItem("user"));
+    //         console.log('user.user:', user.user.uid)
+    //         this.setState({
+    //             uid: user.user.uid
+    //         })
+    //     } catch (error) {
+    //         console.log('AsyncStorage retrieval error:', error.message);
+    //     }
+    // }
+
+    updateRegistrationToken = async () => {
+        let user = JSON.parse(await AsyncStorage.getItem("user"));
+        console.log('CameraPage user retrieval. user:', user)
+        let registrationToken = await messaging().getToken()
+        console.log('updateRegistrationToken token:', registrationToken)
+        await database()
+            .ref(`/users/${user.uid}`)
+            .update({
+                registrationToken: registrationToken
             })
-        } catch (error) {
-            console.log('AsyncStorage retrieval error:', error.message);
-        }
     }
 
     componentDidMount = () => {
-        this.retrieveUid()
+        this.updateRegistrationToken()
         this.requestUserPermission()
     }
 

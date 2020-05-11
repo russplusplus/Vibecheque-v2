@@ -7,6 +7,7 @@ import { Image, KeyboardAvoidingView, ScrollView, TouchableWithoutFeedback, Keyb
 import { getPhoneNumber } from 'react-native-device-info';
 
 import messaging from '@react-native-firebase/messaging';
+import database from '@react-native-firebase/database';
 
 const Login = props => {
 
@@ -41,11 +42,15 @@ const Login = props => {
 
     confirmCode = async () => {
         try {
-          await confirm.confirm(code);
-          console.log('code is valid!')
+          let user = await confirm.confirm(code);
+          console.log('code is valid! user:', user)
+          updateRegistrationToken(user)
+          await AsyncStorage.setItem("user", JSON.stringify(user))
+          setMessage('')
           props.history.push('/camera')
         } catch (error) {
           console.log('Invalid code.');
+          setMessage('Invalid code.')
         }
     }
 
@@ -104,9 +109,10 @@ const Login = props => {
 
     checkIfLoggedIn = async () => {
         try {
-            const user = await AsyncStorage.getItem("user")
-            console.log('user:', user)
+            const user = JSON.parse(await AsyncStorage.getItem("user"))
+            console.log('in checkIfLoggedIn. user.uid:', user.uid)
             if (user) {
+                updateRegistrationToken(user)
                 props.history.push('/camera')
             }
         } catch (error) {
@@ -114,11 +120,17 @@ const Login = props => {
         }
     }
 
-    // getDevicePhoneNumber = async () => {
-    //     let phoneNumber = await getPhoneNumber()
-    //     console.log('phoneNumber:', phoneNumber)
-    //     setPhoneNumber(await getPhoneNumber())
-    // }
+    updateRegistrationToken = async (user) => {
+        console.log('in updateRegistrationToken', user)
+        console.log('user.uid:', user.uid)
+        let registrationToken = await messaging().getToken()
+        console.log('updateRegistrationToken token:', registrationToken)
+        await database()
+            .ref(`/users/${user.uid}`)
+            .update({
+                registrationToken: registrationToken
+            })
+    }
 
     useEffect(() =>  {
         checkIfLoggedIn()

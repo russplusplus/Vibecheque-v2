@@ -19,6 +19,9 @@ PODS:
     - FirebaseAnalytics (= 6.1.6)
   - Firebase/CoreOnly (6.13.0):
     - FirebaseCore (= 6.4.0)
+  - Firebase/Database (6.13.0):
+    - Firebase/CoreOnly
+    - FirebaseDatabase (~> 6.1.2)
   - Firebase/Messaging (6.13.0):
     - Firebase/CoreOnly
     - FirebaseMessaging (~> 4.1.9)
@@ -54,6 +57,10 @@ PODS:
     - GoogleUtilities/Logger (~> 6.5)
     - nanopb (~> 0.3.901)
   - FirebaseCoreDiagnosticsInterop (1.2.0)
+  - FirebaseDatabase (6.1.4):
+    - FirebaseAuthInterop (~> 1.0)
+    - FirebaseCore (~> 6.0)
+    - leveldb-library (~> 1.22)
   - FirebaseInstanceID (4.2.7):
     - FirebaseCore (~> 6.0)
     - GoogleUtilities/Environment (~> 6.0)
@@ -157,6 +164,7 @@ PODS:
   - GoogleUtilities/UserDefaults (6.6.0):
     - GoogleUtilities/Logger
   - GTMSessionFetcher/Core (1.4.0)
+  - leveldb-library (1.22)
   - nanopb (0.3.9011):
     - nanopb/decode (= 0.3.9011)
     - nanopb/encode (= 0.3.9011)
@@ -409,6 +417,11 @@ PODS:
     - Firebase/Core (~> 6.13.0)
     - React
     - RNFBApp
+  - RNFBDatabase (6.4.0):
+    - Firebase/Core (~> 6.13.0)
+    - Firebase/Database (~> 6.13.0)
+    - React
+    - RNFBApp
   - RNFBMessaging (6.4.0):
     - Firebase/Core (~> 6.13.0)
     - Firebase/Messaging (~> 6.13.0)
@@ -478,6 +491,7 @@ DEPENDENCIES:
   - RNDeviceInfo (from `../node_modules/react-native-device-info`)
   - "RNFBApp (from `../node_modules/@react-native-firebase/app`)"
   - "RNFBAuth (from `../node_modules/@react-native-firebase/auth`)"
+  - "RNFBDatabase (from `../node_modules/@react-native-firebase/database`)"
   - "RNFBMessaging (from `../node_modules/@react-native-firebase/messaging`)"
   - "RNFBStorage (from `../node_modules/@react-native-firebase/storage`)"
   - RNVectorIcons (from `../node_modules/react-native-vector-icons`)
@@ -496,6 +510,7 @@ SPEC REPOS:
     - FirebaseCore
     - FirebaseCoreDiagnostics
     - FirebaseCoreDiagnosticsInterop
+    - FirebaseDatabase
     - FirebaseInstanceID
     - FirebaseMessaging
     - FirebaseStorage
@@ -511,6 +526,7 @@ SPEC REPOS:
     - GoogleDataTransportCCTSupport
     - GoogleUtilities
     - GTMSessionFetcher
+    - leveldb-library
     - nanopb
     - OpenSSL-Universal
     - PromisesObjC
@@ -576,6 +592,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/@react-native-firebase/app"
   RNFBAuth:
     :path: "../node_modules/@react-native-firebase/auth"
+  RNFBDatabase:
+    :path: "../node_modules/@react-native-firebase/database"
   RNFBMessaging:
     :path: "../node_modules/@react-native-firebase/messaging"
   RNFBStorage:
@@ -600,6 +618,7 @@ SPEC CHECKSUMS:
   FirebaseCore: 307ea2508df730c5865334e41965bd9ea344b0e5
   FirebaseCoreDiagnostics: b59c024493a409f8aecba02c99928d0d8431d159
   FirebaseCoreDiagnosticsInterop: 296e2c5f5314500a850ad0b83e9e7c10b011a850
+  FirebaseDatabase: 0144e0706a4761f1b0e8679572eba8095ddb59be
   FirebaseInstanceID: ebd2ea79ee38db0cb5f5167b17a0d387e1cc7b6e
   FirebaseMessaging: 089b7a4991425783384acc8bcefcd78c0af913bd
   FirebaseStorage: 93fe2f8190a01bfb2b2c4932df7d679744c4ef1d
@@ -617,6 +636,7 @@ SPEC CHECKSUMS:
   GoogleDataTransportCCTSupport: 0f39025e8cf51f168711bd3fb773938d7e62ddb5
   GoogleUtilities: 39530bc0ad980530298e9c4af8549e991fd033b1
   GTMSessionFetcher: 6f5c8abbab8a9bce4bb3f057e317728ec6182b10
+  leveldb-library: 55d93ee664b4007aac644a782d11da33fba316f7
   nanopb: 18003b5e52dab79db540fe93fe9579f399bd1ccd
   OpenSSL-Universal: 8b48cc0d10c1b2923617dfe5c178aa9ed2689355
   PromisesObjC: c119f3cd559f50b7ae681fa59dc1acd19173b7e6
@@ -645,6 +665,7 @@ SPEC CHECKSUMS:
   RNDeviceInfo: c3ea4a4d4547740c548cdd1e5a78f9b04e524688
   RNFBApp: 69781cf10ce41f6f6db789e6264dd80119ef2fb7
   RNFBAuth: 50fcc7826344dc96caad8bc4f5b40a64904297b8
+  RNFBDatabase: 393536c2bd82bd11de82795c2d5893f04d5bf587
   RNFBMessaging: 805710731a2b616030514f6f416e8787de521f41
   RNFBStorage: 24097a1d18534b9c3559f862b8d18365cd573c2c
   RNVectorIcons: 0bb4def82230be1333ddaeee9fcba45f0b288ed4

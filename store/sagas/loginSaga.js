@@ -9,7 +9,7 @@ function* login(action) {
     try {
         let user = yield auth().signInWithEmailAndPassword(action.payload.email, action.payload.password)
         console.log('user:', user)
-        yield AsyncStorage.setItem("user", JSON.stringify(user))
+        yield AsyncStorage.setItem("user", JSON.stringify(user.user))
         action.history.push('/camera');
         console.log('User signed in!');
         yield put({
