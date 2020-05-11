@@ -51,12 +51,12 @@ exports.addImage = functions.storage.object('/images').onFinalize(async (object)
       console.log('recipientToken:', recipientToken)
 
       const payload = {
-				data: {
-					data_type: "direct_message",
-					title: "New Message from " + senderToken,
-					message: filename,
-					message_id: "test id",
-        },
+				// data: {
+				// 	data_type: "direct_message",
+				// 	title: "New Message from " + senderToken,
+				// 	message: filename,
+				// 	message_id: "test id",
+        // },
         notification: {
           title: 'Basic Notification',
           body: 'This is a basic notification sent from the server!',
@@ -64,7 +64,9 @@ exports.addImage = functions.storage.object('/images').onFinalize(async (object)
         },
       }
 
-      admin.messaging().sendToDevice(recipientToken, payload)
+      admin
+        .messaging()
+        .sendToDevice(recipientToken, payload)
         .then(function(response) {
           console.log("Successfully sent message:", response);
         })
@@ -74,12 +76,31 @@ exports.addImage = functions.storage.object('/images').onFinalize(async (object)
           
       // add entry to images table 
       admin
-      .database()
-      .ref(`images/${filename}`)
-      .set({
-        from: senderToken,
-        to: recipientToken,
-        isResponse: false
-      })
+        .database()
+        .ref(`images/${filename}`)
+        .set({
+          from: senderToken,
+          to: recipientToken,
+          isResponse: false
+        })
+    })
+});
+
+exports.updateInbox = functions.https.onCall((data, context) => {
+  console.log('data.registrationToken:', data.registrationToken)
+  let inboxArr = []
+  return admin  
+    .database()
+    .ref('images')
+    .once('value')
+    .then(snapshot => {
+      let images = snapshot.val()
+      for (image in images) {
+        if (images[image].to === data.registrationToken) {
+          inboxArr.push(image)
+        }
+      }
+      console.log('in .then. inboxArr:', inboxArr)
+      return inboxArr
     })
 });

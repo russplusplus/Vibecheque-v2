@@ -16,6 +16,7 @@ import ReviewImage from './ReviewImage';
 
 import messaging from '@react-native-firebase/messaging';
 import database from '@react-native-firebase/database';
+import functions from '@react-native-firebase/functions';
 
 FontAwesome.loadFont()
 Ionicons.loadFont()
@@ -27,7 +28,8 @@ class CameraPage extends React.Component {
         isReviewMode: false,
         cameraType: RNCamera.Constants.Type.back,
         capturedImageUri: '',
-        uid: ''
+        uid: '',
+        inbox: [],
     }
 
     logout = () => {
@@ -98,22 +100,9 @@ class CameraPage extends React.Component {
         }
     }
 
-    // retrieveUid = async () => {
-    //     try {
-    //         let user = JSON.parse(await AsyncStorage.getItem("user"));
-    //         console.log('user.user:', user.user.uid)
-    //         this.setState({
-    //             uid: user.user.uid
-    //         })
-    //     } catch (error) {
-    //         console.log('AsyncStorage retrieval error:', error.message);
-    //     }
-    // }
-
-    updateRegistrationToken = async () => {
+    updateRegistrationToken = async (registrationToken) => {
         let user = JSON.parse(await AsyncStorage.getItem("user"));
         console.log('CameraPage user retrieval. user:', user)
-        let registrationToken = await messaging().getToken()
         console.log('updateRegistrationToken token:', registrationToken)
         await database()
             .ref(`/users/${user.uid}`)
@@ -122,9 +111,22 @@ class CameraPage extends React.Component {
             })
     }
 
-    componentDidMount = () => {
-        this.updateRegistrationToken()
+    getInbox = async (registrationToken) => {
+        let data = {
+            registrationToken: registrationToken
+        }
+        let response = await functions().httpsCallable('updateInbox')(data)
+        console.log('response:', response)
+        this.setState({
+            inbox: response.data
+        })      
+    }
+
+    componentDidMount = async () => {
+        let registrationToken = await messaging().getToken()
+        this.updateRegistrationToken(registrationToken)
         this.requestUserPermission()
+        this.getInbox(registrationToken)
     }
 
     render() {
@@ -171,7 +173,7 @@ class CameraPage extends React.Component {
                             </View>
                             <View style={styles.bottomIcons}>
                                 <TouchableOpacity onPress={this.viewInbox} style={styles.viewInbox}>
-                                    <Text style={styles.inboxText}>2</Text>
+                                    <Text style={styles.inboxText}>{this.state.inbox.length}</Text>
                                 </TouchableOpacity>
                                 <TouchableOpacity onPress={this.takePicture.bind(this)}>
                                     <FontAwesome
