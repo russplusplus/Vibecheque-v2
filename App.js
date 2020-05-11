@@ -11,16 +11,6 @@ import { NativeRouter, Route, Switch } from "react-router-native";
 import auth from '@react-native-firebase/auth';
 import messaging from '@react-native-firebase/messaging';
 
-import {
-  SafeAreaView,
-  StyleSheet,
-  ScrollView,
-  View,
-  Text,
-  StatusBar,
-  Alert,
-} from 'react-native';
-
 import { createStore, applyMiddleware } from 'redux';
 import { Provider } from 'react-redux';
 import createSagaMiddleware from 'redux-saga';
@@ -64,7 +54,6 @@ export default App = () => {
     return unsubscribe;
   }, []);
   
-
   return (
     <>
       <Provider store={store}>

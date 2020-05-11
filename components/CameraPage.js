@@ -2,8 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, TextInput, StyleSheet, Button, Platform, TouchableOpacity, ImageBackground } from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
 
-import EStyleSheet from 'react-native-extended-stylesheet';
-
 import { connect } from 'react-redux';
 import { RNCamera } from 'react-native-camera';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
@@ -117,9 +115,10 @@ class CameraPage extends React.Component {
         }
         let response = await functions().httpsCallable('updateInbox')(data)
         console.log('response:', response)
-        this.setState({
-            inbox: response.data
-        })      
+        this.props.dispatch({
+            type: 'SET_INBOX',
+            payload: response.data
+        })   
     }
 
     componentDidMount = async () => {
@@ -173,7 +172,7 @@ class CameraPage extends React.Component {
                             </View>
                             <View style={styles.bottomIcons}>
                                 <TouchableOpacity onPress={this.viewInbox} style={styles.viewInbox}>
-                                    <Text style={styles.inboxText}>{this.state.inbox.length}</Text>
+                                    <Text style={styles.inboxText}>{this.props.reduxState.inbox.length}</Text>
                                 </TouchableOpacity>
                                 <TouchableOpacity onPress={this.takePicture.bind(this)}>
                                     <FontAwesome
@@ -261,25 +260,6 @@ const styles = StyleSheet.create({
     favoriteIcon: {
         color: 'white',
         fontSize: 44
-    }
-});
-
-const eStyles = EStyleSheet.create({
-    logoutIcon: {
-
-    },
-    switchCameraIcon: {
-
-    },
-    inboxText: {
-
-    },
-    captureIcon: {
-
-    },
-    favoriteIcon: {
-        color: 'white',
-        fontSize: '2rem'
     }
 });
 
