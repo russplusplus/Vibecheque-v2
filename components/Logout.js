@@ -1,11 +1,12 @@
 import React from 'react';
-import { View, Text, TextInput, StyleSheet, Button, Platform, TouchableOpacity, ImageBackground, Modal } from 'react-native';
+import { View, Text, TextInput, StyleSheet, Button, Platform, TouchableOpacity, ImageBackground } from 'react-native';
+import Modal from 'react-native-modal';
 
 class Logout extends React.Component {
 
     render() {
         return (
-            <Modal visible={this.props.visible} animationType='slide' transparent={true}>
+            <Modal isVisible={this.props.visible} animationIn='slideInUp' animationOut='slideOutDown'>
                 <View style={styles.container}>
                     <Text style={styles.text}>Log out?</Text>
                     <TouchableOpacity 
