@@ -1,15 +1,16 @@
 import React from 'react';
-import { View, Text, TextInput, StyleSheet, Button, Platform, TouchableOpacity, ImageBackground, Modal } from 'react-native';
+import { View, Text, TextInput, StyleSheet, Button, Platform, TouchableOpacity, ImageBackground } from 'react-native';
+import Modal from 'react-native-modal';
 
 export default Logout = (props) => {
 
     return (
-        <Modal visible={props.visible} animationType='fade' transparent={true}>
+        <Modal isVisible={props.isVisible} animationIn='zoomIn' animationOut='zoomOut'>
             <View style={styles.container}>
                 <Text style={styles.title}>You've received a vibe!</Text>
-                <Text style={styles.subtitle}>You've received a vibe!</Text>
+                <Text style={styles.subtitle}>View your inbox to see it</Text>
                 <TouchableOpacity 
-                    onPress={() => props.setVisible('false')} 
+                    onPress={() => props.setIsVisible(false)} 
                     style={styles.cancelButton}>
                     <Text
                         style={styles.cancelButtonText}>
@@ -23,7 +24,7 @@ export default Logout = (props) => {
 
 const styles = StyleSheet.create({
     container: {
-        flex:1, 
+        flex: 1, 
         alignItems: 'center', 
         marginLeft: '6%', 
         marginRight: '6%', 
@@ -35,13 +36,12 @@ const styles = StyleSheet.create({
         borderRadius: 10
     },
     title: {
-        fontFamily: 'notoserif',
-        fontSize: 48, 
+        fontSize: 44, 
         textAlign: 'center', 
         marginTop: '15%'
     },
     subtitle: {
-        fontSize: 36, 
+        fontSize: 30, 
         textAlign: 'center', 
     },
     yesButton: {
