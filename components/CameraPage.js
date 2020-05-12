@@ -23,7 +23,8 @@ class CameraPage extends React.Component {
         isReviewMode: false,
         cameraType: RNCamera.Constants.Type.back,
         capturedImageUri: '',
-        uid: ''
+        uid: '',
+        isSending: false
     }
 
     logout = () => {
@@ -68,6 +69,9 @@ class CameraPage extends React.Component {
     }
 
     sendImage = async () => {
+        this.setState({
+            isSending: true
+        })
         let registrationToken = this.props.reduxState.registrationToken
         console.log('token:', registrationToken)
         
@@ -83,6 +87,9 @@ class CameraPage extends React.Component {
         }
         await ref.putFile(this.state.capturedImageUri, metadata);
         this.toggleReviewMode()
+        this.setState({
+            isSending: false
+        })
     }
 
     requestUserPermission = async () => {
@@ -121,7 +128,7 @@ class CameraPage extends React.Component {
             <>
                 <View style={styles.container}>
                     <Logout visible={this.state.isLogoutMode} logout={this.logout} toggleLogoutMode={this.toggleLogoutMode}/>
-                    <ReviewImage visible={this.state.isReviewMode} sendImage={this.sendImage} toggleReviewMode={this.toggleReviewMode} capturedImageUri={this.state.capturedImageUri}/>
+                    <ReviewImage visible={this.state.isReviewMode} sendImage={this.sendImage} toggleReviewMode={this.toggleReviewMode} capturedImageUri={this.state.capturedImageUri} isSending={this.state.isSending}/>
                     <RNCamera
                         ref={ref => {
                             this.camera = ref;
@@ -198,7 +205,9 @@ const styles = StyleSheet.create({
         flexDirection: 'column', 
         justifyContent: 'space-between',
         margin: '3%',
-        marginTop: Platform.OS === 'ios' ? '8%' : '3%'
+        marginTop: Platform.OS === 'ios' ? '8%' : '3%',
+        marginBottom: Platform.OS === 'ios' ? '5%' : '3%'
+
     },
     topIcons: {
         flexDirection: 'row',
@@ -210,7 +219,7 @@ const styles = StyleSheet.create({
         alignItems: 'flex-end',
     },
     viewInbox: {
-        justifyContent: 'center',
+        justifyContent: Platform.OS === 'ios' ? 'flex-end' : 'center',
         alignItems: 'center',
         borderColor: 'black',
         borderWidth: 2,
@@ -220,7 +229,7 @@ const styles = StyleSheet.create({
         borderRadius: 10
     },
     viewFavorite: {
-        justifyContent: 'center',
+        justifyContent: Platform.OS === 'ios' ? 'flex-end' : 'center',
         alignItems: 'center',
         borderColor: 'black',
         borderWidth: 2,

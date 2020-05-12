@@ -1,39 +1,50 @@
-import React from 'react';
-import { View, Text, TextInput, StyleSheet, Button, Platform, TouchableOpacity, ImageBackground, Modal } from 'react-native';
+import React, { useState } from 'react';
+import { View, Text, TextInput, StyleSheet, Button, Platform, TouchableOpacity, ImageBackground, ActivityIndicator } from 'react-native';
+import Modal from 'react-native-modal';
 
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
-class Logout extends React.Component {
+export default ReviewImage = (props) => {
 
-    render() {
         return (
-            <Modal visible={this.props.visible} animationType='flip'>
+            <Modal isVisible={props.visible} animationInTiming={0.1} animationOutTiming={0.1} style={styles.modal}>
                 <ImageBackground
                     style={{ flex: 1 }}
-                    source={{ uri: this.props.capturedImageUri }}>
+                    source={{ uri: props.capturedImageUri }}>
                     <View style={styles.iconContainer}>
                         <View style={styles.bottomIcons}>
-                            <TouchableOpacity onPress={this.props.toggleReviewMode} style={styles.cancel}>
+                            <TouchableOpacity onPress={props.toggleReviewMode} style={styles.cancel}>
                                 <Ionicons
                                     name='md-close'
                                     style={styles.cancelIcon}
                                 />
                             </TouchableOpacity>
-                            <TouchableOpacity onPress={this.props.sendImage} style={styles.sendImage}>
-                                <Ionicons
-                                    name='md-send'
-                                    style={styles.sendImageIcon}
-                                />
+                            <TouchableOpacity onPress={props.sendImage} style={styles.sendImage}>
+                                {props.isSending ? 
+                                    <ActivityIndicator
+                                        color='black'
+                                        size={40} 
+                                        style={styles.wheel}   
+                                    />
+                                :
+                                
+                                    <Ionicons
+                                        name='md-send'
+                                        style={styles.sendImageIcon}
+                                    />
+                                }
                             </TouchableOpacity>
                         </View>
                     </View>
                 </ImageBackground> 
             </Modal>
         )
-    }
 }
 
 const styles = StyleSheet.create({
+    modal: {
+        margin: 0
+    },
     container: {
         flex: 6,
         flexDirection: 'column',
@@ -45,7 +56,8 @@ const styles = StyleSheet.create({
         flexDirection: 'column', 
         justifyContent: 'flex-end',
         margin: '3%',
-        marginTop: Platform.OS === 'ios' ? '8%' : '3%'
+        marginTop: Platform.OS === 'ios' ? '8%' : '3%',
+        marginBottom: Platform.OS === 'ios' ? '5%' : '3%'
     },
     bottomIcons: {
         flexDirection: 'row',
@@ -54,7 +66,7 @@ const styles = StyleSheet.create({
     },
     cancel: {
         flexDirection: 'column',
-        justifyContent: 'flex-end',
+        justifyContent: 'center',
         alignItems: 'center',
         borderColor: 'black',
         borderWidth: 2,
@@ -65,9 +77,8 @@ const styles = StyleSheet.create({
     },
     sendImage: {
         flexDirection: 'column',
-        justifyContent: 'flex-end',
+        justifyContent: 'center',
         alignItems: 'center',
-        alignSelf: 'flex-end',
         borderColor: 'black',
         borderWidth: 2,
         backgroundColor: '#9EE7FF',
@@ -75,14 +86,18 @@ const styles = StyleSheet.create({
         aspectRatio: 1,
         borderRadius: 10
     },
+    wheel: {
+        alignSelf: 'center'
+    },
     cancelIcon: {
+        height: Platform.OS === 'ios' ? '87%' : '91%',
         color: 'black',
-        fontSize: 44
+        fontSize: 44,
+        // borderWidth: 2,
     },
     sendImageIcon: {
+        height: Platform.OS === 'ios' ? '87%' : '91%',
         color: 'black',
         fontSize: 44
     }
 })
-
-export default Logout;
