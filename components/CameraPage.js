@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, TextInput, StyleSheet, Button, Platform, TouchableOpacity, ImageBackground } from 'react-native';
-import AsyncStorage from '@react-native-community/async-storage';
 
 import { connect } from 'react-redux';
 import { RNCamera } from 'react-native-camera';
@@ -13,8 +12,6 @@ import Logout from './Logout';
 import ReviewImage from './ReviewImage';
 
 import messaging from '@react-native-firebase/messaging';
-import database from '@react-native-firebase/database';
-import functions from '@react-native-firebase/functions';
 
 FontAwesome.loadFont()
 Ionicons.loadFont()
@@ -26,8 +23,7 @@ class CameraPage extends React.Component {
         isReviewMode: false,
         cameraType: RNCamera.Constants.Type.back,
         capturedImageUri: '',
-        uid: '',
-        inbox: [],
+        uid: ''
     }
 
     logout = () => {
@@ -72,8 +68,7 @@ class CameraPage extends React.Component {
     }
 
     sendImage = async () => {
-        // try this, if it's slow, get the token in useEffect
-        let registrationToken = await messaging().getToken()
+        let registrationToken = this.props.reduxState.registrationToken
         console.log('token:', registrationToken)
         
         // generate filename from current time in milliseconds
@@ -98,31 +93,27 @@ class CameraPage extends React.Component {
         }
     }
 
-    updateRegistrationToken = async (registrationToken) => {
-        let user = JSON.parse(await AsyncStorage.getItem("user"));
-        console.log('CameraPage user retrieval. user:', user)
-        console.log('updateRegistrationToken token:', registrationToken)
-        await database()
-            .ref(`/users/${user.uid}`)
-            .update({
-                registrationToken: registrationToken
-            })
-    }
-
-    getInbox = async (registrationToken) => {
-        let response = await functions().httpsCallable('updateInbox')({registrationToken})
-        console.log('response:', response)
-        this.props.dispatch({
-            type: 'SET_INBOX',
-            payload: response.data
-        })   
-    }
+    // updateRegistrationToken = async (registrationToken) => {
+    //     let user = JSON.parse(await AsyncStorage.getItem("user"));
+    //     console.log('CameraPage user retrieval. user:', user)
+    //     console.log('updateRegistrationToken token:', registrationToken)
+    //     await database()
+    //         .ref(`/users/${user.uid}`)
+    //         .update({
+    //             registrationToken: registrationToken
+    //         })
+    // }
 
     componentDidMount = async () => {
-        let registrationToken = await messaging().getToken()
-        this.updateRegistrationToken(registrationToken)
+        this.props.dispatch({
+            type: 'GET_REGISTRATION_TOKEN'
+        })
+        //let registrationToken = await messaging().getToken()
+        //this.updateRegistrationToken(registrationToken)
         this.requestUserPermission()
-        this.getInbox(registrationToken)
+        this.props.dispatch({
+            type: 'GET_INBOX'
+        })
     }
 
     render() {

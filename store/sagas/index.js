@@ -5,6 +5,7 @@ import loginSaga from './loginSaga';
 import signUpSaga from './signUpSaga';
 import logoutSaga from './logoutSaga';
 import getInboxSaga from './getInboxSaga';
+import getRegistrationTokenSaga from './getRegistrationTokenSaga';
 
 function* rootSaga() {
     yield all([
@@ -12,7 +13,8 @@ function* rootSaga() {
         signUpSaga(),
         logoutSaga(),
         sendImageSaga(),
-        getInboxSaga()
+        getInboxSaga(),
+        getRegistrationTokenSaga()
     ]);
   }
 

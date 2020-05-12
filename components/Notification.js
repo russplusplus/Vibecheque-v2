@@ -7,23 +7,10 @@ import messaging from '@react-native-firebase/messaging';
 
 Notification = (props) => {
 
-    getInbox = async (registrationToken) => {
-        let response = await functions().httpsCallable('updateInbox')({registrationToken})
-        //console.log('response:', response)
-        console.log('updated inbox length:', response.data.length)
-        props.dispatch({
-            type: 'SET_INBOX',
-            payload: response.data
-        })   
-    }
-
     closeNotification = async () => {
-        let registrationToken = await messaging().getToken() //see if this slows it down. then try getting rid of useState
-        console.log('registrationToken:', registrationToken)
         props.dispatch({
             type: 'GET_INBOX'
         })
-        //getInbox(registrationToken)
         props.setIsVisible(false)
     }
 

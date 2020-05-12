@@ -1,6 +1,4 @@
 import { put, takeEvery } from 'redux-saga/effects';
-import AsyncStorage from '@react-native-community/async-storage';
-import auth from '@react-native-firebase/auth';
 import messaging from '@react-native-firebase/messaging';
 import functions from '@react-native-firebase/functions';
 

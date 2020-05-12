@@ -49,7 +49,6 @@ export default App = () => {
     const unsubscribe = messaging().onMessage(async remoteMessage => {
       console.log('Received FCM')
       setNotification(true)
-      //Alert.alert('A new FCM message arrived!', JSON.stringify(remoteMessage));
     });
     return unsubscribe;
   }, []);
