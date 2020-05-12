@@ -1,8 +1,28 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Text, TextInput, StyleSheet, Button, Platform, TouchableOpacity, ImageBackground } from 'react-native';
+import { connect } from 'react-redux';
 import Modal from 'react-native-modal';
+import functions from '@react-native-firebase/functions';
+import messaging from '@react-native-firebase/messaging';
 
-export default Logout = (props) => {
+Notification = (props) => {
+
+    getInbox = async (registrationToken) => {
+        let response = await functions().httpsCallable('updateInbox')({registrationToken})
+        //console.log('response:', response)
+        console.log('updated inbox length:', response.data.length)
+        props.dispatch({
+            type: 'SET_INBOX',
+            payload: response.data
+        })   
+    }
+
+    closeNotification = async () => {
+        let registrationToken = await messaging().getToken() //see if this slows it down. then try getting rid of useState
+        console.log('registrationToken:', registrationToken)
+        getInbox(registrationToken)
+        props.setIsVisible(false)
+    }
 
     return (
         <Modal isVisible={props.isVisible} animationIn='zoomIn' animationOut='zoomOut'>
@@ -10,7 +30,7 @@ export default Logout = (props) => {
                 <Text style={styles.title}>You've received a vibe!</Text>
                 <Text style={styles.subtitle}>View your inbox to see it</Text>
                 <TouchableOpacity 
-                    onPress={() => props.setIsVisible(false)} 
+                    onPress={() => closeNotification()} 
                     style={styles.cancelButton}>
                     <Text
                         style={styles.cancelButtonText}>
@@ -21,6 +41,10 @@ export default Logout = (props) => {
         </Modal>
     )
 }
+
+const mapReduxStateToProps = reduxState => ({
+    reduxState
+});
 
 const styles = StyleSheet.create({
     container: {
@@ -72,3 +96,4 @@ const styles = StyleSheet.create({
     }
 })
 
+export default connect(mapReduxStateToProps)(Notification);

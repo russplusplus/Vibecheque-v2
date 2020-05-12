@@ -110,10 +110,7 @@ class CameraPage extends React.Component {
     }
 
     getInbox = async (registrationToken) => {
-        let data = {
-            registrationToken: registrationToken
-        }
-        let response = await functions().httpsCallable('updateInbox')(data)
+        let response = await functions().httpsCallable('updateInbox')({registrationToken})
         console.log('response:', response)
         this.props.dispatch({
             type: 'SET_INBOX',
