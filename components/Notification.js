@@ -20,7 +20,10 @@ Notification = (props) => {
     closeNotification = async () => {
         let registrationToken = await messaging().getToken() //see if this slows it down. then try getting rid of useState
         console.log('registrationToken:', registrationToken)
-        getInbox(registrationToken)
+        props.dispatch({
+            type: 'GET_INBOX'
+        })
+        //getInbox(registrationToken)
         props.setIsVisible(false)
     }
 

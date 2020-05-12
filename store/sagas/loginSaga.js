@@ -1,4 +1,4 @@
-import { put, select, takeEvery } from 'redux-saga/effects';
+import { put, takeEvery } from 'redux-saga/effects';
 import AsyncStorage from '@react-native-community/async-storage';
 import auth from '@react-native-firebase/auth';
 
@@ -45,19 +45,7 @@ function* login(action) {
                 })
                 break;
         }
-        // if (err.code === 'auth/invalid-email') {
-        //     console.log('err match')
-        //     yield put({
-        //         type: 'SET_LOGIN_MESSAGE',
-        //         payload: 'Please enter a valid email address.'
-        //     })
-        // } else if (err.cody)
     }
-
-    //  yield put({
-    //         type: 'SET_LOGIN_MESSAGE', 
-    //         payload: message
-    //     })
 }
 
 function* loginSaga() {
