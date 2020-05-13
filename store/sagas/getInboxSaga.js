@@ -1,11 +1,11 @@
 import { put, takeEvery } from 'redux-saga/effects';
-import messaging from '@react-native-firebase/messaging';
+import AsyncStorage from '@react-native-community/async-storage';
 import functions from '@react-native-firebase/functions';
 
 function* getInbox() {
-    let registrationToken = yield messaging().getToken()
-    let response = yield functions().httpsCallable('updateInbox')({registrationToken})
-    console.log('response:', response)
+    let uid = JSON.parse(yield AsyncStorage.getItem('user')).uid
+    let response = yield functions().httpsCallable('updateInbox')({uid})
+    console.log('response.data:', response.data)
     yield put({
         type: 'SET_INBOX',
         payload: response.data

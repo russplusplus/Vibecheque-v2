@@ -12,6 +12,7 @@ import Logout from './Logout';
 import ReviewImage from './ReviewImage';
 
 import messaging from '@react-native-firebase/messaging';
+import AsyncStorage from '@react-native-community/async-storage';
 
 FontAwesome.loadFont()
 Ionicons.loadFont()
@@ -69,27 +70,30 @@ class CameraPage extends React.Component {
     }
 
     sendImage = async () => {
-        this.setState({
-            isSending: true
-        })
-        let registrationToken = this.props.reduxState.registrationToken
-        console.log('token:', registrationToken)
-        
-        // generate filename from current time in milliseconds
-        let d = new Date();
-        let filename = d.getTime();
-        console.log('filename:', filename)
-        const ref = storage().ref('images/' + String(filename));
-        const metadata = {
-            customMetadata: {
-                fromToken: registrationToken
+        if (this.state.uid) {
+            this.setState({
+                isSending: true
+            })
+            let registrationToken = this.props.reduxState.registrationToken
+            console.log('token:', registrationToken)
+            
+            // generate filename from current time in milliseconds
+            let d = new Date();
+            let filename = d.getTime();
+            console.log('filename:', filename)
+            const ref = storage().ref('images/' + String(filename));
+            const metadata = {
+                customMetadata: {
+                    fromUid: this.state.uid
+                }
             }
+            await ref.putFile(this.state.capturedImageUri, metadata);
+            this.toggleReviewMode()
+            this.setState({
+                isSending: false
+            })
         }
-        await ref.putFile(this.state.capturedImageUri, metadata);
-        this.toggleReviewMode()
-        this.setState({
-            isSending: false
-        })
+        
     }
 
     requestUserPermission = async () => {
@@ -100,18 +104,10 @@ class CameraPage extends React.Component {
         }
     }
 
-    // updateRegistrationToken = async (registrationToken) => {
-    //     let user = JSON.parse(await AsyncStorage.getItem("user"));
-    //     console.log('CameraPage user retrieval. user:', user)
-    //     console.log('updateRegistrationToken token:', registrationToken)
-    //     await database()
-    //         .ref(`/users/${user.uid}`)
-    //         .update({
-    //             registrationToken: registrationToken
-    //         })
-    // }
-
     componentDidMount = async () => {
+        this.setState({
+            uid: JSON.parse(await AsyncStorage.getItem('user')).uid
+        })
         this.props.dispatch({
             type: 'GET_REGISTRATION_TOKEN'
         })

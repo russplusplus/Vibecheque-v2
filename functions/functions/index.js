@@ -11,15 +11,15 @@ exports.addUser = functions.auth.user().onCreate(user => {
       isBanned: 0,
       email: user.email,
       phoneNumber: user.phoneNumber,
-    });
+  });
 });
 
 exports.addImage = functions.storage.object('/images').onFinalize(async (object) => {
   console.log('storage object:', object)
 
   // Sender UID is attached as metadata to storage object
-  console.log('object.metadata.fromToken:', object.metadata.fromToken)
-  let senderToken = object.metadata.fromToken
+  console.log('object.metadata.fromToken:', object.metadata.fromUid)
+  let senderUid = object.metadata.fromUid
 
   // 'images/xxxxxxx' => 'xxxxxxx'
   let filename = object.name.substring(7)
@@ -32,22 +32,24 @@ exports.addImage = functions.storage.object('/images').onFinalize(async (object)
     .then(snapshot => {
       let users = snapshot.val()
       console.log('snapshot:', users)
-      let tokenArr = []
+      let uidArr = []
       for (user in users) {
-        console.log('user:', users[user])
-        console.log('user.registrationToken:', users[user].registrationToken)
+        console.log('user:', user)
         // add [if not banned...], [if in geographic radius...]
-        tokenArr.push(users[user].registrationToken)
+        uidArr.push(user)
       }
-      console.log('tokenArr:', tokenArr)
+      console.log('uidArr:', uidArr)
+      console.log('senderUid:', senderUid)
 
       // randomly select from array of suitable UIDs
-      let recipientToken
+      let recipientUid
       let i = 0
       do {
-        recipientToken = tokenArr[Math.floor(Math.random() * tokenArr.length)]
+        recipientUid = uidArr[Math.floor(Math.random() * uidArr.length)]
         i++
-      } while (recipientToken === senderToken && i < 100)
+      } while (recipientUid === senderUid && i < 100)
+      console.log('recipientUid:', recipientUid)
+      let recipientToken = users[recipientUid].registrationToken
       console.log('recipientToken:', recipientToken)
 
       const payload = {
@@ -72,31 +74,34 @@ exports.addImage = functions.storage.object('/images').onFinalize(async (object)
         })
         .catch(function(error) {
           console.log("Error sending message:", error);
-        });
+      });
           
-      // add entry to images table 
+      // add entry to images table
+      console.log('recipientUid:', recipientUid)
+      console.log('senderUid:', senderUid) 
       admin
         .database()
-        .ref(`images/${filename}`)
+        .ref(`users/${recipientUid}/inbox/${filename}`)
         .set({
-          from: senderToken,
-          to: recipientToken,
+          from: senderUid,
+          to: recipientUid,
           isResponse: false
-        })
-    })
+      })
+  })
 });
 
 exports.updateInbox = functions.https.onCall((data, context) => {
-  console.log('data.registrationToken:', data.registrationToken)
+  console.log('data.registrationToken:', data.uid)
   let inboxArr = []
   return admin  
     .database()
-    .ref('images')
+    .ref(`users/${data.uid}/inbox`)
     .once('value')
     .then(snapshot => {
+      console.log('snapshot.val():', snapshot.val())
       let images = snapshot.val()
       for (image in images) {
-        if (images[image].to === data.registrationToken) {
+        if (images[image].to === data.uid) {
           inboxArr.push(image)
         }
       }
