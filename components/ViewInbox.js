@@ -86,12 +86,28 @@ class ViewInbox extends React.Component {
     componentDidMount() {
         console.log('in ViewInbox componentDidMount')
         console.log('reduxState.inbox:', this.props.reduxState.inbox)
+        //console.log('this.props.reduxState.inbox[0]:'. this.props.reduxState.inbox[0])
         this.setState({
             image: this.props.reduxState.inbox[0]
         })
-        if (this.props.reduxState.inbox[0].is_response) {
-            this.setState({responseMessage: 'Response'})
-        }
+        // if (this.props.reduxState.inbox[0].is_response) {
+        //     this.setState({responseMessage: 'Response'})
+        // }
+
+        //Russ,
+        //
+        //You need to figure out how to get isResponding from the image.
+        //Right now, redux has an array of image names and the url of the
+        //first image in the queue. However, since we're gonna need the 
+        //isResponse boolean from each image too, it might be best to 
+        //change the array of strings to an array of objects, with all
+        //the data we'll need for each image. Maybe in the cameraPage 
+        //componentDidMount we could load the url for the first image
+        //in the queue. But maybe you'll think of a better way.
+        //
+        //Goodnight,
+        //
+        //Russ
     }
     
     render() {
@@ -101,6 +117,7 @@ class ViewInbox extends React.Component {
                 <NewFavorite visible={this.state.newFavoriteMode} closeNewFavoriteModal={this.closeNewFavoriteModal} indicateFavorite={this.indicateFavorite}></NewFavorite>
                 <Report visible={this.state.reportMode} cancelReport={this.cancelReport} returnToCameraPage={this.returnToCameraPage}></Report>
                     <TouchableWithoutFeedback onPress={this.handlePressAnywhere}>
+                        <View style={{ flex: 1 }}>
                         <ImageBackground
                         style={{ flex: 1 }}
                         source={{ uri: this.props.reduxState.inboxUrl }}>
@@ -114,7 +131,7 @@ class ViewInbox extends React.Component {
                                             onPress={() => this.setState({reportMode: true})}>
                                             <FontAwesome
                                                 name='thumbs-down'
-                                                style={{ color: 'black', fontSize: 40}}
+                                                style={styles.thumbsDownIcon}
                                             />
                                         </TouchableOpacity>
                                         <TouchableOpacity
@@ -122,12 +139,14 @@ class ViewInbox extends React.Component {
                                             onPress={() => this.setState({newFavoriteMode: true})}>
                                             <Ionicons
                                                 name='md-star'
-                                                style={{ color: this.state.starColor, fontSize: 40}}
+                                                style={styles.favoriteIcon}
                                             />
                                         </TouchableOpacity>
                                 </View>
                             </View>
                         </ImageBackground>
+                        </View>
+
                     </TouchableWithoutFeedback>
             </>
         )
@@ -159,11 +178,11 @@ const styles = StyleSheet.create({
         alignItems: 'flex-end',
     },
     badVibes: {
-        justifyContent: Platform.OS === 'ios' ? 'flex-end' : 'center',
+        justifyContent: 'center',
         alignItems: 'center',
         borderColor: 'black',
         borderWidth: 2,
-        backgroundColor: '#FFFAAC',
+        backgroundColor: '#CC375E',
         width: '14%',
         aspectRatio: 1,
         borderRadius: 10
@@ -178,21 +197,9 @@ const styles = StyleSheet.create({
         aspectRatio: 1,
         borderRadius: 10
     },
-    logoutIcon: {
-        color: 'white', 
-        fontSize: 44
-    },
-    switchCameraIcon: {
-        color: 'white', 
-        fontSize: 44
-    },
-    inboxText: {
+    thumbsDownIcon: {
         color: 'black',
         fontSize: 40
-    },
-    captureIcon: {
-        color: 'white', 
-        fontSize: 82
     },
     favoriteIcon: {
         color: 'white',
