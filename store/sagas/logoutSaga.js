@@ -2,6 +2,7 @@ import { put, select, takeEvery } from 'redux-saga/effects';
 import AsyncStorage from '@react-native-community/async-storage';
 
 function* logout(action) {
+    console.log('in logout saga')
     try {
         yield AsyncStorage.removeItem("user");
         console.log('Successfully deleted user object')

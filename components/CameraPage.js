@@ -7,12 +7,14 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
 import storage from '@react-native-firebase/storage';
-
-import Logout from './Logout';
-import ReviewImage from './ReviewImage';
-
 import messaging from '@react-native-firebase/messaging';
 import AsyncStorage from '@react-native-community/async-storage';
+
+import Logout from './Logout';
+import ViewInbox from './ViewInbox';
+import ReviewImage from './ReviewImage';
+import Favorite from './Favorite';
+
 
 FontAwesome.loadFont()
 Ionicons.loadFont()
@@ -25,7 +27,8 @@ class CameraPage extends React.Component {
         cameraType: RNCamera.Constants.Type.back,
         capturedImageUri: '',
         uid: '',
-        isSending: false
+        isSending: false,
+        isViewInboxMode: false
     }
 
     logout = () => {
@@ -53,6 +56,12 @@ class CameraPage extends React.Component {
     toggleReviewMode = () => {
         this.setState({
             isReviewMode: (this.state.isReviewMode ? false : true)
+        })
+    }
+
+    toggleViewInboxMode = () => {
+        this.setState({
+            isViewInboxMode: (this.state.isViewInboxMode ? false : true)
         })
     }
 
@@ -96,6 +105,13 @@ class CameraPage extends React.Component {
         
     }
 
+    viewInbox = async () => {
+        console.log('in viewInbox')
+        if (this.props.reduxState.inboxUrl) {
+            this.props.history.push('/ViewInbox')
+        }
+    }
+
     requestUserPermission = async () => {
         const settings = await messaging().requestPermission();
 
@@ -104,7 +120,19 @@ class CameraPage extends React.Component {
         }
     }
 
+    // getStorageUrl = async () => {
+    //     this.setState({
+    //         url: await storage().ref(`images/${this.props.reduxState.inbox[0]}`).getDownloadURL()
+    //     })
+    // }
+
     componentDidMount = async () => {
+        this.props.dispatch({
+            type: 'GET_INBOX'
+        })
+        // this.props.dispatch({
+        //     type: 'GET_INBOX_URL'
+        // })
         this.setState({
             uid: JSON.parse(await AsyncStorage.getItem('user')).uid
         })
@@ -114,9 +142,7 @@ class CameraPage extends React.Component {
         //let registrationToken = await messaging().getToken()
         //this.updateRegistrationToken(registrationToken)
         this.requestUserPermission()
-        this.props.dispatch({
-            type: 'GET_INBOX'
-        })
+        
     }
 
     render() {
@@ -124,6 +150,7 @@ class CameraPage extends React.Component {
             <>
                 <View style={styles.container}>
                     <Logout visible={this.state.isLogoutMode} logout={this.logout} toggleLogoutMode={this.toggleLogoutMode}/>
+                    {/* <ViewInbox visible={this.state.isViewInboxMode} toggleLogoutMode={this.toggleViewInboxMode}/> */}
                     <ReviewImage visible={this.state.isReviewMode} sendImage={this.sendImage} toggleReviewMode={this.toggleReviewMode} capturedImageUri={this.state.capturedImageUri} isSending={this.state.isSending}/>
                     <RNCamera
                         ref={ref => {
@@ -203,7 +230,6 @@ const styles = StyleSheet.create({
         margin: '3%',
         marginTop: Platform.OS === 'ios' ? '8%' : '3%',
         marginBottom: Platform.OS === 'ios' ? '5%' : '3%'
-
     },
     topIcons: {
         flexDirection: 'row',
