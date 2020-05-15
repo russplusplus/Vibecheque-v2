@@ -123,7 +123,7 @@ class ViewInbox extends React.Component {
                         source={{ uri: this.props.reduxState.inboxUrl }}>
                             <View style={styles.iconContainer}>
                                 <View style={styles.topIcons}>
-                                    <Text style={{fontSize: 32, color: 'white', textAlign: 'center', marginTop: 10}}>Response</Text>
+                                    <Text style={{fontFamily: 'Gorditas-Regular', fontSize: 32, color: 'white', textAlign: 'center', marginTop: 10}}>Response</Text>
                                 </View>
                                 <View style={styles.bottomIcons}>
                                         <TouchableOpacity

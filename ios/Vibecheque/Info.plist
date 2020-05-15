@@ -53,6 +53,10 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
+	<key>UIAppFonts</key>
+	<array>
+		<string>Gorditas-Regular.ttf</string>
+	</array>
 	<key>NSCameraUsageDescription</key>
 	<string>Vibecheque needs access to the device camera.</string>
 </dict>
