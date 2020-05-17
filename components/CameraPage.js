@@ -241,7 +241,7 @@ const styles = StyleSheet.create({
         alignItems: 'flex-end',
     },
     viewInbox: {
-        justifyContent: Platform.OS === 'ios' ? 'flex-end' : 'center',
+        justifyContent: Platform.OS === 'ios' ? 'flex-end' : 'flex-end',
         alignItems: 'center',
         borderColor: 'black',
         borderWidth: 2,
@@ -270,7 +270,8 @@ const styles = StyleSheet.create({
     },
     inboxText: {
         color: 'black',
-        fontSize: 40
+        fontSize: 40,
+        fontFamily: 'Rubik-Regular'
     },
     captureIcon: {
         color: 'white', 

@@ -47,7 +47,8 @@ const styles = StyleSheet.create({
     text: {
         fontSize: 48, 
         textAlign: 'center', 
-        marginTop: '35%'
+        marginTop: '35%',
+        fontFamily: 'Rubik-Regular'
     },
     yesButton: {
         width: '75%', 
@@ -56,11 +57,12 @@ const styles = StyleSheet.create({
         borderRadius: 10,
         backgroundColor: '#9EE7FF',
         justifyContent: 'center',
-        marginTop: '20%'
+        marginTop: '20%',
+        alignItems: 'center'
     },
     yesButtonText: {
         fontSize: 30,
-        textAlign: 'center'
+        fontFamily: 'Rubik-Regular'
     },
     cancelButton: { 
         width: '75%', 
@@ -69,11 +71,12 @@ const styles = StyleSheet.create({
         borderRadius: 10,
         backgroundColor: '#CC375E',
         justifyContent: 'center',
-        marginTop: '4%'
+        marginTop: '4%',
+        alignItems: 'center'
     },
     cancelButtonText: {
         fontSize: 30,
-        textAlign: 'center'
+        fontFamily: 'Rubik-Regular'
     }
 })
 

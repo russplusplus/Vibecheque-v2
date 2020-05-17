@@ -57,6 +57,8 @@
 	<array>
 		<string>Gorditas-Regular.ttf</string>
 		<string>Sansation-Regular.ttf</string>
+		<string>KingthingsClarity.ttf</string>
+		<string>Rubik-Regular.ttf</string>
 	</array>
 	<key>NSCameraUsageDescription</key>
 	<string>Vibecheque needs access to the device camera.</string>

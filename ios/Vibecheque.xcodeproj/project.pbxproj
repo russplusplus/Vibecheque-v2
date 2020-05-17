@@ -12,8 +12,7 @@
 		13B07FBD1A68108700A75B9A /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB11A68108700A75B9A /* LaunchScreen.xib */; };
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
-		2712FABA246F157A0004BB4F /* Gorditas-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 2712FAB9246F157A0004BB4F /* Gorditas-Regular.ttf */; };
-		27D4B1EE2470C3960045A125 /* Sansation-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 27D4B1ED2470C3960045A125 /* Sansation-Regular.ttf */; };
+		277513DA2470E5A100AA6E18 /* Rubik-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 277513D92470E5A100AA6E18 /* Rubik-Regular.ttf */; };
 		27FB5D0224439FE30070DDE5 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 27FB5D0124439FE30070DDE5 /* GoogleService-Info.plist */; };
 		2D02E4BC1E0B4A80006451C7 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.m */; };
 		2D02E4BD1E0B4A84006451C7 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
@@ -59,7 +58,9 @@
 		1DD7753F9EDD0439F90C1741 /* Pods-Vibecheque-VibechequeTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Vibecheque-VibechequeTests.release.xcconfig"; path = "Target Support Files/Pods-Vibecheque-VibechequeTests/Pods-Vibecheque-VibechequeTests.release.xcconfig"; sourceTree = "<group>"; };
 		24CCD64824312A9E2B763ADE /* libPods-Vibecheque-tvOSTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Vibecheque-tvOSTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		2712FAB9246F157A0004BB4F /* Gorditas-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Gorditas-Regular.ttf"; path = "../../../Downloads/gorditas/Gorditas-Regular.ttf"; sourceTree = "<group>"; };
+		277513D92470E5A100AA6E18 /* Rubik-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Rubik-Regular.ttf"; path = "../../../Downloads/rubik/Rubik-Regular.ttf"; sourceTree = "<group>"; };
 		27D4B1ED2470C3960045A125 /* Sansation-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Sansation-Regular.ttf"; path = "../../../Downloads/sansation/Sansation-Regular.ttf"; sourceTree = "<group>"; };
+		27D4B1F12470D1550045A125 /* KingthingsClarity.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = KingthingsClarity.ttf; path = "../../../Downloads/kingthings-clarity/KingthingsClarity.ttf"; sourceTree = "<group>"; };
 		27FB5D0124439FE30070DDE5 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		2D02E47B1E0B4A5D006451C7 /* Vibecheque-tvOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Vibecheque-tvOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		2D02E4901E0B4A5D006451C7 /* Vibecheque-tvOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Vibecheque-tvOSTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -166,6 +167,8 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
+				277513D92470E5A100AA6E18 /* Rubik-Regular.ttf */,
+				27D4B1F12470D1550045A125 /* KingthingsClarity.ttf */,
 				27D4B1ED2470C3960045A125 /* Sansation-Regular.ttf */,
 				2712FAB9246F157A0004BB4F /* Gorditas-Regular.ttf */,
 				13B07FAE1A68108700A75B9A /* Vibecheque */,
@@ -349,8 +352,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				27D4B1EE2470C3960045A125 /* Sansation-Regular.ttf in Resources */,
-				2712FABA246F157A0004BB4F /* Gorditas-Regular.ttf in Resources */,
+				277513DA2470E5A100AA6E18 /* Rubik-Regular.ttf in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				13B07FBD1A68108700A75B9A /* LaunchScreen.xib in Resources */,
 				27FB5D0224439FE30070DDE5 /* GoogleService-Info.plist in Resources */,
