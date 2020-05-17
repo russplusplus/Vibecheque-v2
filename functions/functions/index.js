@@ -20,12 +20,12 @@ exports.addImage = functions.storage.object('/images').onFinalize(async (object)
   // Sender UID and isResponding are attached as metadata to storage object
   console.log('object.metadata.fromUid:', object.metadata.fromUid)
   let senderUid = object.metadata.fromUid
-  let isResponse = object.metadata.isResponse
 
   // 'images/xxxxxxx' => 'xxxxxxx'
   let filename = object.name.substring(7)
 
   if (object.metadata.toUid) {
+    let isResponse = true
     console.log('in response block. toUid:', object.metadata.toUid)
     let recipientUid = object.metadata.toUid
     admin  
@@ -66,6 +66,7 @@ exports.addImage = functions.storage.object('/images').onFinalize(async (object)
         })
       })
   } else {
+    let isResponse = false
     console.log('in default block')
     // Get users from database to randomly assign recipient
     admin  

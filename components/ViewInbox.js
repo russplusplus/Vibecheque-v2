@@ -17,8 +17,8 @@ class ViewInbox extends React.Component {
         reportMode: false,
         newFavoriteMode: false,
         starColor: 'white',
-        responseMessage: '',
-        url: ''
+        url: '',
+        responseMessage: ''
     }
     
     handlePressAnywhere = () => {
@@ -87,9 +87,27 @@ class ViewInbox extends React.Component {
         console.log('in ViewInbox componentDidMount')
         console.log('reduxState.inbox:', this.props.reduxState.inbox)
         //console.log('this.props.reduxState.inbox[0]:'. this.props.reduxState.inbox[0])
-        this.setState({
-            image: this.props.reduxState.inbox[0]
-        })
+
+        // Set response message
+        if (this.props.reduxState.inbox[0].isResponse === 'true') {
+            this.setState({
+                responseMessage: 'Response'
+            })
+            this.props.dispatch({
+                type: 'SET_NOT_RESPONDING'
+            })
+        } else {
+            this.setState({
+                responseMessage: ''
+            })
+            // Set recipient if image is not response
+            this.props.dispatch({
+                type: 'SET_RESPONDING_TO',
+                payload: this.props.reduxState.inbox[0].from
+            })
+        }
+
+        
         // if (this.props.reduxState.inbox[0].is_response) {
         //     this.setState({responseMessage: 'Response'})
         // }
@@ -123,7 +141,7 @@ class ViewInbox extends React.Component {
                         source={{ uri: this.props.reduxState.inbox[0].url }}>
                             <View style={styles.iconContainer}>
                                 <View style={styles.topIcons}>
-                                    <Text style={{fontFamily: 'Rubik-Regular', fontSize: 32, color: 'white', textAlign: 'center', marginTop: 10}}>Response</Text>
+                                    <Text style={{fontFamily: 'Rubik-Regular', fontSize: 32, color: 'white', textAlign: 'center', marginTop: 10}}>{this.state.responseMessage}</Text>
                                 </View>
                                 <View style={styles.bottomIcons}>
                                         <TouchableOpacity

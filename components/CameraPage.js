@@ -95,7 +95,7 @@ class CameraPage extends React.Component {
             const metadata = {
                 customMetadata: {
                     fromUid: this.state.uid,
-                    isResponse: isResponse
+                    toUid: this.props.reduxState.respondingTo
                 }
             }
             await ref.putFile(this.state.capturedImageUri, metadata);
@@ -109,7 +109,7 @@ class CameraPage extends React.Component {
 
     viewInbox = async () => {
         console.log('in viewInbox')
-        if (this.props.reduxState.inboxUrl) {
+        if (this.props.reduxState.inbox[0].url) {
             this.props.history.push('/ViewInbox')
         }
     }
