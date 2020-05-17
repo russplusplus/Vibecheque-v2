@@ -37,7 +37,7 @@ const styles = StyleSheet.create({
         alignItems: 'center', 
         marginLeft: '6%', 
         marginRight: '6%', 
-        marginTop: Platform.OS === 'ios' ? '45%' : '25%', 
+        marginTop: Platform.OS === 'ios' ? '55%' : '35%', 
         marginBottom: Platform.OS === 'ios' ? '45%' : '25%', 
         backgroundColor: '#FFFAAC', 
         borderWidth: 2, 

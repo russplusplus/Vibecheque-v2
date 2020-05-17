@@ -83,6 +83,7 @@ class CameraPage extends React.Component {
             this.setState({
                 isSending: true
             })
+            let isResponse = 'false';
             let registrationToken = this.props.reduxState.registrationToken
             console.log('token:', registrationToken)
             
@@ -93,7 +94,8 @@ class CameraPage extends React.Component {
             const ref = storage().ref('images/' + String(filename));
             const metadata = {
                 customMetadata: {
-                    fromUid: this.state.uid
+                    fromUid: this.state.uid,
+                    isResponse: isResponse
                 }
             }
             await ref.putFile(this.state.capturedImageUri, metadata);

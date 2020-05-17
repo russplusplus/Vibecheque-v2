@@ -13,7 +13,7 @@ function* getInbox() {
     })   
     let url;
     if (response.data[0]) {
-        url = yield storage().ref(`images/${response.data[0]}`).getDownloadURL()
+        url = yield storage().ref(`images/${response.data[0].imageName}`).getDownloadURL()
         console.log('in getInboxUrl. url:', url)
     } else {
         url = null

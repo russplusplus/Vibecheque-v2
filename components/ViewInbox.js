@@ -120,7 +120,7 @@ class ViewInbox extends React.Component {
                         <View style={{ flex: 1 }}>
                         <ImageBackground
                         style={{ flex: 1 }}
-                        source={{ uri: this.props.reduxState.inboxUrl }}>
+                        source={{ uri: this.props.reduxState.inbox[0].url }}>
                             <View style={styles.iconContainer}>
                                 <View style={styles.topIcons}>
                                     <Text style={{fontFamily: 'Rubik-Regular', fontSize: 32, color: 'white', textAlign: 'center', marginTop: 10}}>Response</Text>

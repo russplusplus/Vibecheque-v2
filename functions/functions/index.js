@@ -17,9 +17,10 @@ exports.addUser = functions.auth.user().onCreate(user => {
 exports.addImage = functions.storage.object('/images').onFinalize(async (object) => {
   console.log('storage object:', object)
 
-  // Sender UID is attached as metadata to storage object
+  // Sender UID and isResponding are attached as metadata to storage object
   console.log('object.metadata.fromToken:', object.metadata.fromUid)
   let senderUid = object.metadata.fromUid
+  let isResponse = object.metadata.isResponse
 
   // 'images/xxxxxxx' => 'xxxxxxx'
   let filename = object.name.substring(7)
@@ -76,7 +77,7 @@ exports.addImage = functions.storage.object('/images').onFinalize(async (object)
           console.log("Error sending message:", error);
       });
           
-      // add entry to images table
+      // add entry to database
       console.log('recipientUid:', recipientUid)
       console.log('senderUid:', senderUid) 
       admin
@@ -85,7 +86,7 @@ exports.addImage = functions.storage.object('/images').onFinalize(async (object)
         .set({
           from: senderUid,
           to: recipientUid,
-          isResponse: false
+          isResponse: isResponse
       })
   })
 });
@@ -102,7 +103,12 @@ exports.updateInbox = functions.https.onCall((data, context) => {
       let images = snapshot.val()
       for (image in images) {
         if (images[image].to === data.uid) {
-          inboxArr.push(image)
+          inboxArr.push({
+            imageName: image,
+            url: '',
+            isResponse: images[image].isResponse,
+            from: images[image].from
+          })
         }
       }
       console.log('in .then. inboxArr:', inboxArr)
