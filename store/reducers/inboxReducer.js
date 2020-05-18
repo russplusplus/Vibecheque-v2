@@ -1,3 +1,5 @@
+import database from '@react-native-firebase/database'
+
 const inboxReducer = (state = [], action) => {
     if (action.type === 'SET_INBOX') {
         return action.payload;
@@ -10,9 +12,11 @@ const inboxReducer = (state = [], action) => {
             console.log('inbox with url:', inbox)
             return inbox
         }
-    } else if (action.type === 'DELETE_IMAGE') {
-        state.shift();
-        return state;
+    // } else if (action.type === 'DELETE_IMAGE') {
+    //     console.log('in DELETE_IMAGE. before state:', state)
+    //     state.shift();
+    //     console.log('after state:', state)
+    //     return state;
     } else {
         return state;
     }

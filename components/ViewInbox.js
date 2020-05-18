@@ -22,14 +22,6 @@ class ViewInbox extends React.Component {
     }
     
     handlePressAnywhere = () => {
-        let imageId = this.props.reduxState.inbox[0].id;
-        let senderId = this.props.reduxState.inbox[0].from_users_id;
-        // delete viewed image from database
-        
-        console.log('before redux delete:', this.props.reduxState.inbox)
-        // delete viewed image from redux
-        
-        console.log('after redux delete:', this.props.reduxState.inbox)
         
         //if the recieved image is not a response, prepare for responding by dispatching to redux
         // if (!this.props.reduxState.inbox[0].is_response) {
@@ -43,7 +35,7 @@ class ViewInbox extends React.Component {
 
         this.props.dispatch({    //dispatch is async- if it responds before the page is changed, there will be an error because the background of the page is deleted
             type: 'DELETE_IMAGE'
-        })
+        }) // maybe we could shift the redux inbox here so it's updated right when history is pushed. It would redundantly reload but that might not be a problem
         this.props.history.push('/camera')
     }
 

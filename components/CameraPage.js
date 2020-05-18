@@ -28,7 +28,8 @@ class CameraPage extends React.Component {
         capturedImageUri: '',
         uid: '',
         isSending: false,
-        isViewInboxMode: false
+        isViewInboxMode: false,
+        respondingMessage: ''
     }
 
     logout = () => {
@@ -99,6 +100,9 @@ class CameraPage extends React.Component {
                 }
             }
             await ref.putFile(this.state.capturedImageUri, metadata);
+            this.setState({
+                respondingMessage: ''
+            })
             this.toggleReviewMode()
             this.setState({
                 isSending: false
@@ -144,6 +148,11 @@ class CameraPage extends React.Component {
         //let registrationToken = await messaging().getToken()
         //this.updateRegistrationToken(registrationToken)
         this.requestUserPermission()
+        if (this.props.reduxState.respondingTo) {
+            this.setState({
+                respondingMessage: 'Responding'
+            })
+        }
         
     }
 
@@ -183,6 +192,9 @@ class CameraPage extends React.Component {
                                         style={styles.logoutIcon}
                                     />
                                 </TouchableOpacity>
+                                <Text style={styles.respondingMessage}>
+                                    {this.state.respondingMessage}
+                                </Text>
                                 <TouchableOpacity onPress={this.reverseCamera}>
                                     <Ionicons
                                         name='md-reverse-camera'
@@ -265,6 +277,11 @@ const styles = StyleSheet.create({
     logoutIcon: {
         color: 'white', 
         fontSize: 44
+    },
+    respondingMessage: {
+        fontSize: 32,
+        fontFamily: 'Rubik-Regular',
+        color: 'white'
     },
     switchCameraIcon: {
         color: 'white', 
