@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, TextInput, StyleSheet, Button, Platform, TouchableOpacity, ImageBackground } from 'react-native';
+import { View, Text, TextInput, StyleSheet, Button, Platform, TouchableOpacity, ImageBackground, TouchableNativeFeedbackBase } from 'react-native';
 
 import { connect } from 'react-redux';
 import { RNCamera } from 'react-native-camera';
@@ -11,7 +11,6 @@ import messaging from '@react-native-firebase/messaging';
 import AsyncStorage from '@react-native-community/async-storage';
 
 import Logout from './Logout';
-import ViewInbox from './ViewInbox';
 import ReviewImage from './ReviewImage';
 import Favorite from './Favorite';
 
@@ -28,7 +27,7 @@ class CameraPage extends React.Component {
         capturedImageUri: '',
         uid: '',
         isSending: false,
-        isViewInboxMode: false,
+        isResponding: false,
         respondingMessage: ''
     }
 
@@ -57,12 +56,6 @@ class CameraPage extends React.Component {
     toggleReviewMode = () => {
         this.setState({
             isReviewMode: (this.state.isReviewMode ? false : true)
-        })
-    }
-
-    toggleViewInboxMode = () => {
-        this.setState({
-            isViewInboxMode: (this.state.isViewInboxMode ? false : true)
         })
     }
 
@@ -101,7 +94,7 @@ class CameraPage extends React.Component {
             }
             await ref.putFile(this.state.capturedImageUri, metadata);
             this.setState({
-                respondingMessage: ''
+                isResponding: false
             })
             this.toggleReviewMode()
             this.setState({
@@ -113,8 +106,14 @@ class CameraPage extends React.Component {
 
     viewInbox = async () => {
         console.log('in viewInbox')
-        if (this.props.reduxState.inbox[0].url) {
-            this.props.history.push('/ViewInbox')
+        if (this.props.reduxState.inbox[0]) {
+            if (this.props.reduxState.inbox[0].url) {
+                this.props.history.push('/ViewInbox')
+            } else {
+                console.log('url not loaded')
+            }
+        } else {
+            console.log('inbox is empty')
         }
     }
 
@@ -150,7 +149,7 @@ class CameraPage extends React.Component {
         this.requestUserPermission()
         if (this.props.reduxState.respondingTo) {
             this.setState({
-                respondingMessage: 'Responding'
+                isResponding: true
             })
         }
         
@@ -161,7 +160,6 @@ class CameraPage extends React.Component {
             <>
                 <View style={styles.container}>
                     <Logout visible={this.state.isLogoutMode} logout={this.logout} toggleLogoutMode={this.toggleLogoutMode}/>
-                    {/* <ViewInbox visible={this.state.isViewInboxMode} toggleLogoutMode={this.toggleViewInboxMode}/> */}
                     <ReviewImage visible={this.state.isReviewMode} sendImage={this.sendImage} toggleReviewMode={this.toggleReviewMode} capturedImageUri={this.state.capturedImageUri} isSending={this.state.isSending}/>
                     <RNCamera
                         ref={ref => {
@@ -192,9 +190,16 @@ class CameraPage extends React.Component {
                                         style={styles.logoutIcon}
                                     />
                                 </TouchableOpacity>
-                                <Text style={styles.respondingMessage}>
-                                    {this.state.respondingMessage}
-                                </Text>
+                                {this.state.isResponding ? 
+                                    <Text style={styles.respondingMessage}>
+                                        Responding
+                                    </Text>
+                                :
+                                    <Text style={styles.respondingMessage}>
+
+                                    </Text>
+                                }
+                                
                                 <TouchableOpacity onPress={this.reverseCamera}>
                                     <Ionicons
                                         name='md-reverse-camera'
@@ -202,23 +207,34 @@ class CameraPage extends React.Component {
                                     />
                                 </TouchableOpacity>
                             </View>
-                            <View style={styles.bottomIcons}>
-                                <TouchableOpacity onPress={this.viewInbox} style={styles.viewInbox}>
-                                    <Text style={styles.inboxText}>{this.props.reduxState.inbox.length}</Text>
-                                </TouchableOpacity>
-                                <TouchableOpacity onPress={this.takePicture.bind(this)}>
-                                    <FontAwesome
-                                        name='circle-thin'
-                                        style={styles.captureIcon}
-                                    />
-                                </TouchableOpacity>
-                                <TouchableOpacity onPress={this.viewFavorite} style={styles.viewFavorite}>
-                                    <Ionicons
-                                        name='md-star'
-                                        style={styles.favoriteIcon}
-                                    />
-                                </TouchableOpacity>
-                            </View>
+                            {this.state.isResponding ?
+                                <View style={styles.respondingBottomIcons}>
+                                    <TouchableOpacity onPress={this.takePicture.bind(this)}>
+                                        <FontAwesome
+                                            name='circle-thin'
+                                            style={styles.captureIcon}
+                                        />
+                                    </TouchableOpacity>
+                                </View>
+                            :
+                                <View style={styles.bottomIcons}>
+                                    <TouchableOpacity onPress={this.viewInbox} style={styles.viewInbox}>
+                                        <Text style={styles.inboxText}>{this.props.reduxState.inbox.length}</Text>
+                                    </TouchableOpacity>
+                                    <TouchableOpacity onPress={this.takePicture.bind(this)}>
+                                        <FontAwesome
+                                            name='circle-thin'
+                                            style={styles.captureIcon}
+                                        />
+                                    </TouchableOpacity>
+                                    <TouchableOpacity onPress={this.viewFavorite} style={styles.viewFavorite}>
+                                        <Ionicons
+                                            name='md-star'
+                                            style={styles.favoriteIcon}
+                                        />
+                                    </TouchableOpacity>
+                                </View>
+                            }
                         </View>
                     </RNCamera>
                 </View>
@@ -252,8 +268,12 @@ const styles = StyleSheet.create({
     bottomIcons: {
         flexDirection: 'row',
         justifyContent: 'space-between',
-        alignItems: 'flex-end',
+        alignItems: 'flex-end'
     },
+    respondingBottomIcons: {
+        flexDirection: 'row',
+        justifyContent: 'space-around'
+    },  
     viewInbox: {
         justifyContent: Platform.OS === 'ios' ? 'flex-end' : 'flex-end',
         alignItems: 'center',
