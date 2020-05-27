@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, StyleSheet, Button, ImageBackground, TouchableOpacity, TouchableWithoutFeedback, AsyncStorage } from 'react-native';
+import { View, Text, TextInput, StyleSheet, Button, ImageBackground, TouchableOpacity, TouchableWithoutFeedback } from 'react-native';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 
 import Report from './Report';
 import NewFavorite from './NewFavorite';
@@ -9,58 +11,28 @@ import { connect } from 'react-redux';
 class ViewInbox extends React.Component {
 
     state = {
-        accessToken: '',
         reportMode: false,
         newFavoriteMode: false,
         starColor: 'white',
-        ifResponse: ''
-    }
-
-    getToken = async () => {
-        try {
-            const token = await AsyncStorage.getItem("access_token")
-            console.log('getToken token:', token);
-            return token;
-        } catch (error) {
-            console.log('AsyncStorage retrieval error:', error.message);
-        }
-        return '(missing token)';
+        url: '',
+        responseMessage: ''
     }
     
     handlePressAnywhere = () => {
-        let imageId = this.props.reduxState.inbox[0].id;
-        let senderId = this.props.reduxState.inbox[0].from_users_id;
-        // delete viewed image from database
-        fetch('https://murmuring-lake-71708.herokuapp.com/images', {
-            method: 'DELETE',
-            headers: {
-                Accept: 'application/json',
-                'Content-Type': 'application/json',
-                Authorization: 'Bearer ' + this.state.accessToken
-            },
-            body: JSON.stringify({
-                "imageId": imageId
-            })
-        })
-        console.log('before redux delete:', this.props.reduxState.inbox)
-        // delete viewed image from redux
-        
-        console.log('after redux delete:', this.props.reduxState.inbox)
         
         //if the recieved image is not a response, prepare for responding by dispatching to redux
-        console.log('this.props.reduxState.inbox[0].is_response:', this.props.reduxState.inbox[0].is_response)
-        if (!this.props.reduxState.inbox[0].is_response) {
-            this.props.dispatch({                 //still need to test if this works
-                type: 'SET_RESPONDING',
-                payload: { senderId: senderId }
-            })
-        }
+        // if (!this.props.reduxState.inbox[0].is_response) {
+        //     this.props.dispatch({                 //still need to test if this works
+        //         type: 'SET_RESPONDING',
+        //         payload: { senderId: senderId }
+        //     })
+        // }
         
         console.log('senderId:', this.props.reduxState.senderId)
 
         this.props.dispatch({    //dispatch is async- if it responds before the page is changed, there will be an error because the background of the page is deleted
             type: 'DELETE_IMAGE'
-        })
+        }) // maybe we could shift the redux inbox here so it's updated right when history is pushed. It would redundantly reload but that might not be a problem
         this.props.history.push('/camera')
     }
 
@@ -79,19 +51,7 @@ class ViewInbox extends React.Component {
     favorite = async () => {
         console.log('in favorite')
         // send image url to database and replace existing
-        await fetch('https://murmuring-lake-71708.herokuapp.com/users', {
-            method: 'PUT',
-            headers: {
-                Accept: 'application/json',
-                'Content-Type': 'application/json',
-                Authorization: 'Bearer ' + this.state.accessToken
-            },
-            body: JSON.stringify({
-                "image_url": this.props.reduxState.inbox[0].image_url
-            })
-        }).then((response) => {
-            console.log('in favorite .then')
-        })
+        
     }
 
     cancelReport = () => {
@@ -110,80 +70,148 @@ class ViewInbox extends React.Component {
         this.setState({starColor: '#FFFAAC'})
     }
 
-    async componentDidMount() {
+    
+
+    componentDidMount() {
         console.log('in ViewInbox componentDidMount')
-        console.log(this.state.reportMode)
-        await this.getToken()
-            .then(response => {
-                //console.log('in new .then. token:', response)
-                this.setState({accessToken: response});
-            }).catch(error => {
-                console.log('in catch,', error)
-            });
-        console.log('state access token:', this.state.accessToken)
         console.log('reduxState.inbox:', this.props.reduxState.inbox)
-        if (this.props.reduxState.inbox[0].is_response) {
-            this.setState({ifResponse: 'Response'})
+        //console.log('this.props.reduxState.inbox[0]:'. this.props.reduxState.inbox[0])
+
+        // Set response message
+        if (this.props.reduxState.inbox[0].isResponse) {
+            this.setState({
+                responseMessage: 'Response'
+            })
+            this.props.dispatch({
+                type: 'SET_NOT_RESPONDING'
+            })
+        } else {
+            this.setState({
+                responseMessage: ''
+            })
+            // Set recipient if image is not response
+            this.props.dispatch({
+                type: 'SET_RESPONDING_TO',
+                payload: this.props.reduxState.inbox[0].from
+            })
         }
+
+        
+        // if (this.props.reduxState.inbox[0].is_response) {
+        //     this.setState({responseMessage: 'Response'})
+        // }
+
+        //Russ,
+        //
+        //You need to figure out how to get isResponding from the image.
+        //Right now, redux has an array of image names and the url of the
+        //first image in the queue. However, since we're gonna need the 
+        //isResponse boolean from each image too, it might be best to 
+        //change the array of strings to an array of objects, with all
+        //the data we'll need for each image. Maybe in the cameraPage 
+        //componentDidMount we could load the url for the first image
+        //in the queue. But maybe you'll think of a better way.
+        //
+        //Goodnight,
+        //
+        //Russ
     }
     
     render() {
+        console.log('in render(). this.state.url:', this.state.url)
         return (
             <>
-                <View style={{ flex: 1, margin: 0 }}>
                 <NewFavorite visible={this.state.newFavoriteMode} closeNewFavoriteModal={this.closeNewFavoriteModal} indicateFavorite={this.indicateFavorite}></NewFavorite>
                 <Report visible={this.state.reportMode} cancelReport={this.cancelReport} returnToCameraPage={this.returnToCameraPage}></Report>
-                    <TouchableWithoutFeedback onPress={() => this.handlePressAnywhere()}>
-
-                    <ImageBackground
-                    style={{ flex: 1 }}
-                    source={{ uri: this.props.reduxState.inbox[0].image_url }}>
-                        <View style={{flex:1, flexDirection:"column",justifyContent:"space-between",margin:10}}>
-                            <Text style={{fontSize: 32, color: 'white', textAlign: 'center', marginTop: 10}}>{this.state.ifResponse}</Text>
-                            <View style={{flexDirection:"row", justifyContent:"space-between"}}>
-                                <TouchableOpacity
-                                    style={{
-                                        alignSelf: 'flex-end',
-                                        alignItems: 'center',
-                                        backgroundColor: '#CC375E',
-                                        width: 47,
-                                        height: 47,
-                                        borderWidth: 3,
-                                        borderColor: 'black',
-                                        borderRadius: 10                   
-                                    }}
-                                    onPress={() => this.setState({reportMode: true})}>
-                                    <FontAwesome
-                                        name='thumbs-down'
-                                        style={{ color: 'black', fontSize: 40}}
-                                    />
-                                </TouchableOpacity>
-                                <TouchableOpacity
-                                    style={{
-                                        alignSelf: 'flex-end',
-                                        alignItems: 'center',
-                                        backgroundColor: '#9EE7FF',
-                                        width: 47,
-                                        height: 47,
-                                        borderWidth: 3,
-                                        borderColor: 'black',
-                                        borderRadius: 10                        
-                                    }}
-                                    onPress={() => this.setState({newFavoriteMode: true})}>
-                                    <Ionicons
-                                        name='md-star'
-                                        style={{ color: this.state.starColor, fontSize: 40}}
-                                    />
-                                </TouchableOpacity>
-                            </View>
+                    <TouchableWithoutFeedback onPress={this.handlePressAnywhere}>
+                        <View style={{ flex: 1 }}>
+                            <ImageBackground
+                            style={{ flex: 1 }}
+                            source={{ uri: this.props.reduxState.inbox[0].url }}>
+                                <View style={styles.iconContainer}>
+                                    <View style={styles.topIcons}>
+                                        <Text style={{fontFamily: 'Rubik-Regular', fontSize: 32, color: 'white', textAlign: 'center', marginTop: 10}}>{this.state.responseMessage}</Text>
+                                    </View>
+                                    <View style={styles.bottomIcons}>
+                                        <TouchableOpacity
+                                            style={styles.badVibes}
+                                            onPress={() => this.setState({reportMode: true})}>
+                                            <FontAwesome
+                                                name='thumbs-down'
+                                                style={styles.thumbsDownIcon}
+                                            />
+                                        </TouchableOpacity>
+                                        <TouchableOpacity
+                                            style={styles.favorite}
+                                            onPress={() => this.setState({newFavoriteMode: true})}>
+                                            <Ionicons
+                                                name='md-star'
+                                                style={styles.favoriteIcon}
+                                            />
+                                        </TouchableOpacity>
+                                    </View>
+                                </View>
+                            </ImageBackground>
                         </View>
-                    </ImageBackground>
                     </TouchableWithoutFeedback>
-                </View>
             </>
         )
     }
 }
+
+const styles = StyleSheet.create({
+    container: {
+        flex: 6,
+        flexDirection: 'column',
+        backgroundColor: 'black',
+    },
+    iconContainer: {
+        display: 'flex',
+        flex: 6, 
+        flexDirection: 'column', 
+        justifyContent: 'space-between',
+        margin: '3%',
+        marginTop: Platform.OS === 'ios' ? '8%' : '3%',
+        marginBottom: Platform.OS === 'ios' ? '5%' : '3%',
+    },
+    topIcons: {
+        flexDirection: 'row',
+        justifyContent: 'space-around',
+    },
+    bottomIcons: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'flex-end',
+    },
+    badVibes: {
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderColor: 'black',
+        borderWidth: 2,
+        backgroundColor: '#CC375E',
+        width: '14%',
+        aspectRatio: 1,
+        borderRadius: 10
+    },
+    favorite: {
+        justifyContent: Platform.OS === 'ios' ? 'flex-end' : 'center',
+        alignItems: 'center',
+        borderColor: 'black',
+        borderWidth: 2,
+        backgroundColor: '#9EE7FF',
+        width: '14%',
+        aspectRatio: 1,
+        borderRadius: 10
+    },
+    thumbsDownIcon: {
+        color: 'black',
+        fontSize: 40
+    },
+    favoriteIcon: {
+        color: 'white',
+        fontSize: 44
+    }
+});
     
 const mapReduxStateToProps = reduxState => ({
     reduxState

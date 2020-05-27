@@ -17,79 +17,140 @@ exports.addUser = functions.auth.user().onCreate(user => {
 exports.addImage = functions.storage.object('/images').onFinalize(async (object) => {
   console.log('storage object:', object)
 
-  // Sender UID is attached as metadata to storage object
-  console.log('object.metadata.fromToken:', object.metadata.fromUid)
+  // Sender UID and isResponding are attached as metadata to storage object
+  console.log('object.metadata.fromUid:', object.metadata.fromUid)
   let senderUid = object.metadata.fromUid
 
   // 'images/xxxxxxx' => 'xxxxxxx'
   let filename = object.name.substring(7)
 
-  // Get users from database to randomly assign recipient
-  admin  
-    .database()
-    .ref('users')
-    .once('value')
-    .then(snapshot => {
-      let users = snapshot.val()
-      console.log('snapshot:', users)
-      let uidArr = []
-      for (user in users) {
-        console.log('user:', user)
-        // add [if not banned...], [if in geographic radius...]
-        uidArr.push(user)
-      }
-      console.log('uidArr:', uidArr)
-      console.log('senderUid:', senderUid)
-
-      // randomly select from array of suitable UIDs
-      let recipientUid
-      let i = 0
-      do {
-        recipientUid = uidArr[Math.floor(Math.random() * uidArr.length)]
-        i++
-      } while (recipientUid === senderUid && i < 100)
-      console.log('recipientUid:', recipientUid)
-      let recipientToken = users[recipientUid].registrationToken
-      console.log('recipientToken:', recipientToken)
-
-      const payload = {
-				// data: {
-				// 	data_type: "direct_message",
-				// 	title: "New Message from " + senderToken,
-				// 	message: filename,
-				// 	message_id: "test id",
-        // },
-        notification: {
-          title: 'Basic Notification',
-          body: 'This is a basic notification sent from the server!',
-          imageUrl: 'https://my-cdn.com/app-logo.png',
-        },
-      }
-
-      admin
-        .messaging()
-        .sendToDevice(recipientToken, payload)
-        .then(function(response) {
-          console.log("Successfully sent message:", response);
+  if (object.metadata.toUid) {
+    let isResponse = true
+    console.log('in response block. toUid:', object.metadata.toUid)
+    let recipientUid = object.metadata.toUid
+    admin  
+      .database()
+      .ref('users')
+      .once('value')
+      .then(snapshot => {
+        let users = snapshot.val()
+        let recipientToken = users[recipientUid].registrationToken
+        console.log('response block recipientToken:', recipientToken)
+        let payload = {
+          notification: {
+            title: 'New Vibecheque response!',
+            body: 'Open the app to view it',
+            imageUrl: 'https://my-cdn.com/app-logo.png',
+          },
+        }
+        admin
+          .messaging()
+          .sendToDevice(recipientToken, payload)
+          .then(function(response) {
+            console.log("Successfully sent message:", response);
+          })
+          .catch(function(error) {
+            console.log("Error sending message:", error);
+        });
+            
+        // add entry to database
+        console.log('recipientUid:', recipientUid)
+        console.log('senderUid:', senderUid) 
+        admin
+          .database()
+          .ref(`users/${recipientUid}/inbox/${filename}`)
+          .set({
+            from: senderUid,
+            to: recipientUid,
+            isResponse: isResponse
         })
-        .catch(function(error) {
-          console.log("Error sending message:", error);
-      });
-          
-      // add entry to images table
-      console.log('recipientUid:', recipientUid)
-      console.log('senderUid:', senderUid) 
-      admin
-        .database()
-        .ref(`users/${recipientUid}/inbox/${filename}`)
-        .set({
-          from: senderUid,
-          to: recipientUid,
-          isResponse: false
       })
-  })
-});
+  } else {
+    let isResponse = false
+    console.log('in default block')
+    // Get users from database to randomly assign recipient
+    admin  
+      .database()
+      .ref('users')
+      .once('value')
+      .then(snapshot => {
+        let users = snapshot.val()
+        console.log('snapshot:', users)
+        let uidArr = []
+        for (user in users) {
+          console.log('user:', user)
+          // add [if not banned...], [if in geographic radius...]
+          uidArr.push(user)
+        }
+        console.log('uidArr:', uidArr)
+        console.log('senderUid:', senderUid)
 
+        // randomly select from array of suitable UIDs
+        let recipientUid
+        let i = 0
+        do {
+          recipientUid = uidArr[Math.floor(Math.random() * uidArr.length)]
+          i++
+        } while (recipientUid === senderUid && i < 100)
+        console.log('recipientUid:', recipientUid)
+        let recipientToken = users[recipientUid].registrationToken
+        console.log('recipientToken:', recipientToken)
+
+        let payload = {
+          notification: {
+            title: 'New Vibe!',
+            body: 'Open the app to view it.',
+            imageUrl: 'https://my-cdn.com/app-logo.png',
+          },
+        }
+        admin
+          .messaging()
+          .sendToDevice(recipientToken, payload)
+          .then(function(response) {
+            console.log("Successfully sent message:", response);
+          })
+          .catch(function(error) {
+            console.log("Error sending message:", error);
+        });
+            
+        // add entry to database
+        console.log('recipientUid:', recipientUid)
+        console.log('senderUid:', senderUid) 
+        admin
+          .database()
+          .ref(`users/${recipientUid}/inbox/${filename}`)
+          .set({
+            from: senderUid,
+            to: recipientUid,
+            isResponse: isResponse
+        })
+      })
+  }
+
+  // console.log('after if block. recipientToken:', recipientToken)
+  // admin
+  //   .messaging()
+  //   .sendToDevice(recipientToken, payload)
+  //   .then(function(response) {
+  //     console.log("Successfully sent message:", response);
+  //   })
+  //   .catch(function(error) {
+  //     console.log("Error sending message:", error);
+  // });
+      
+  // // add entry to database
+  // console.log('recipientUid:', recipientUid)
+  // console.log('senderUid:', senderUid) 
+  // admin
+  //   .database()
+  //   .ref(`users/${recipientUid}/inbox/${filename}`)
+  //   .set({
+  //     from: senderUid,
+  //     to: recipientUid,
+  //     isResponse: isResponse
+  // })
+});
+  
 exports.updateInbox = functions.https.onCall((data, context) => {
   console.log('data.registrationToken:', data.uid)
   let inboxArr = []
@@ -102,7 +163,12 @@ exports.updateInbox = functions.https.onCall((data, context) => {
       let images = snapshot.val()
       for (image in images) {
         if (images[image].to === data.uid) {
-          inboxArr.push(image)
+          inboxArr.push({
+            imageName: image,
+            url: '',
+            isResponse: images[image].isResponse,
+            from: images[image].from
+          })
         }
       }
       console.log('in .then. inboxArr:', inboxArr)

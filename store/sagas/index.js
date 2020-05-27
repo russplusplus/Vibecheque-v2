@@ -14,7 +14,7 @@ function* rootSaga() {
         logoutSaga(),
         sendImageSaga(),
         getInboxSaga(),
-        getRegistrationTokenSaga()
+        getRegistrationTokenSaga(),
     ]);
   }
 

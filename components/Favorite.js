@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, TextInput, StyleSheet, Button, AsyncStorage, ImageBackground, TouchableOpacity } from 'react-native';
+import { View, Text, TextInput, StyleSheet, Button, ImageBackground, TouchableOpacity } from 'react-native';
+import AsyncStorage from '@react-native-community/async-storage';
 
 import DeleteFavorite from './DeleteFavorite';
 

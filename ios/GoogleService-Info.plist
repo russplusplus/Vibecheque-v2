@@ -21,27 +21,26 @@
 	<key>STORAGE_BUCKET</key>
 	<string>vibecheque-543ff.appspot.com</string>
 	<key>IS_ADS_ENABLED</key>
-	<false></false>
+	<false/>
 	<key>IS_ANALYTICS_ENABLED</key>
-	<false></false>
+	<false/>
 	<key>IS_APPINVITE_ENABLED</key>
-	<true></true>
+	<true/>
 	<key>IS_GCM_ENABLED</key>
-	<true></true>
+	<true/>
 	<key>IS_SIGNIN_ENABLED</key>
-	<true></true>
+	<true/>
 	<key>GOOGLE_APP_ID</key>
 	<string>1:973891374140:ios:ecc29b28fce27d3550c739</string>
 	<key>DATABASE_URL</key>
 	<string>https://vibecheque-543ff.firebaseio.com</string>
-	<!-- <key>NSCameraUsageDescription</key>
-	<string>Vibecheque needs access to the device camera.</string> -->
 	<key>UIAppFonts</key>
 	<array>
 		<string>AntDesign.ttf</string>
 		<string>Entypo.ttf</string>
 		<string>EvilIcons.ttf</string>
 		<string>Feather.ttf</string>
+		<string>Gorditas-Regular.ttf</string>
 		<string>FontAwesome.ttf</string>
 		<string>FontAwesome5_Brands.ttf</string>
 		<string>FontAwesome5_Regular.ttf</string>

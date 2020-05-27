@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, TextInput, StyleSheet, Button, Platform, TouchableOpacity, ImageBackground } from 'react-native';
+import { View, Text, TextInput, StyleSheet, Button, Platform, TouchableOpacity, ImageBackground, TouchableNativeFeedbackBase } from 'react-native';
 
 import { connect } from 'react-redux';
 import { RNCamera } from 'react-native-camera';
@@ -7,12 +7,13 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
 import storage from '@react-native-firebase/storage';
+import messaging from '@react-native-firebase/messaging';
+import AsyncStorage from '@react-native-community/async-storage';
 
 import Logout from './Logout';
 import ReviewImage from './ReviewImage';
+import Favorite from './Favorite';
 
-import messaging from '@react-native-firebase/messaging';
-import AsyncStorage from '@react-native-community/async-storage';
 
 FontAwesome.loadFont()
 Ionicons.loadFont()
@@ -25,7 +26,7 @@ class CameraPage extends React.Component {
         cameraType: RNCamera.Constants.Type.back,
         capturedImageUri: '',
         uid: '',
-        isSending: false
+        isSending: false,
     }
 
     logout = () => {
@@ -84,16 +85,38 @@ class CameraPage extends React.Component {
             const ref = storage().ref('images/' + String(filename));
             const metadata = {
                 customMetadata: {
-                    fromUid: this.state.uid
+                    fromUid: this.state.uid,
+                    toUid: this.props.reduxState.respondingTo
                 }
             }
             await ref.putFile(this.state.capturedImageUri, metadata);
+            
+            // this.setState({
+            //     isResponding: false
+            // })
+            console.log('this.props.reduxState.respondingTo:', this.props.reduxState.respondingTo)
+            this.props.dispatch({
+                type: 'SET_NOT_RESPONDING'
+            })
             this.toggleReviewMode()
             this.setState({
                 isSending: false
             })
         }
         
+    }
+
+    viewInbox = async () => {
+        console.log('in viewInbox')
+        if (this.props.reduxState.inbox[0]) {
+            if (this.props.reduxState.inbox[0].url) {
+                this.props.history.push('/ViewInbox')
+            } else {
+                console.log('url not loaded')
+            }
+        } else {
+            console.log('inbox is empty')
+        }
     }
 
     requestUserPermission = async () => {
@@ -104,7 +127,19 @@ class CameraPage extends React.Component {
         }
     }
 
+    // getStorageUrl = async () => {
+    //     this.setState({
+    //         url: await storage().ref(`images/${this.props.reduxState.inbox[0]}`).getDownloadURL()
+    //     })
+    // }
+
     componentDidMount = async () => {
+        this.props.dispatch({
+            type: 'GET_INBOX'
+        })
+        // this.props.dispatch({
+        //     type: 'GET_INBOX_URL'
+        // })
         this.setState({
             uid: JSON.parse(await AsyncStorage.getItem('user')).uid
         })
@@ -114,9 +149,16 @@ class CameraPage extends React.Component {
         //let registrationToken = await messaging().getToken()
         //this.updateRegistrationToken(registrationToken)
         this.requestUserPermission()
-        this.props.dispatch({
-            type: 'GET_INBOX'
-        })
+        // if (this.props.reduxState.respondingTo) {
+        //     this.setState({
+        //         isResponding: true
+        //     })
+        // } else {
+        //     this.setState({
+        //         isResponding: false
+        //     })
+        // }
+        
     }
 
     render() {
@@ -154,6 +196,15 @@ class CameraPage extends React.Component {
                                         style={styles.logoutIcon}
                                     />
                                 </TouchableOpacity>
+                                {this.props.reduxState.respondingTo ? 
+                                    <Text style={styles.respondingMessage}>
+                                        Responding
+                                    </Text>
+                                :
+                                    <Text style={styles.respondingMessage}>
+
+                                    </Text>
+                                }
                                 <TouchableOpacity onPress={this.reverseCamera}>
                                     <Ionicons
                                         name='md-reverse-camera'
@@ -161,23 +212,34 @@ class CameraPage extends React.Component {
                                     />
                                 </TouchableOpacity>
                             </View>
-                            <View style={styles.bottomIcons}>
-                                <TouchableOpacity onPress={this.viewInbox} style={styles.viewInbox}>
-                                    <Text style={styles.inboxText}>{this.props.reduxState.inbox.length}</Text>
-                                </TouchableOpacity>
-                                <TouchableOpacity onPress={this.takePicture.bind(this)}>
-                                    <FontAwesome
-                                        name='circle-thin'
-                                        style={styles.captureIcon}
-                                    />
-                                </TouchableOpacity>
-                                <TouchableOpacity onPress={this.viewFavorite} style={styles.viewFavorite}>
-                                    <Ionicons
-                                        name='md-star'
-                                        style={styles.favoriteIcon}
-                                    />
-                                </TouchableOpacity>
-                            </View>
+                            {this.props.reduxState.respondingTo ?
+                                <View style={styles.respondingBottomIcons}>
+                                    <TouchableOpacity onPress={this.takePicture.bind(this)}>
+                                        <FontAwesome
+                                            name='circle-thin'
+                                            style={styles.captureIcon}
+                                        />
+                                    </TouchableOpacity>
+                                </View>
+                            :
+                                <View style={styles.bottomIcons}>
+                                    <TouchableOpacity onPress={this.viewInbox} style={styles.viewInbox}>
+                                        <Text style={styles.inboxText}>{this.props.reduxState.inbox.length}</Text>
+                                    </TouchableOpacity>
+                                    <TouchableOpacity onPress={this.takePicture.bind(this)}>
+                                        <FontAwesome
+                                            name='circle-thin'
+                                            style={styles.captureIcon}
+                                        />
+                                    </TouchableOpacity>
+                                    <TouchableOpacity onPress={this.viewFavorite} style={styles.viewFavorite}>
+                                        <Ionicons
+                                            name='md-star'
+                                            style={styles.favoriteIcon}
+                                        />
+                                    </TouchableOpacity>
+                                </View>
+                            }
                         </View>
                     </RNCamera>
                 </View>
@@ -203,7 +265,6 @@ const styles = StyleSheet.create({
         margin: '3%',
         marginTop: Platform.OS === 'ios' ? '8%' : '3%',
         marginBottom: Platform.OS === 'ios' ? '5%' : '3%'
-
     },
     topIcons: {
         flexDirection: 'row',
@@ -212,10 +273,14 @@ const styles = StyleSheet.create({
     bottomIcons: {
         flexDirection: 'row',
         justifyContent: 'space-between',
-        alignItems: 'flex-end',
+        alignItems: 'flex-end'
     },
+    respondingBottomIcons: {
+        flexDirection: 'row',
+        justifyContent: 'space-around'
+    },  
     viewInbox: {
-        justifyContent: Platform.OS === 'ios' ? 'flex-end' : 'center',
+        justifyContent: Platform.OS === 'ios' ? 'flex-end' : 'flex-end',
         alignItems: 'center',
         borderColor: 'black',
         borderWidth: 2,
@@ -238,13 +303,19 @@ const styles = StyleSheet.create({
         color: 'white', 
         fontSize: 44
     },
+    respondingMessage: {
+        fontSize: 32,
+        fontFamily: 'Rubik-Regular',
+        color: 'white'
+    },
     switchCameraIcon: {
         color: 'white', 
         fontSize: 44
     },
     inboxText: {
         color: 'black',
-        fontSize: 40
+        fontSize: 40,
+        fontFamily: 'Rubik-Regular'
     },
     captureIcon: {
         color: 'white', 
