@@ -27,8 +27,6 @@ class CameraPage extends React.Component {
         capturedImageUri: '',
         uid: '',
         isSending: false,
-        isResponding: false,
-        respondingMessage: ''
     }
 
     logout = () => {
@@ -207,7 +205,6 @@ class CameraPage extends React.Component {
 
                                     </Text>
                                 }
-                                
                                 <TouchableOpacity onPress={this.reverseCamera}>
                                     <Ionicons
                                         name='md-reverse-camera'

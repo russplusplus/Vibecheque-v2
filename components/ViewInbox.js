@@ -8,9 +8,6 @@ import NewFavorite from './NewFavorite';
 
 import { connect } from 'react-redux';
 
-import storage from '@react-native-firebase/storage';
-
-
 class ViewInbox extends React.Component {
 
     state = {
@@ -136,22 +133,22 @@ class ViewInbox extends React.Component {
                                         <Text style={{fontFamily: 'Rubik-Regular', fontSize: 32, color: 'white', textAlign: 'center', marginTop: 10}}>{this.state.responseMessage}</Text>
                                     </View>
                                     <View style={styles.bottomIcons}>
-                                            <TouchableOpacity
-                                                style={styles.badVibes}
-                                                onPress={() => this.setState({reportMode: true})}>
-                                                <FontAwesome
-                                                    name='thumbs-down'
-                                                    style={styles.thumbsDownIcon}
-                                                />
-                                            </TouchableOpacity>
-                                            <TouchableOpacity
-                                                style={styles.favorite}
-                                                onPress={() => this.setState({newFavoriteMode: true})}>
-                                                <Ionicons
-                                                    name='md-star'
-                                                    style={styles.favoriteIcon}
-                                                />
-                                            </TouchableOpacity>
+                                        <TouchableOpacity
+                                            style={styles.badVibes}
+                                            onPress={() => this.setState({reportMode: true})}>
+                                            <FontAwesome
+                                                name='thumbs-down'
+                                                style={styles.thumbsDownIcon}
+                                            />
+                                        </TouchableOpacity>
+                                        <TouchableOpacity
+                                            style={styles.favorite}
+                                            onPress={() => this.setState({newFavoriteMode: true})}>
+                                            <Ionicons
+                                                name='md-star'
+                                                style={styles.favoriteIcon}
+                                            />
+                                        </TouchableOpacity>
                                     </View>
                                 </View>
                             </ImageBackground>
