@@ -77,7 +77,6 @@ class CameraPage extends React.Component {
             this.setState({
                 isSending: true
             })
-            let isResponse = 'false';
             let registrationToken = this.props.reduxState.registrationToken
             console.log('token:', registrationToken)
             
@@ -93,8 +92,13 @@ class CameraPage extends React.Component {
                 }
             }
             await ref.putFile(this.state.capturedImageUri, metadata);
-            this.setState({
-                isResponding: false
+            
+            // this.setState({
+            //     isResponding: false
+            // })
+            console.log('this.props.reduxState.respondingTo:', this.props.reduxState.respondingTo)
+            this.props.dispatch({
+                type: 'SET_NOT_RESPONDING'
             })
             this.toggleReviewMode()
             this.setState({
@@ -147,11 +151,15 @@ class CameraPage extends React.Component {
         //let registrationToken = await messaging().getToken()
         //this.updateRegistrationToken(registrationToken)
         this.requestUserPermission()
-        if (this.props.reduxState.respondingTo) {
-            this.setState({
-                isResponding: true
-            })
-        }
+        // if (this.props.reduxState.respondingTo) {
+        //     this.setState({
+        //         isResponding: true
+        //     })
+        // } else {
+        //     this.setState({
+        //         isResponding: false
+        //     })
+        // }
         
     }
 
@@ -190,7 +198,7 @@ class CameraPage extends React.Component {
                                         style={styles.logoutIcon}
                                     />
                                 </TouchableOpacity>
-                                {this.state.isResponding ? 
+                                {this.props.reduxState.respondingTo ? 
                                     <Text style={styles.respondingMessage}>
                                         Responding
                                     </Text>
@@ -207,7 +215,7 @@ class CameraPage extends React.Component {
                                     />
                                 </TouchableOpacity>
                             </View>
-                            {this.state.isResponding ?
+                            {this.props.reduxState.respondingTo ?
                                 <View style={styles.respondingBottomIcons}>
                                     <TouchableOpacity onPress={this.takePicture.bind(this)}>
                                         <FontAwesome

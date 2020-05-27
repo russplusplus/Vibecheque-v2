@@ -81,7 +81,7 @@ class ViewInbox extends React.Component {
         //console.log('this.props.reduxState.inbox[0]:'. this.props.reduxState.inbox[0])
 
         // Set response message
-        if (this.props.reduxState.inbox[0].isResponse === 'true') {
+        if (this.props.reduxState.inbox[0].isResponse) {
             this.setState({
                 responseMessage: 'Response'
             })
@@ -128,35 +128,34 @@ class ViewInbox extends React.Component {
                 <Report visible={this.state.reportMode} cancelReport={this.cancelReport} returnToCameraPage={this.returnToCameraPage}></Report>
                     <TouchableWithoutFeedback onPress={this.handlePressAnywhere}>
                         <View style={{ flex: 1 }}>
-                        <ImageBackground
-                        style={{ flex: 1 }}
-                        source={{ uri: this.props.reduxState.inbox[0].url }}>
-                            <View style={styles.iconContainer}>
-                                <View style={styles.topIcons}>
-                                    <Text style={{fontFamily: 'Rubik-Regular', fontSize: 32, color: 'white', textAlign: 'center', marginTop: 10}}>{this.state.responseMessage}</Text>
+                            <ImageBackground
+                            style={{ flex: 1 }}
+                            source={{ uri: this.props.reduxState.inbox[0].url }}>
+                                <View style={styles.iconContainer}>
+                                    <View style={styles.topIcons}>
+                                        <Text style={{fontFamily: 'Rubik-Regular', fontSize: 32, color: 'white', textAlign: 'center', marginTop: 10}}>{this.state.responseMessage}</Text>
+                                    </View>
+                                    <View style={styles.bottomIcons}>
+                                            <TouchableOpacity
+                                                style={styles.badVibes}
+                                                onPress={() => this.setState({reportMode: true})}>
+                                                <FontAwesome
+                                                    name='thumbs-down'
+                                                    style={styles.thumbsDownIcon}
+                                                />
+                                            </TouchableOpacity>
+                                            <TouchableOpacity
+                                                style={styles.favorite}
+                                                onPress={() => this.setState({newFavoriteMode: true})}>
+                                                <Ionicons
+                                                    name='md-star'
+                                                    style={styles.favoriteIcon}
+                                                />
+                                            </TouchableOpacity>
+                                    </View>
                                 </View>
-                                <View style={styles.bottomIcons}>
-                                        <TouchableOpacity
-                                            style={styles.badVibes}
-                                            onPress={() => this.setState({reportMode: true})}>
-                                            <FontAwesome
-                                                name='thumbs-down'
-                                                style={styles.thumbsDownIcon}
-                                            />
-                                        </TouchableOpacity>
-                                        <TouchableOpacity
-                                            style={styles.favorite}
-                                            onPress={() => this.setState({newFavoriteMode: true})}>
-                                            <Ionicons
-                                                name='md-star'
-                                                style={styles.favoriteIcon}
-                                            />
-                                        </TouchableOpacity>
-                                </View>
-                            </View>
-                        </ImageBackground>
+                            </ImageBackground>
                         </View>
-
                     </TouchableWithoutFeedback>
             </>
         )
