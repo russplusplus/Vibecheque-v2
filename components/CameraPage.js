@@ -12,8 +12,6 @@ import AsyncStorage from '@react-native-community/async-storage';
 
 import Logout from './Logout';
 import ReviewImage from './ReviewImage';
-import Favorite from './Favorite';
-
 
 FontAwesome.loadFont()
 Ionicons.loadFont()
@@ -119,6 +117,10 @@ class CameraPage extends React.Component {
         }
     }
 
+    viewFavorite = () => {
+        this.props.history.push('/favorite')
+    }
+
     requestUserPermission = async () => {
         const settings = await messaging().requestPermission();
 
@@ -134,12 +136,22 @@ class CameraPage extends React.Component {
     // }
 
     componentDidMount = async () => {
+        //get user ID
+        let uid = JSON.parse(await AsyncStorage.getItem('user')).uid
+        this.props.dispatch({
+            type: 'SET_USER_ID',
+            payload: uid
+        })
+
         this.props.dispatch({
             type: 'GET_INBOX'
         })
         // this.props.dispatch({
         //     type: 'GET_INBOX_URL'
         // })
+        this.props.dispatch({
+            type: 'GET_FAVORITE_URL'
+        })
         this.setState({
             uid: JSON.parse(await AsyncStorage.getItem('user')).uid
         })
@@ -162,6 +174,7 @@ class CameraPage extends React.Component {
     }
 
     render() {
+        console.log('in render. reduxState:', this.props.reduxState)
         return (
             <>
                 <View style={styles.container}>

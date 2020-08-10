@@ -1,6 +1,5 @@
 import { all } from 'redux-saga/effects';
 
-import sendImageSaga from './sendImageSaga';
 import loginSaga from './loginSaga';
 import signUpSaga from './signUpSaga';
 import logoutSaga from './logoutSaga';
@@ -12,7 +11,6 @@ function* rootSaga() {
         loginSaga(),
         signUpSaga(),
         logoutSaga(),
-        sendImageSaga(),
         getInboxSaga(),
         getRegistrationTokenSaga(),
     ]);

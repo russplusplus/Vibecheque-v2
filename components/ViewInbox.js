@@ -2,6 +2,9 @@ import React, { useState } from 'react';
 import { View, Text, TextInput, StyleSheet, Button, ImageBackground, TouchableOpacity, TouchableWithoutFeedback } from 'react-native';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import AsyncStorage from '@react-native-community/async-storage';
+
+import database from '@react-native-firebase/database';
 
 import Report from './Report';
 import NewFavorite from './NewFavorite';
@@ -14,8 +17,10 @@ class ViewInbox extends React.Component {
         reportMode: false,
         newFavoriteMode: false,
         starColor: 'white',
+        starBorderColor: 'black',
         url: '',
-        responseMessage: ''
+        responseMessage: '',
+        isFavorited: false
     }
     
     handlePressAnywhere = () => {
@@ -31,7 +36,10 @@ class ViewInbox extends React.Component {
         console.log('senderId:', this.props.reduxState.senderId)
 
         this.props.dispatch({    //dispatch is async- if it responds before the page is changed, there will be an error because the background of the page is deleted
-            type: 'DELETE_IMAGE'
+            type: 'DELETE_IMAGE',
+            payload: {
+                isFavorited: this.state.isFavorited
+            }
         }) // maybe we could shift the redux inbox here so it's updated right when history is pushed. It would redundantly reload but that might not be a problem
         this.props.history.push('/camera')
     }
@@ -66,15 +74,30 @@ class ViewInbox extends React.Component {
         this.props.history.push('/camera')
     }
 
-    indicateFavorite = () => {
-        this.setState({starColor: '#FFFAAC'})
+    indicateFavorite = async () => {
+        // send this to the db this.props.reduxState.inbox[0].url
+
+        // we might need to store the filename (timestamp) rather than the url, as it is
+        // unclear how long the urls last
+
+        let ref = 'users/' + JSON.parse(await AsyncStorage.getItem('user')).uid + '/favorite';
+        console.log('ref:', ref)
+        console.log('this.props.reduxState.inbox[0].url:', this.props.reduxState.inbox[0].url)
+        await database()
+            .ref(ref)
+            .set(this.props.reduxState.inbox[0].url)
+        this.setState({
+            isFavorited: true,
+            starColor: '#FFFAAC',
+            starBorderColor: '#FFFAAC'
+        })
     }
 
     
 
     componentDidMount() {
-        console.log('in ViewInbox componentDidMount')
-        console.log('reduxState.inbox:', this.props.reduxState.inbox)
+        // console.log('in ViewInbox componentDidMount')
+        // console.log('reduxState.inbox:', this.props.reduxState.inbox)
         //console.log('this.props.reduxState.inbox[0]:'. this.props.reduxState.inbox[0])
 
         // Set response message
@@ -142,11 +165,23 @@ class ViewInbox extends React.Component {
                                             />
                                         </TouchableOpacity>
                                         <TouchableOpacity
-                                            style={styles.favorite}
+                                            style={{
+                                                justifyContent: Platform.OS === 'ios' ? 'flex-end' : 'center',
+                                                alignItems: 'center',
+                                                borderColor: this.state.starBorderColor,
+                                                borderWidth: 2,
+                                                backgroundColor: '#9EE7FF',
+                                                width: '14%',
+                                                aspectRatio: 1,
+                                                borderRadius: 10
+                                            }}
                                             onPress={() => this.setState({newFavoriteMode: true})}>
                                             <Ionicons
                                                 name='md-star'
-                                                style={styles.favoriteIcon}
+                                                style={{
+                                                    color: this.state.starColor,
+                                                    fontSize: 44
+                                                }}
                                             />
                                         </TouchableOpacity>
                                     </View>
@@ -193,24 +228,24 @@ const styles = StyleSheet.create({
         aspectRatio: 1,
         borderRadius: 10
     },
-    favorite: {
-        justifyContent: Platform.OS === 'ios' ? 'flex-end' : 'center',
-        alignItems: 'center',
-        borderColor: 'black',
-        borderWidth: 2,
-        backgroundColor: '#9EE7FF',
-        width: '14%',
-        aspectRatio: 1,
-        borderRadius: 10
-    },
+    // favorite: {
+    //     justifyContent: Platform.OS === 'ios' ? 'flex-end' : 'center',
+    //     alignItems: 'center',
+    //     borderColor: this.state.starBorderColor,
+    //     borderWidth: 2,
+    //     backgroundColor: '#9EE7FF',
+    //     width: '14%',
+    //     aspectRatio: 1,
+    //     borderRadius: 10
+    // },
     thumbsDownIcon: {
         color: 'black',
         fontSize: 40
     },
-    favoriteIcon: {
-        color: 'white',
-        fontSize: 44
-    }
+    // favoriteIcon: {
+    //     color: this.state.starColor,
+    //     fontSize: 44
+    // }
 });
     
 const mapReduxStateToProps = reduxState => ({

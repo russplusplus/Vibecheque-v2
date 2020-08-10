@@ -1,5 +1,3 @@
-import database from '@react-native-firebase/database'
-
 const inboxReducer = (state = [], action) => {
     if (action.type === 'SET_INBOX') {
         return action.payload;
