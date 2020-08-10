@@ -19,7 +19,8 @@ class ViewInbox extends React.Component {
         starColor: 'white',
         starBorderColor: 'black',
         url: '',
-        responseMessage: ''
+        responseMessage: '',
+        isFavorited: false
     }
     
     handlePressAnywhere = () => {
@@ -35,7 +36,10 @@ class ViewInbox extends React.Component {
         console.log('senderId:', this.props.reduxState.senderId)
 
         this.props.dispatch({    //dispatch is async- if it responds before the page is changed, there will be an error because the background of the page is deleted
-            type: 'DELETE_IMAGE'
+            type: 'DELETE_IMAGE',
+            payload: {
+                isFavorited: this.state.isFavorited
+            }
         }) // maybe we could shift the redux inbox here so it's updated right when history is pushed. It would redundantly reload but that might not be a problem
         this.props.history.push('/camera')
     }
@@ -83,6 +87,7 @@ class ViewInbox extends React.Component {
             .ref(ref)
             .set(this.props.reduxState.inbox[0].url)
         this.setState({
+            isFavorited: true,
             starColor: '#FFFAAC',
             starBorderColor: '#FFFAAC'
         })

@@ -1,7 +1,12 @@
-import React, { useState, useEffect } from 'react';
-import { View, Text, TextInput, StyleSheet, Button, ImageBackground, TouchableOpacity } from 'react-native';
+import React, { useState } from 'react';
+import { View, Text, TextInput, StyleSheet, Button, ImageBackground, TouchableOpacity, TouchableWithoutFeedback } from 'react-native';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 import AsyncStorage from '@react-native-community/async-storage';
 
+import database from '@react-native-firebase/database';
+
+import Report from './Report';
 import DeleteFavorite from './DeleteFavorite';
 
 import { connect } from 'react-redux';
@@ -9,149 +14,134 @@ import { connect } from 'react-redux';
 class Favorite extends React.Component {
 
     state = {
-        accessToken: '',
-        favoriteUrl: 'https://thumbs.gfycat.com/ThankfulFoolhardyDorado-size_restricted.gif',
-        deleteFavoriteMode: false
+        
     }
 
-    getToken = async () => {
-        try {
-            const token = await AsyncStorage.getItem("access_token")
-            console.log('getToken token:', token);
-            return token;
-        } catch (error) {
-            console.log('AsyncStorage retrieval error:', error.message);
-        }
-        return '(missing token)';
-    }
-
-    loadPic = () => {
-        console.log('in loadPic')
-        fetch('https://murmuring-lake-71708.herokuapp.com/favorite', {
-            method: 'GET',
-            headers: {
-                Accept: 'application/json',
-                'Content-Type': 'application/json',
-                Authorization: 'Bearer ' + this.state.accessToken
-            }
-        })
-        .then((response) => {
-            return response.json()
-        })
-        .then((myJson) => {
-            console.log('favorite:', myJson)
-            if (myJson[0].favorite_image_url === null) {
-               // console.log('no favorite, defaultBackground')
-                this.setState({
-                    favoriteUrl: 'https://vibecheque.s3.us-east-2.amazonaws.com/NoFavorite.png'
-                })
-            } else {
-                this.setState({
-                    favoriteUrl: myJson[0].favorite_image_url
-                })
-            }
-            
-            console.log('in second .then, this.state.favoriteUrl:', this.state.favoriteUrl)
-        })
-        .catch((error) => {
-            console.log('error in Favorite loadPic:', error)
-        })
-    }
-
-    goToCameraPage = () => {
-        this.props.history.push('/camera')
+    deleteFavorite = async () => {
+        console.log('in deleteFavorite')
+        // send image url to database and replace existing
+        
     }
 
     returnToCameraPage = () => {
-        console.log('in return function');
-        this.props.history.push('/camera');
+        this.props.history.push('/camera')
     }
 
-    deleteFavorite = () => {
-        console.log('in delete function');
-        fetch('http://https://murmuring-lake-71708.herokuapp.com/favorite', {
-            method: 'DELETE',
-            headers: {
-                Accept: 'application/json',
-                'Content-Type': 'application/json',
-                Authorization: 'Bearer ' + this.state.accessToken
-            }
-        })
-        console.log('after fetch')
-        this.loadPic();
+    
+
+    
+
+    componentDidMount() {
+        
     }
-
-    closeDeleteFavoriteModal = () => {
-        this.setState({deleteFavoriteMode: false})
-    }
-
-    async componentDidMount() {
-        console.log('in Favorite componentDidMount');
-        await this.getToken()
-            .then(response => {
-                console.log('in Favorite .then. token:', response)
-                this.setState({accessToken: response});
-            }).catch(error => {
-                console.log('in catch,', error)
-            });
-        this.loadPic()
-    };
-
+    
     render() {
-        console.log('in render')
+        console.log('in render(). this.state.url:', this.state.url)
         return (
             <>
-                <View style={{ flex: 1, margin: 0 }}>
-                    <DeleteFavorite visible={this.state.deleteFavoriteMode} closeDeleteFavoriteModal={this.closeDeleteFavoriteModal} loadPic={this.loadPic}></DeleteFavorite>
-                    <ImageBackground
-                    style={{ flex: 1 }}
-                    source={{ uri: this.state.favoriteUrl }}>
-                        <View style={{flex:1, flexDirection:"row",justifyContent:"space-between",margin:10}}>
-                            <TouchableOpacity
-                                style={{
-                                    alignSelf: 'flex-end',
-                                    alignItems: 'center',
-                                    backgroundColor: '#FFFAAC',
-                                    width: 47,
-                                    height: 47,
-                                    borderWidth: 3,
-                                    borderColor: 'black',
-                                    borderRadius: 10                    
-                                }}
-                                onPress={() => this.returnToCameraPage()}>
-                                <Ionicons
-                                    name="md-return-left"
-                                    style={{ 
-                                        color: "black", 
-                                        fontSize: 40,    
-                                    }}
-                                />
-                            </TouchableOpacity>
-                            <TouchableOpacity
-                                style={{
-                                    alignSelf: 'flex-end',
-                                    alignItems: 'center',
-                                    backgroundColor: '#CC375E',
-                                    width: 47,
-                                    height: 47,
-                                    borderWidth: 3,
-                                    borderColor: 'black',
-                                    borderRadius: 10                      
-                                }}
-                                onPress={() => this.setState({deleteFavoriteMode: true})}>
-                                <Ionicons
-                                    name="ios-trash"
-                                    style={{ color: "black", fontSize: 40}}
-                                />
-                            </TouchableOpacity>
+                <DeleteFavorite visible={this.state.deleteFavoriteMode} closeDeleteFavoriteModal={this.closeDeleteFavoriteModal} deleteFavorite={this.deleteFavorite}></DeleteFavorite>
+                    <TouchableWithoutFeedback onPress={this.handlePressAnywhere}>
+                        <View style={{ flex: 1 }}>
+                            <ImageBackground
+                            style={{ flex: 1 }}
+                            source={{ uri: this.props.reduxState.favoriteUrl }}>
+                                <View style={styles.iconContainer}>
+                                    <View style={styles.topIcons}>
+                                        <Text style={{fontFamily: 'Rubik-Regular', fontSize: 32, color: 'white', textAlign: 'center', marginTop: 10}}></Text>
+                                    </View>
+                                    <View style={styles.bottomIcons}>
+                                        <TouchableOpacity
+                                            style={styles.return}
+                                            onPress={() => this.setState({reportMode: true})}>
+                                            <FontAwesome
+                                                name='thumbs-down'
+                                                style={styles.thumbsDownIcon}
+                                            />
+                                        </TouchableOpacity>
+                                        <TouchableOpacity
+                                            style={{
+                                                justifyContent: Platform.OS === 'ios' ? 'flex-end' : 'center',
+                                                alignItems: 'center',
+                                                borderColor: this.state.starBorderColor,
+                                                borderWidth: 2,
+                                                backgroundColor: '#9EE7FF',
+                                                width: '14%',
+                                                aspectRatio: 1,
+                                                borderRadius: 10
+                                            }}
+                                            onPress={() => this.setState({deleteFavoriteMode: true})}>
+                                            <Ionicons
+                                                name='md-star'
+                                                style={{
+                                                    color: this.state.starColor,
+                                                    fontSize: 44
+                                                }}
+                                            />
+                                        </TouchableOpacity>
+                                    </View>
+                                </View>
+                            </ImageBackground>
                         </View>
-                    </ImageBackground>
-                </View>
+                    </TouchableWithoutFeedback>
             </>
         )
-    } 
+    }
 }
 
+const styles = StyleSheet.create({
+    container: {
+        flex: 6,
+        flexDirection: 'column',
+        backgroundColor: 'black',
+    },
+    iconContainer: {
+        display: 'flex',
+        flex: 6, 
+        flexDirection: 'column', 
+        justifyContent: 'space-between',
+        margin: '3%',
+        marginTop: Platform.OS === 'ios' ? '8%' : '3%',
+        marginBottom: Platform.OS === 'ios' ? '5%' : '3%',
+    },
+    topIcons: {
+        flexDirection: 'row',
+        justifyContent: 'space-around',
+    },
+    bottomIcons: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'flex-end',
+    },
+    return: {
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderColor: 'black',
+        borderWidth: 2,
+        backgroundColor: '#FFFAAC',
+        width: '14%',
+        aspectRatio: 1,
+        borderRadius: 10
+    },
+    // favorite: {
+    //     justifyContent: Platform.OS === 'ios' ? 'flex-end' : 'center',
+    //     alignItems: 'center',
+    //     borderColor: this.state.starBorderColor,
+    //     borderWidth: 2,
+    //     backgroundColor: '#9EE7FF',
+    //     width: '14%',
+    //     aspectRatio: 1,
+    //     borderRadius: 10
+    // },
+    thumbsDownIcon: {
+        color: 'black',
+        fontSize: 40
+    },
+    // favoriteIcon: {
+    //     color: this.state.starColor,
+    //     fontSize: 44
+    // }
+});
+    
 const mapReduxStateToProps = reduxState => ({
     reduxState
 });
