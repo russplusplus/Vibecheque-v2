@@ -118,6 +118,7 @@ class CameraPage extends React.Component {
     }
 
     viewFavorite = () => {
+        console.log('in viewFavorite')
         this.props.history.push('/favorite')
     }
 
@@ -174,7 +175,7 @@ class CameraPage extends React.Component {
     }
 
     render() {
-        console.log('in render. reduxState:', this.props.reduxState)
+        console.log('in CameraPage render. reduxState:', this.props.reduxState)
         return (
             <>
                 <View style={styles.container}>

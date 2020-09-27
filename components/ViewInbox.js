@@ -142,6 +142,7 @@ class ViewInbox extends React.Component {
     
     render() {
         console.log('in render(). this.state.url:', this.state.url)
+        console.log('this.props.reduxState.inbox[0].url:', this.props.reduxState.inbox[0].url)
         return (
             <>
                 <NewFavorite visible={this.state.newFavoriteMode} closeNewFavoriteModal={this.closeNewFavoriteModal} indicateFavorite={this.indicateFavorite}></NewFavorite>

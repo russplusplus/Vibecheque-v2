@@ -14,75 +14,64 @@ import { connect } from 'react-redux';
 class Favorite extends React.Component {
 
     state = {
-        
+        deleteFavoriteMode: false
     }
 
     deleteFavorite = async () => {
         console.log('in deleteFavorite')
-        // send image url to database and replace existing
-        
+        this.setState({deleteFavoriteMode: true})
+    }
+
+    closeDeleteFavoriteModal = () => {
+        this.setState({deleteFavoriteMode: false})
     }
 
     returnToCameraPage = () => {
         this.props.history.push('/camera')
     }
 
-    
-
-    
-
     componentDidMount() {
-        
+        //console.log('history:', this.props.history)
     }
     
     render() {
-        console.log('in render(). this.state.url:', this.state.url)
+        console.log('in render(). this.props.reduxState.favoriteUrl:', this.props.reduxState.favoriteUrl.url)
         return (
             <>
                 <DeleteFavorite visible={this.state.deleteFavoriteMode} closeDeleteFavoriteModal={this.closeDeleteFavoriteModal} deleteFavorite={this.deleteFavorite}></DeleteFavorite>
-                    <TouchableWithoutFeedback onPress={this.handlePressAnywhere}>
-                        <View style={{ flex: 1 }}>
-                            <ImageBackground
-                            style={{ flex: 1 }}
-                            source={{ uri: this.props.reduxState.favoriteUrl }}>
-                                <View style={styles.iconContainer}>
-                                    <View style={styles.topIcons}>
-                                        <Text style={{fontFamily: 'Rubik-Regular', fontSize: 32, color: 'white', textAlign: 'center', marginTop: 10}}></Text>
-                                    </View>
-                                    <View style={styles.bottomIcons}>
-                                        <TouchableOpacity
-                                            style={styles.return}
-                                            onPress={() => this.setState({reportMode: true})}>
-                                            <FontAwesome
-                                                name='thumbs-down'
-                                                style={styles.thumbsDownIcon}
-                                            />
-                                        </TouchableOpacity>
-                                        <TouchableOpacity
-                                            style={{
-                                                justifyContent: Platform.OS === 'ios' ? 'flex-end' : 'center',
-                                                alignItems: 'center',
-                                                borderColor: this.state.starBorderColor,
-                                                borderWidth: 2,
-                                                backgroundColor: '#9EE7FF',
-                                                width: '14%',
-                                                aspectRatio: 1,
-                                                borderRadius: 10
-                                            }}
-                                            onPress={() => this.setState({deleteFavoriteMode: true})}>
-                                            <Ionicons
-                                                name='md-star'
-                                                style={{
-                                                    color: this.state.starColor,
-                                                    fontSize: 44
-                                                }}
-                                            />
-                                        </TouchableOpacity>
-                                    </View>
-                                </View>
-                            </ImageBackground>
+                <View style={{ flex: 1 }}>
+                    <ImageBackground
+                    style={{ flex: 1 }}
+                    source={{ uri: 'https://firebasestorage.googleapis.com/v0/b/vibecheque-543ff.appspot.com/o/images%2F1597008785959?alt=media&token=4eddc06e-f9a6-42a4-9328-8e0a722908fb' }}>
+                        <View style={styles.iconContainer}>
+                            <View style={styles.topIcons}>
+                            </View>
+                            <View style={styles.bottomIcons}>
+                                <TouchableOpacity
+                                    style={styles.return}
+                                    onPress={this.returnToCameraPage}>
+                                    <Ionicons
+                                        name='md-return-left'
+                                        style={styles.returnIcon}
+                                    />
+                                </TouchableOpacity>
+                                <TouchableOpacity
+                                    style={styles.deleteFavorite}
+                                    onPress={this.deleteFavorite}>
+                                    <Ionicons
+                                        name='md-star'
+                                        style={{
+                                            color: this.state.starColor,
+                                            fontSize: 44
+                                        }}
+                                    />
+                                </TouchableOpacity>
+                            </View>
                         </View>
-                    </TouchableWithoutFeedback>
+
+                    </ImageBackground>
+                    
+                </View>
             </>
         )
     }
@@ -122,17 +111,17 @@ const styles = StyleSheet.create({
         aspectRatio: 1,
         borderRadius: 10
     },
-    // favorite: {
-    //     justifyContent: Platform.OS === 'ios' ? 'flex-end' : 'center',
-    //     alignItems: 'center',
-    //     borderColor: this.state.starBorderColor,
-    //     borderWidth: 2,
-    //     backgroundColor: '#9EE7FF',
-    //     width: '14%',
-    //     aspectRatio: 1,
-    //     borderRadius: 10
-    // },
-    thumbsDownIcon: {
+    deleteFavorite: {
+        justifyContent: Platform.OS === 'ios' ? 'flex-end' : 'center',
+        alignItems: 'center',
+        borderColor: 'black',
+        borderWidth: 2,
+        backgroundColor: '#9EE7FF',
+        width: '14%',
+        aspectRatio: 1,
+        borderRadius: 10
+    },
+    returnIcon: {
         color: 'black',
         fontSize: 40
     },

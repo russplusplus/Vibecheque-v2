@@ -10,7 +10,7 @@ function* getInbox() {
     let reduxState = yield select()
     let uid = reduxState.userID
     let response = yield functions().httpsCallable('updateInbox')({uid})
-    console.log('response.data:', response.data)
+    console.log('get Inbox response.data:', response.data)
     yield put({
         type: 'SET_INBOX',
         payload: response.data
@@ -38,9 +38,7 @@ function* getFavoriteURL() {
             console.log('in getFavoriteURL .then. snapshot:', snapshot)
     yield put({
         type: 'SET_FAVORITE_URL',
-        payload: {
-            snapshot
-        }
+        payload: snapshot
     })
 }
 
