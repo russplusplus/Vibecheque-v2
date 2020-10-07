@@ -16,6 +16,7 @@ import ReviewImage from './ReviewImage';
 FontAwesome.loadFont()
 Ionicons.loadFont()
 
+
 class CameraPage extends React.Component {
 
     state = {
