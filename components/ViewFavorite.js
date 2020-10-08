@@ -35,13 +35,16 @@ class Favorite extends React.Component {
     }
 
     componentDidMount() {
+        console.log('in ViewFavorite comonentDidMount.', this.props.reduxState.favoriteUrl)
+        console.log('type:', typeof(this.props.reduxState.favoriteUrl))
         this.setState({
-            url: JSON.stringify(this.props.reduxState.favoriteUrl).replace(/['"]+/g, '') //This is weird, but necessary because from Redux, the url comes as an object with an unknown key. The object is stringified to get the url, and the quotations are removed.
+            url: this.props.reduxState.favoriteUrl.url
+            //url: JSON.stringify(this.props.reduxState.favoriteUrl.url).replace(/['"]+/g, '') //This is weird, but necessary because from Redux, the url comes as an object with an unknown key. The object is stringified to get the url, and the quotations are removed.
         })
     }
     
     render() {
-        console.log('JSON.stringify(this.props.reduxState.favoriteUrl):', JSON.stringify(this.props.reduxState.favoriteUrl))
+        console.log('JSON.stringify(this.props.reduxState.favoriteUrl):', JSON.stringify(this.props.reduxState.favoriteUrl.url))
         //let url = JSON.stringify(this.props.reduxState.favoriteUrl)
         console.log('type of url:', typeof(this.state.url))
         console.log(this.state.url)        
@@ -122,7 +125,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         borderColor: 'black',
         borderWidth: 2,
-        backgroundColor: '#9EE7FF',
+        backgroundColor: '#CC375E',
         width: '14%',
         aspectRatio: 1,
         borderRadius: 10

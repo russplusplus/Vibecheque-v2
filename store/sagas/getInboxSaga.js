@@ -36,6 +36,7 @@ function* getFavoriteURL() {
         .ref(ref)
         .once('value')
             console.log('in getFavoriteURL .then. snapshot:', snapshot)
+    console.log('in getFavoriteURL. snapshot:', snapshot)
     yield put({
         type: 'SET_FAVORITE_URL',
         payload: snapshot
@@ -70,9 +71,11 @@ function* deleteImage(action) {
 }
 
 function* deleteFavorite() {
+    let reduxState = yield select()
+    // delete from database
+    yield database().ref(`users/${reduxState.userID}/favorite`).delete();
     // delete from storage
-    //yield storage().ref(`images/${toBeDeleted.imageName}`).delete()
-    //this won't work because toBeDeleted isn't defined
+    yield storage().ref(`images/${reduxState.userID}/favorite/`).delete()
 }
 
 function* getInboxSaga() {
