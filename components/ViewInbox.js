@@ -80,12 +80,17 @@ class ViewInbox extends React.Component {
         // we might need to store the filename (timestamp) rather than the url, as it is
         // unclear how long the urls last
 
-        let ref = 'users/' + JSON.parse(await AsyncStorage.getItem('user')).uid + '/favorite';
-        console.log('ref:', ref)
+        let urlRef = 'users/' + JSON.parse(await AsyncStorage.getItem('user')).uid + '/favorite/url';
+        let nameRef = 'users/' + JSON.parse(await AsyncStorage.getItem('user')).uid + '/favorite/name';
+        console.log('urlRef:', urlRef)
+        console.log('nameRef:', nameRef)
         console.log('this.props.reduxState.inbox[0].url:', this.props.reduxState.inbox[0].url)
         await database()
-            .ref(ref)
+            .ref(urlRef)
             .set(this.props.reduxState.inbox[0].url)
+        await database()
+            .ref(nameRef)
+            .set(this.props.reduxState.inbox[0].imageName)
         this.setState({
             isFavorited: true,
             starColor: '#FFFAAC',
@@ -142,6 +147,7 @@ class ViewInbox extends React.Component {
     
     render() {
         console.log('in render(). this.state.url:', this.state.url)
+        console.log('this.props.reduxState.inbox[0].url:', this.props.reduxState.inbox[0].url)
         return (
             <>
                 <NewFavorite visible={this.state.newFavoriteMode} closeNewFavoriteModal={this.closeNewFavoriteModal} indicateFavorite={this.indicateFavorite}></NewFavorite>

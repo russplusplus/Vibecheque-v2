@@ -1,56 +1,17 @@
 import React from 'react';
 import { View, Text, TextInput, StyleSheet, Button, Platform, TouchableOpacity, ImageBackground, Modal } from 'react-native';
-import AsyncStorage from '@react-native-community/async-storage';
-
 import { connect } from 'react-redux';
 
 class NewFavorite extends React.Component {
 
-    state = {
-        accessToken: ''
-    }
-
-    getToken = async () => {
-        try {
-            const token = await AsyncStorage.getItem("access_token")
-            console.log('getToken token:', token);
-            return token;
-        } catch (error) {
-            console.log('AsyncStorage retrieval error:', error.message);
-        }
-        return '(missing token)';
-    }
-
     favorite = async () => {
         console.log('in favorite')
-        // turn star yellow
         this.props.indicateFavorite()
-
-        // send image url to database and replace existing
-        fetch('https://murmuring-lake-71708.herokuapp.com/users', {
-            method: 'PUT',
-            headers: {
-                Accept: 'application/json',
-                'Content-Type': 'application/json',
-                Authorization: 'Bearer ' + this.state.accessToken
-            },
-            body: JSON.stringify({
-                "image_url": this.props.reduxState.inbox[0].image_url
-            })
-        })
-        console.log('past fetch')
         this.props.closeNewFavoriteModal();
     }    
 
     async componentDidMount() {
         console.log('in NewFavorite componentDidMount')
-        await this.getToken()
-            .then(response => {
-                //console.log('in new .then. token:', response)
-                this.setState({accessToken: response});
-            }).catch(error => {
-                console.log('in catch,', error)
-            });
     }
 
     render() {

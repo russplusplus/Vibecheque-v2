@@ -10,7 +10,7 @@ function* getInbox() {
     let reduxState = yield select()
     let uid = reduxState.userID
     let response = yield functions().httpsCallable('updateInbox')({uid})
-    console.log('response.data:', response.data)
+    console.log('get Inbox response.data:', response.data)
     yield put({
         type: 'SET_INBOX',
         payload: response.data
@@ -35,13 +35,28 @@ function* getFavoriteURL() {
     const snapshot = yield database()
         .ref(ref)
         .once('value')
-            console.log('in getFavoriteURL .then. snapshot:', snapshot)
-    yield put({
-        type: 'SET_FAVORITE_URL',
-        payload: {
-            snapshot
-        }
-    })
+            
+    if (snapshot._snapshot.value) {
+        console.log('snapshot is truthy')
+    } else {
+        console.log('snapshot is falsey')
+    }
+    console.log('type of null:', typeof(snapshot))
+    for (key in snapshot) {
+        console.log('key:', key)
+        console.log('value:', snapshot[key])
+    }
+
+
+    console.log('in getFavoriteURL. snapshot:', snapshot)
+    console.log('._snapshot.value:', snapshot._snapshot.value)
+    console.log('url:', snapshot.url)
+    if (snapshot._snapshot.value) {
+        yield put({
+            type: 'SET_FAVORITE_URL',
+            payload: snapshot._snapshot.value   // snapshot object has a bunch of hidden metadata that messes up retrieval on the ViewFavorite page. This is the true data.
+        })
+    }
 }
 
 function* deleteImage(action) {
@@ -72,15 +87,20 @@ function* deleteImage(action) {
 }
 
 function* deleteFavorite() {
+    let reduxState = yield select()
+    console.log('in deleteFavorite. userID:', reduxState.userID)
+
+    // delete from database
+    yield database().ref(`users/${reduxState.userID}/favorite`).remove();
     // delete from storage
-    //yield storage().ref(`images/${toBeDeleted.imageName}`).delete()
-    //this won't work because toBeDeleted isn't defined
+    yield storage().ref(`images/${reduxState.favoriteUrl.name}`).delete();
 }
 
 function* getInboxSaga() {
     yield takeEvery('GET_INBOX', getInbox)
     yield takeEvery('DELETE_IMAGE', deleteImage)
     yield takeEvery('GET_FAVORITE_URL', getFavoriteURL)
+    yield takeEvery('DELETE_FAVORITE', deleteFavorite)
 }
 
 export default getInboxSaga;

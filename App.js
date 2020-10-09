@@ -20,7 +20,7 @@ import rootSaga from './store/sagas';
 
 import Login from './components/Login';
 import CameraPage from './components/CameraPage';
-import Favorite from './components/Favorite';
+import ViewFavorite from './components/ViewFavorite';
 import ViewInbox from './components/ViewInbox';
 import Notification from './components/Notification';
 
@@ -61,7 +61,7 @@ export default App = () => {
           <Switch>
             <Route exact path="/" component={Login} />
             <Route exact path="/camera" component={CameraPage} />
-            <Route exact path="/favorite" component={Favorite} />
+            <Route exact path="/favorite" component={ViewFavorite} />
             <Route exact path="/viewInbox" component={ViewInbox} />
           </Switch>
         </NativeRouter>

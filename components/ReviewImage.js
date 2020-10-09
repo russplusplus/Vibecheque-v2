@@ -5,7 +5,7 @@ import Modal from 'react-native-modal';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
 export default ReviewImage = (props) => {
-
+        console.log('in ReviewImage. capturedImageUri:', props.capturedImageUri)
         return (
             <Modal isVisible={props.visible} animationInTiming={0.1} animationOutTiming={0.1} style={styles.modal}>
                 <ImageBackground

@@ -7,44 +7,23 @@ import { connect } from 'react-redux';
 class DeleteFavorite extends React.Component {
 
     state = {
-        accessToken: ''
     }
 
-    getToken = async () => {
-        try {
-            const token = await AsyncStorage.getItem("access_token")
-            console.log('getToken token:', token);
-            return token;
-        } catch (error) {
-            console.log('AsyncStorage retrieval error:', error.message);
-        }
-        return '(missing token)';
-    }
+    
 
     deleteFavorite = () => {
         console.log('in delete function');
-        fetch('https://murmuring-lake-71708.herokuapp.com/favorite', {
-            method: 'DELETE',
-            headers: {
-                Accept: 'application/json',
-                'Content-Type': 'application/json',
-                Authorization: 'Bearer ' + this.state.accessToken
-            }
+        //actually delete image
+        this.props.dispatch({
+            type: 'DELETE_FAVORITE'
         })
-        console.log('after fetch')
-        this.props.loadPic();
-        this.props.closeDeleteFavoriteModal();
+        this.props.returnToCameraPage()
+        //this.props.closeDeleteFavoriteModal();
     }
 
     async componentDidMount() {
         console.log('in DeleteFavorite componentDidMount')
-        await this.getToken()
-            .then(response => {
-                //console.log('in new .then. token:', response)
-                this.setState({accessToken: response});
-            }).catch(error => {
-                console.log('in catch,', error)
-            });
+        
     }
 
     render() {
@@ -54,7 +33,7 @@ class DeleteFavorite extends React.Component {
                         <Text style={{fontSize:48, textAlign:'center', marginTop:100}}>Delete image?</Text>
                         <Text style={{fontSize:26, textAlign:'center', marginTop:50, marginLeft:20, marginRight:20}}>The image will be permanently deleted.</Text>
                         <TouchableOpacity 
-                            onPress={() => this.deleteFavorite()} 
+                            onPress={this.deleteFavorite} 
                             style={{ 
                                 width: '75%', 
                                 borderWidth: 2,
@@ -71,7 +50,7 @@ class DeleteFavorite extends React.Component {
                             </Text>
                         </TouchableOpacity>
                         <TouchableOpacity 
-                            onPress={() => this.props.closeDeleteFavoriteModal()} 
+                            onPress={this.props.closeDeleteFavoriteModal} 
                             style={{ 
                                 width: '75%', 
                                 borderWidth: 2,

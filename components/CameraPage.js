@@ -16,6 +16,7 @@ import ReviewImage from './ReviewImage';
 FontAwesome.loadFont()
 Ionicons.loadFont()
 
+
 class CameraPage extends React.Component {
 
     state = {
@@ -118,6 +119,7 @@ class CameraPage extends React.Component {
     }
 
     viewFavorite = () => {
+        console.log('in viewFavorite')
         this.props.history.push('/favorite')
     }
 
@@ -158,8 +160,7 @@ class CameraPage extends React.Component {
         this.props.dispatch({
             type: 'GET_REGISTRATION_TOKEN'
         })
-        //let registrationToken = await messaging().getToken()
-        //this.updateRegistrationToken(registrationToken)
+        
         this.requestUserPermission()
         // if (this.props.reduxState.respondingTo) {
         //     this.setState({
@@ -174,7 +175,7 @@ class CameraPage extends React.Component {
     }
 
     render() {
-        console.log('in render. reduxState:', this.props.reduxState)
+        console.log('in CameraPage render. reduxState:', this.props.reduxState)
         return (
             <>
                 <View style={styles.container}>
