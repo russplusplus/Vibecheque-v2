@@ -23,7 +23,7 @@ class Favorite extends React.Component {
 
     deleteFavorite = async () => {
         console.log('in deleteFavorite')
-        this.setState({deleteFavoriteMode: true})
+        this.setState({ deleteFavoriteMode: true} )
     }
 
     closeDeleteFavoriteModal = () => {
@@ -44,26 +44,31 @@ class Favorite extends React.Component {
     }
     
     render() {
-        console.log('this.props.reduxState.favoriteUrl:', this.props.reduxState.favoriteUrl._ref)
-        console.log('type of url:', typeof(this.props.reduxState.favoriteUrl))
-        console.log('this should be the url:', this.props.reduxState.favoriteUrl._ref)        
+        // console.log('this.props.reduxState.favoriteUrl:', this.props.reduxState.favoriteUrl._ref)
+        // console.log('type of url:', typeof(this.props.reduxState.favoriteUrl))
+        // console.log('this should be the url:', this.props.reduxState.favoriteUrl._ref)        
         
+        // The below problem was solved. Firebase attached hidden metadata to database objects it returns. The actual data is nested two levels deeper in the object.
+        //
         // This is an interesting problem that I do not understand at all, but accessing the '_ref' attribute of the object 
         // returns what should be returned from the 'url' attribute. If the object (this.props.reduxState.favoriteUrl) is 
         // logged, it appears normal with attributes as intended. However, the values of these attributes return undefined
         // when trying to access them with the intended keys. Looping through the object and exposing the true keys provided
         // a solution to the problem, but it is still shrouded in mystery...
-        for (let key in this.props.reduxState.favoriteUrl) {
-            console.log('key:', key)
-            console.log('value:', this.props.reduxState.favoriteUrl[key])
-        }
+        //
+
+
+        // for (let key in this.props.reduxState.favoriteUrl) {
+        //     console.log('key:', key)
+        //     console.log('value:', this.props.reduxState.favoriteUrl[key])
+        // }
         return (
             <>
-                <DeleteFavorite visible={this.state.deleteFavoriteMode} closeDeleteFavoriteModal={this.closeDeleteFavoriteModal} deleteFavorite={this.deleteFavorite}></DeleteFavorite>
+                <DeleteFavorite visible={this.state.deleteFavoriteMode} returnToCameraPage={this.returnToCameraPage} deleteFavorite={this.deleteFavorite}></DeleteFavorite>
                 <View style={{ flex: 1 }}>
                     <ImageBackground
                     style={{ flex: 1 }}
-                    source={{ uri: this.props.reduxState.favoriteUrl._snapshot.value.url }}>
+                    source={{ uri: this.props.reduxState.favoriteUrl.url }}>
                         <View style={styles.iconContainer}>
                             <View style={styles.topIcons}>
                             </View>

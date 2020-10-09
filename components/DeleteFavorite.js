@@ -14,7 +14,11 @@ class DeleteFavorite extends React.Component {
     deleteFavorite = () => {
         console.log('in delete function');
         //actually delete image
-        this.props.closeDeleteFavoriteModal();
+        this.props.dispatch({
+            type: 'DELETE_FAVORITE'
+        })
+        this.props.returnToCameraPage()
+        //this.props.closeDeleteFavoriteModal();
     }
 
     async componentDidMount() {
