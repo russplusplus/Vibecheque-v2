@@ -18,7 +18,7 @@ class Favorite extends React.Component {
 
     state = {
         deleteFavoriteMode: false,
-        url: 'none'
+        //url: 'none'
     }
 
     deleteFavorite = async () => {
@@ -35,26 +35,35 @@ class Favorite extends React.Component {
     }
 
     componentDidMount() {
-        console.log('in ViewFavorite comonentDidMount.', this.props.reduxState.favoriteUrl)
+        console.log('in ViewFavorite comonentDidMount.', String(this.props.reduxState.favoriteUrl._ref))
         console.log('type:', typeof(this.props.reduxState.favoriteUrl))
-        this.setState({
-            url: this.props.reduxState.favoriteUrl.url
-            //url: JSON.stringify(this.props.reduxState.favoriteUrl.url).replace(/['"]+/g, '') //This is weird, but necessary because from Redux, the url comes as an object with an unknown key. The object is stringified to get the url, and the quotations are removed.
-        })
+        // this.setState({
+        //     url: this.props.reduxState.favoriteUrl._snapshot.value.url
+        //     //url: JSON.stringify(this.props.reduxState.favoriteUrl.url).replace(/['"]+/g, '') //This is weird, but necessary because from Redux, the url comes as an object with an unknown key. The object is stringified to get the url, and the quotations are removed.
+        // })
     }
     
     render() {
-        console.log('JSON.stringify(this.props.reduxState.favoriteUrl):', JSON.stringify(this.props.reduxState.favoriteUrl.url))
-        //let url = JSON.stringify(this.props.reduxState.favoriteUrl)
-        console.log('type of url:', typeof(this.state.url))
-        console.log(this.state.url)        
+        console.log('this.props.reduxState.favoriteUrl:', this.props.reduxState.favoriteUrl._ref)
+        console.log('type of url:', typeof(this.props.reduxState.favoriteUrl))
+        console.log('this should be the url:', this.props.reduxState.favoriteUrl._ref)        
+        
+        // This is an interesting problem that I do not understand at all, but accessing the '_ref' attribute of the object 
+        // returns what should be returned from the 'url' attribute. If the object (this.props.reduxState.favoriteUrl) is 
+        // logged, it appears normal with attributes as intended. However, the values of these attributes return undefined
+        // when trying to access them with the intended keys. Looping through the object and exposing the true keys provided
+        // a solution to the problem, but it is still shrouded in mystery...
+        for (let key in this.props.reduxState.favoriteUrl) {
+            console.log('key:', key)
+            console.log('value:', this.props.reduxState.favoriteUrl[key])
+        }
         return (
             <>
                 <DeleteFavorite visible={this.state.deleteFavoriteMode} closeDeleteFavoriteModal={this.closeDeleteFavoriteModal} deleteFavorite={this.deleteFavorite}></DeleteFavorite>
                 <View style={{ flex: 1 }}>
                     <ImageBackground
                     style={{ flex: 1 }}
-                    source={{ uri: this.state.url }}>
+                    source={{ uri: this.props.reduxState.favoriteUrl._snapshot.value.url }}>
                         <View style={styles.iconContainer}>
                             <View style={styles.topIcons}>
                             </View>
