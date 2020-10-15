@@ -45,7 +45,7 @@ const styles = StyleSheet.create({
         borderRadius: 10
     },
     text: {
-        fontSize: 48, 
+        fontSize: 36, 
         textAlign: 'center', 
         marginTop: '35%',
         fontFamily: 'Rubik-Regular'
