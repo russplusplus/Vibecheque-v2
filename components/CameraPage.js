@@ -12,6 +12,7 @@ import AsyncStorage from '@react-native-community/async-storage';
 
 import Logout from './Logout';
 import ReviewImage from './ReviewImage';
+import NoFavorite from './NoFavorite';
 
 FontAwesome.loadFont()
 Ionicons.loadFont()
@@ -22,6 +23,7 @@ class CameraPage extends React.Component {
     state = {
         isLogoutMode: false,
         isReviewMode: false,
+        isNoFavoriteMode: false,
         cameraType: RNCamera.Constants.Type.back,
         capturedImageUri: '',
         uid: '',
@@ -53,6 +55,12 @@ class CameraPage extends React.Component {
     toggleReviewMode = () => {
         this.setState({
             isReviewMode: (this.state.isReviewMode ? false : true)
+        })
+    }
+
+    toggleNoFavoriteMode = () => {
+        this.setState({
+            isNoFavoriteMode: (this.state.isNoFavoriteMode ? false : true)
         })
     }
 
@@ -120,7 +128,11 @@ class CameraPage extends React.Component {
 
     viewFavorite = () => {
         console.log('in viewFavorite')
-        this.props.history.push('/favorite')
+        if (this.props.reduxState.favoriteUrl.name === 'none') {
+            this.toggleNoFavoriteMode()
+        } else {
+            this.props.history.push('/favorite')
+        }
     }
 
     requestUserPermission = async () => {
@@ -171,7 +183,7 @@ class CameraPage extends React.Component {
         //         isResponding: false
         //     })
         // }
-        
+        console.log('favoriteUrl:', this.props.reduxState.favoriteUrl)
     }
 
     render() {
@@ -181,6 +193,7 @@ class CameraPage extends React.Component {
                 <View style={styles.container}>
                     <Logout visible={this.state.isLogoutMode} logout={this.logout} toggleLogoutMode={this.toggleLogoutMode}/>
                     <ReviewImage visible={this.state.isReviewMode} sendImage={this.sendImage} toggleReviewMode={this.toggleReviewMode} capturedImageUri={this.state.capturedImageUri} isSending={this.state.isSending}/>
+                    <NoFavorite visible={this.state.isNoFavoriteMode} toggleNoFavoriteMode={this.toggleNoFavoriteMode}/>
                     <RNCamera
                         ref={ref => {
                             this.camera = ref;
