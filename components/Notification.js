@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, TextInput, StyleSheet, Button, Platform, TouchableOpacity, ImageBackground } from 'react-native';
+import { View, Text, TextInput, StyleSheet, Button, Platform, TouchableOpacity, Dimensions } from 'react-native';
 import { connect } from 'react-redux';
 import Modal from 'react-native-modal';
-import functions from '@react-native-firebase/functions';
-import messaging from '@react-native-firebase/messaging';
 
 Notification = (props) => {
+
+    // const [width, setWidth] = useState('')
+    // const [height, setHeight] = useState('')
 
     closeNotification = async () => {
         props.dispatch({
@@ -14,14 +15,23 @@ Notification = (props) => {
         props.setIsVisible(false)
     }
 
+    // useEffect(() => {
+    //     setWidth(Dimensions.get('window').width)
+    //     setHeight(Dimensions.get('window').height)
+    // })
+
     return (
         <Modal isVisible={props.isVisible} animationIn='zoomIn' animationOut='zoomOut'>
             <View style={styles.container}>
-                <Text style={styles.title}>You've received a vibe!</Text>
-                <Text style={styles.subtitle}>View your inbox to see it</Text>
+                <Text style={styles.title}>You've received</Text>
+                <Text style={styles.title}>a vibe!</Text>
+                
+                {/* <Text style={styles.subtitle}>width: {width}</Text>
+                <Text style={styles.subtitle}>height: {height}</Text> */}
+
                 <TouchableOpacity 
                     onPress={() => closeNotification()} 
-                    style={styles.cancelButton}>
+                    style={styles.alrightButton}>
                     <Text
                         style={styles.cancelButtonText}>
                         Alright!
@@ -38,47 +48,32 @@ const mapReduxStateToProps = reduxState => ({
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1, 
+        flex:1, 
         alignItems: 'center', 
-        marginLeft: '6%', 
-        marginRight: '6%', 
-        marginTop: Platform.OS === 'ios' ? '55%' : '45%', 
-        marginBottom: Platform.OS === 'ios' ? '55%' : '45%', 
-        backgroundColor: '#FFFAAC', 
-        borderWidth: 2, 
-        borderColor: 'black', 
-        borderRadius: 10
+        justifyContent: 'center', 
+        marginLeft:'5%', 
+        marginRight:'5%', 
+        marginTop:'40%', 
+        marginBottom:'40%', 
+        backgroundColor:'#FFFAAC', 
+        borderWidth:2, 
+        borderColor:'black', 
+        borderRadius:10, 
+        paddingLeft:'5%', 
+        paddingRight:'5%'
     },
     title: {
-        fontSize: 44, 
-        textAlign: 'center', 
-        marginTop: '15%'
-    },
-    subtitle: {
-        fontSize: 30, 
+        fontSize: 36, 
         textAlign: 'center', 
     },
-    yesButton: {
+    alrightButton: { 
         width: '75%', 
         borderWidth: 2,
         borderColor: 'black',
         borderRadius: 10,
         backgroundColor: '#9EE7FF',
         justifyContent: 'center',
-        marginTop: '20%'
-    },
-    yesButtonText: {
-        fontSize: 30,
-        textAlign: 'center'
-    },
-    cancelButton: { 
-        width: '75%', 
-        borderWidth: 2,
-        borderColor: 'black',
-        borderRadius: 10,
-        backgroundColor: '#CC375E',
-        justifyContent: 'center',
-        marginTop: '4%'
+        marginTop: '15%'
     },
     cancelButtonText: {
         fontSize: 30,

@@ -10,7 +10,7 @@ function* getInbox() {
     let reduxState = yield select()
     let uid = reduxState.userID
     let response = yield functions().httpsCallable('updateInbox')({uid})
-    console.log('get Inbox response.data:', response.data)
+    //console.log('get Inbox response.data:', response.data)
     yield put({
         type: 'SET_INBOX',
         payload: response.data
@@ -18,7 +18,7 @@ function* getInbox() {
     let url;
     if (response.data[0]) {
         url = yield storage().ref(`images/${response.data[0].imageName}`).getDownloadURL()
-        console.log('in getInboxUrl. url:', url)
+        //console.log('in getInboxUrl. url:', url)
     } else {
         url = null
     }
@@ -37,20 +37,20 @@ function* getFavoriteURL() {
         .once('value')
             
     if (snapshot._snapshot.value) {
-        console.log('snapshot is truthy')
+        //console.log('snapshot is truthy')
     } else {
-        console.log('snapshot is falsey')
+        //console.log('snapshot is falsey')
     }
-    console.log('type of null:', typeof(snapshot))
-    for (key in snapshot) {
-        console.log('key:', key)
-        console.log('value:', snapshot[key])
-    }
+    // console.log('type of null:', typeof(snapshot))
+    // for (key in snapshot) {
+    //     console.log('key:', key)
+    //     console.log('value:', snapshot[key])
+    // }
 
 
-    console.log('in getFavoriteURL. snapshot:', snapshot)
-    console.log('._snapshot.value:', snapshot._snapshot.value)
-    console.log('url:', snapshot.url)
+    // console.log('in getFavoriteURL. snapshot:', snapshot)
+    // console.log('._snapshot.value:', snapshot._snapshot.value)
+    // console.log('url:', snapshot.url)
     if (snapshot._snapshot.value) {
         yield put({
             type: 'SET_FAVORITE_URL',
@@ -94,6 +94,15 @@ function* deleteFavorite() {
     yield database().ref(`users/${reduxState.userID}/favorite`).remove();
     // delete from storage
     yield storage().ref(`images/${reduxState.favoriteUrl.name}`).delete();
+    // reset redux favorite
+    const initFav = {
+        name: 'none',
+        url: 'none'
+    }
+    yield put({
+        type: 'SET_FAVORITE_URL',
+        payload: initFav   // snapshot object has a bunch of hidden metadata that messes up retrieval on the ViewFavorite page. This is the true data.
+    })
 }
 
 function* getInboxSaga() {

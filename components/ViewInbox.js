@@ -33,7 +33,7 @@ class ViewInbox extends React.Component {
         //     })
         // }
         
-        console.log('senderId:', this.props.reduxState.senderId)
+        //console.log('senderId:', this.props.reduxState.senderId)
 
         this.props.dispatch({    //dispatch is async- if it responds before the page is changed, there will be an error because the background of the page is deleted
             type: 'DELETE_IMAGE',
@@ -44,22 +44,17 @@ class ViewInbox extends React.Component {
         this.props.history.push('/camera')
     }
 
-    // report = () => {
-    //     console.log('in report')
-    //     fetch(`http://172.16.102.94:5000/users/${this.props.reduxState.inbox[0].from_users_id}`, {
-    //         method: 'PUT',
-    //         headers: {
-    //             Accept: 'application/json',
-    //             'Content-Type': 'application/json',
-    //             Authorization: 'Bearer ' + this.state.accessToken
-    //         }  
-    //     })
-    // }
+    handleReportPress = () => {
+        console.log('in handleReportPress')
+    }
 
-    favorite = async () => {
-        console.log('in favorite')
-        // send image url to database and replace existing
-        
+    handleFavoritePress = () => {
+        console.log('in handleFavoritePress')
+        if (!this.state.isFavorited) {
+            this.setState({
+                newFavoriteMode: true
+            })
+        }  
     }
 
     cancelReport = () => {
@@ -82,9 +77,9 @@ class ViewInbox extends React.Component {
 
         let urlRef = 'users/' + JSON.parse(await AsyncStorage.getItem('user')).uid + '/favorite/url';
         let nameRef = 'users/' + JSON.parse(await AsyncStorage.getItem('user')).uid + '/favorite/name';
-        console.log('urlRef:', urlRef)
-        console.log('nameRef:', nameRef)
-        console.log('this.props.reduxState.inbox[0].url:', this.props.reduxState.inbox[0].url)
+        // console.log('urlRef:', urlRef)
+        // console.log('nameRef:', nameRef)
+        // console.log('this.props.reduxState.inbox[0].url:', this.props.reduxState.inbox[0].url)
         await database()
             .ref(urlRef)
             .set(this.props.reduxState.inbox[0].url)
@@ -146,8 +141,8 @@ class ViewInbox extends React.Component {
     }
     
     render() {
-        console.log('in render(). this.state.url:', this.state.url)
-        console.log('this.props.reduxState.inbox[0].url:', this.props.reduxState.inbox[0].url)
+        // console.log('in render(). this.state.url:', this.state.url)
+        // console.log('this.props.reduxState.inbox[0].url:', this.props.reduxState.inbox[0].url)
         return (
             <>
                 <NewFavorite visible={this.state.newFavoriteMode} closeNewFavoriteModal={this.closeNewFavoriteModal} indicateFavorite={this.indicateFavorite}></NewFavorite>
@@ -181,7 +176,7 @@ class ViewInbox extends React.Component {
                                                 aspectRatio: 1,
                                                 borderRadius: 10
                                             }}
-                                            onPress={() => this.setState({newFavoriteMode: true})}>
+                                            onPress={() => this.handleFavoritePress()}>
                                             <Ionicons
                                                 name='md-star'
                                                 style={{
