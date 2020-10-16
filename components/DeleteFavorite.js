@@ -1,15 +1,11 @@
 import React from 'react';
-import { View, Text, TextInput, StyleSheet, Button, Platform, TouchableOpacity, ImageBackground, Modal } from 'react-native';
+import { View, Text, TextInput, StyleSheet, Button, Platform, TouchableOpacity, ImageBackground } from 'react-native';
+import Modal from 'react-native-modal';
 import AsyncStorage from '@react-native-community/async-storage';
 
 import { connect } from 'react-redux';
 
 class DeleteFavorite extends React.Component {
-
-    state = {
-    }
-
-    
 
     deleteFavorite = () => {
         console.log('in delete function');
@@ -18,54 +14,83 @@ class DeleteFavorite extends React.Component {
             type: 'DELETE_FAVORITE'
         })
         this.props.returnToCameraPage()
-        //this.props.closeDeleteFavoriteModal();
-    }
-
-    async componentDidMount() {
-        console.log('in DeleteFavorite componentDidMount')
-        
     }
 
     render() {
         return (
             <Modal visible={this.props.visible} animationType='slide' transparent={true}>
-                <View style={{flex:1, alignItems: 'center', marginLeft:20, marginRight:20, marginTop:120, marginBottom:120, backgroundColor:'#FFFAAC', borderWidth:2, borderColor:'black', borderRadius:10}}>
-                        <Text style={{fontSize:48, textAlign:'center', marginTop:100}}>Delete image?</Text>
-                        <Text style={{fontSize:26, textAlign:'center', marginTop:50, marginLeft:20, marginRight:20}}>The image will be permanently deleted.</Text>
-                        <TouchableOpacity 
-                            onPress={this.deleteFavorite} 
-                            style={{ 
-                                width: '75%', 
-                                borderWidth: 2,
-                                borderColor: 'black',
-                                borderRadius: 10,
-                                backgroundColor: '#CC375E',
-                                justifyContent: 'center',
-                                marginTop: 50}}>
-                            <Text
-                                style={{
-                                    fontSize: 26,
-                                    textAlign: 'center'}}>
-                                Delete
-                            </Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity 
-                            onPress={this.props.closeDeleteFavoriteModal} 
-                            style={{ 
-                                width: '75%', 
-                                borderWidth: 2,
-                                borderColor: 'black',
-                                borderRadius: 10,
-                                backgroundColor: 'transparent',
-                                justifyContent: 'center',
-                                marginTop: 10}}>
-                            <Text
-                                style={{
-                                    fontSize: 26,
-                                    textAlign: 'center'}}>
-                                Cancel
-                            </Text>
-                        </TouchableOpacity>                    
+                <View style={{
+                    flex:1, 
+                    alignItems: 'center', 
+                    justifyContent: 'center', 
+                    marginLeft:'5%', 
+                    marginRight:'5%', 
+                    marginTop:'40%', 
+                    marginBottom:'40%', 
+                    backgroundColor:'#FFFAAC', 
+                    borderWidth:2, 
+                    borderColor:'black', 
+                    borderRadius:10, 
+                    paddingLeft:'5%', 
+                    paddingRight:'5%'
+                }}>
+                    <Text style={{
+                        fontSize:36, 
+                        textAlign:'center',
+                        fontFamily: 'Rubik-Regular'
+                    }}>
+                        Delete image?
+                    </Text>
+                    <Text style={{
+                        fontSize:20, 
+                        textAlign:'center', 
+                        marginTop:'10%',
+                        fontFamily: 'Rubik-Regular'
+                    }}>
+                        The image will be permanently deleted.
+                    </Text>
+                    <TouchableOpacity 
+                        onPress={this.deleteFavorite} 
+                        style={{ 
+                            width: '75%',
+                            height: 40,
+                            borderWidth: 2,
+                            borderColor: 'black',
+                            borderRadius: 10,
+                            backgroundColor: '#CC375E',
+                            justifyContent: 'center',
+                            marginTop: '10%'
+                        }}>
+                        <Text
+                            style={{
+                                fontSize: 26,
+                                textAlign: 'center',
+                                fontFamily: 'Rubik-Regular'
+                            }}>
+                            Delete
+                        </Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity 
+                        onPress={this.props.closeDeleteFavoriteModal} 
+                        style={{ 
+                            width: '75%',
+                            height: 40,
+                            borderWidth: 2,
+                            borderColor: 'black',
+                            borderRadius: 10,
+                            backgroundColor: 'transparent',
+                            justifyContent: 'center',
+                            marginTop: 10
+                        }}>
+                        <Text
+                            style={{
+                                fontSize: 26,
+                                textAlign: 'center',
+                                fontFamily: 'Rubik-Regular'
+                            }}>
+                            Cancel
+                        </Text>
+                    </TouchableOpacity>                    
                 </View>  
             </Modal>
         )

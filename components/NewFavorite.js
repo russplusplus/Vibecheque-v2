@@ -33,64 +33,62 @@ class NewFavorite extends React.Component {
                     borderRadius:10, 
                     paddingLeft:'5%', 
                     paddingRight:'5%'
+                }}>
+                    <Text style={{
+                        fontSize:36, 
+                        textAlign:'center', 
+                        fontFamily: 'Rubik-Regular'
                     }}>
+                            Favorite Vibe?
+                    </Text>
+                    <Text style={{
+                        fontSize:20, 
+                        textAlign:'center', 
+                        marginTop:'10%', 
+                        fontFamily: 'Rubik-Regular'
+                    }}>
+                            The image will be saved and will overwrite any currently saved image.
+                    </Text>
+                    <TouchableOpacity 
+                        onPress={() => this.favorite()} 
+                        style={{ 
+                            width: '75%',
+                            height: 40, 
+                            borderWidth: 2,
+                            borderColor: 'black',
+                            borderRadius: 10,
+                            backgroundColor: '#9EE7FF',
+                            justifyContent: 'center',
+                            marginTop: '10%'
+                        }}>
                         <Text style={{
-                            fontSize:36, 
-                            textAlign:'center', 
+                            fontSize: 26,
+                            textAlign: 'center',
                             fontFamily: 'Rubik-Regular'
                         }}>
-                                Favorite Vibe?
+                            Save
                         </Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity 
+                        onPress={() => this.props.closeNewFavoriteModal()} 
+                        style={{ 
+                            width: '75%',
+                            height: 40,
+                            borderWidth: 2,
+                            borderColor: 'black',
+                            borderRadius: 10,
+                            backgroundColor: 'transparent',
+                            justifyContent: 'center',
+                            marginTop: '5%'
+                        }}>
                         <Text style={{
-                            fontSize:20, 
-                            textAlign:'center', 
-                            marginTop:'10%', 
+                            fontSize: 26,
+                            textAlign: 'center',
                             fontFamily: 'Rubik-Regular'
                         }}>
-                                The image will be saved and will overwrite any currently saved image.
+                            Cancel
                         </Text>
-                        <TouchableOpacity 
-                            onPress={() => this.favorite()} 
-                            style={{ 
-                                width: '75%',
-                                height: 40, 
-                                borderWidth: 2,
-                                borderColor: 'black',
-                                borderRadius: 10,
-                                backgroundColor: '#9EE7FF',
-                                justifyContent: 'center',
-                                marginTop: '10%'
-                        }}>
-                            <Text
-                                style={{
-                                    fontSize: 26,
-                                    textAlign: 'center',
-                                    fontFamily: 'Rubik-Regular'
-                                }}>
-                                Save
-                            </Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity 
-                            onPress={() => this.props.closeNewFavoriteModal()} 
-                            style={{ 
-                                width: '75%',
-                                height: 40,
-                                borderWidth: 2,
-                                borderColor: 'black',
-                                borderRadius: 10,
-                                backgroundColor: 'transparent',
-                                justifyContent: 'center',
-                                marginTop: '5%'
-                            }}>
-                            <Text
-                                style={{
-                                    fontSize: 26,
-                                    textAlign: 'center',
-                                    fontFamily: 'Rubik-Regular'
-                                }}>
-                                Cancel
-                            </Text>
-                        </TouchableOpacity>                    
+                    </TouchableOpacity>                    
                 </View>  
             </Modal>
         )
