@@ -152,7 +152,9 @@ const Login = props => {
                         style={styles.wideButton}>
                         <Text
                             style={{
-                                fontSize: 26}}>
+                                fontSize: 20,
+                                fontFamily: 'Rubik-Regular'
+                            }}>
                             Continue with phone number
                         </Text>
                     </TouchableOpacity>
@@ -161,7 +163,9 @@ const Login = props => {
                         style={styles.wideButton}>
                         <Text
                             style={{
-                                fontSize: 26}}>
+                                fontSize: 20,
+                                fontFamily: 'Rubik-Regular'
+                            }}>
                             Continue with email
                         </Text>
                     </TouchableOpacity>
@@ -310,7 +314,7 @@ const styles = StyleSheet.create({
     },
     message: { 
         color: '#CC375E', 
-        fontSize: 24, 
+        fontSize: 20, 
         marginHorizontal: '15%', 
         marginTop: Platform.OS === 'ios' ? '45%' : '35%', 
         textAlign: 'center',
@@ -341,11 +345,13 @@ const styles = StyleSheet.create({
         marginBottom: 6
     },
     wideButton: {
-        width: '80%', 
+        width: '80%',
+        height: 40, 
         borderWidth: 2,
         borderColor: 'black',
         borderRadius: 10,
         backgroundColor: 'transparent',
+        justifyContent: 'center',
         alignItems: 'center',
         marginBottom: 6
     },
