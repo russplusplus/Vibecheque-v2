@@ -87,7 +87,8 @@ const styles = StyleSheet.create({
         borderRadius: 10
     },
     wheel: {
-        alignSelf: 'center'
+        alignSelf: 'center',
+        transform: Platform.OS === 'ios' ? [{ scale: 2 }] : [{ scale: 1 }]
     },
     cancelIcon: {
         height: Platform.OS === 'ios' ? '87%' : '91%',

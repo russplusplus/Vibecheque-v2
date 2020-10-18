@@ -35,23 +35,26 @@ const styles = StyleSheet.create({
     container: {
         flex:1, 
         alignItems: 'center', 
-        marginLeft: '6%', 
-        marginRight: '6%', 
-        marginTop: Platform.OS === 'ios' ? '55%' : '35%', 
-        marginBottom: Platform.OS === 'ios' ? '45%' : '25%', 
-        backgroundColor: '#FFFAAC', 
-        borderWidth: 2, 
-        borderColor: 'black', 
-        borderRadius: 10
+        justifyContent: 'center', 
+        marginLeft:'5%', 
+        marginRight:'5%', 
+        marginTop:'40%', 
+        marginBottom:'40%', 
+        backgroundColor:'#FFFAAC', 
+        borderWidth:2, 
+        borderColor:'black', 
+        borderRadius:10, 
+        paddingLeft:'5%', 
+        paddingRight:'5%'
     },
     text: {
-        fontSize: 48, 
+        fontSize: 36, 
         textAlign: 'center', 
-        marginTop: '35%',
         fontFamily: 'Rubik-Regular'
     },
     yesButton: {
-        width: '75%', 
+        width: '75%',
+        height: 40,
         borderWidth: 2,
         borderColor: 'black',
         borderRadius: 10,
@@ -61,21 +64,22 @@ const styles = StyleSheet.create({
         alignItems: 'center'
     },
     yesButtonText: {
-        fontSize: 30,
+        fontSize: 26,
         fontFamily: 'Rubik-Regular'
     },
     cancelButton: { 
-        width: '75%', 
+        width: '75%',
+        height: 40,
         borderWidth: 2,
         borderColor: 'black',
         borderRadius: 10,
         backgroundColor: '#CC375E',
         justifyContent: 'center',
-        marginTop: '4%',
+        marginTop: 10,
         alignItems: 'center'
     },
     cancelButtonText: {
-        fontSize: 30,
+        fontSize: 26,
         fontFamily: 'Rubik-Regular'
     }
 })

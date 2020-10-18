@@ -3,7 +3,6 @@ import { View, Text, TextInput, StyleSheet, Button, ImageBackground, TouchableOp
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import AntDesign from 'react-native-vector-icons/AntDesign';
-import AsyncStorage from '@react-native-community/async-storage';
 
 import database from '@react-native-firebase/database';
 
@@ -37,10 +36,6 @@ class Favorite extends React.Component {
     componentDidMount() {
         console.log('in ViewFavorite comonentDidMount.', String(this.props.reduxState.favoriteUrl._ref))
         console.log('type:', typeof(this.props.reduxState.favoriteUrl))
-        // this.setState({
-        //     url: this.props.reduxState.favoriteUrl._snapshot.value.url
-        //     //url: JSON.stringify(this.props.reduxState.favoriteUrl.url).replace(/['"]+/g, '') //This is weird, but necessary because from Redux, the url comes as an object with an unknown key. The object is stringified to get the url, and the quotations are removed.
-        // })
     }
     
     render() {
@@ -64,7 +59,7 @@ class Favorite extends React.Component {
         // }
         return (
             <>
-                <DeleteFavorite visible={this.state.deleteFavoriteMode} returnToCameraPage={this.returnToCameraPage} deleteFavorite={this.deleteFavorite}></DeleteFavorite>
+                <DeleteFavorite visible={this.state.deleteFavoriteMode} closeDeleteFavoriteModal={this.closeDeleteFavoriteModal} returnToCameraPage={this.returnToCameraPage}></DeleteFavorite>
                 <View style={{ flex: 1 }}>
                     <ImageBackground
                     style={{ flex: 1 }}
@@ -91,9 +86,7 @@ class Favorite extends React.Component {
                                 </TouchableOpacity>
                             </View>
                         </View>
-
                     </ImageBackground>
-                    
                 </View>
             </>
         )

@@ -1,5 +1,6 @@
 import React from 'react';
-import { View, Text, TextInput, StyleSheet, Button, Platform, TouchableOpacity, ImageBackground, Modal } from 'react-native';
+import { View, Text, TextInput, StyleSheet, Button, Platform, TouchableOpacity, ImageBackground } from 'react-native';
+import Modal from 'react-native-modal';
 import { connect } from 'react-redux';
 
 class NoFavorite extends React.Component {
@@ -25,31 +26,35 @@ class NoFavorite extends React.Component {
                     borderRadius:10, 
                     paddingLeft:'5%', 
                     paddingRight:'5%'
+                }}>
+                    <Text style={{
+                        fontSize:36, 
+                        textAlign:'center',
+                        fontFamily: 'Rubik-Regular'
                     }}>
-                        <Text style={{
-                            fontSize:40, 
-                            textAlign:'center', 
+                        You haven't selected a favorite vibe yet.
+                    </Text>
+                    <TouchableOpacity 
+                        onPress={() => this.props.toggleNoFavoriteMode()} 
+                        style={{ 
+                            marginTop: '15%',
+                            width: '75%', 
+                            borderWidth: 2,
+                            borderColor: 'black',
+                            borderRadius: 10,
+                            backgroundColor: '#9EE7FF',
+                            justifyContent: 'center',
+                            height: 40
+                        }}>
+                        <Text
+                            style={{
+                                fontSize: 26,
+                                textAlign: 'center',
+                                fontFamily: 'Rubik-Regular'
                             }}>
-                                You haven't selected a favorite vibe yet.
+                            Oh okay
                         </Text>
-                        <TouchableOpacity 
-                            onPress={() => this.props.toggleNoFavoriteMode()} 
-                            style={{ 
-                                marginTop: '15%',
-                                width: '75%', 
-                                borderWidth: 2,
-                                borderColor: 'black',
-                                borderRadius: 10,
-                                backgroundColor: '#9EE7FF',
-                                justifyContent: 'center',
-                                }}>
-                            <Text
-                                style={{
-                                    fontSize: 26,
-                                    textAlign: 'center'}}>
-                                Oh okay
-                            </Text>
-                        </TouchableOpacity>                    
+                    </TouchableOpacity>                    
                 </View>  
             </Modal>
         )
