@@ -23,28 +23,10 @@ class Report extends React.Component {
 
     report = () => {
         console.log('in report')
-        fetch(`https://murmuring-lake-71708.herokuapp.com/users/${this.props.reduxState.inbox[0].from_users_id}`, {
-            method: 'PUT',
-            headers: {
-                Accept: 'application/json',
-                'Content-Type': 'application/json',
-                Authorization: 'Bearer ' + this.state.accessToken
-            }  
-        })
+        
 
         //delete photo from database
-        let imageId = this.props.reduxState.inbox[0].id;
-        fetch('https://murmuring-lake-71708.herokuapp.com/images', {
-            method: 'DELETE',
-            headers: {
-                Accept: 'application/json',
-                'Content-Type': 'application/json',
-                Authorization: 'Bearer ' + this.state.accessToken
-            },
-            body: JSON.stringify({
-                "imageId": imageId
-            })
-        })
+        
 
         //delete photo from Redux
         this.props.dispatch({    //dispatch is async- if it responds before the page is changed, there will be an error because the background of the page is deleted
