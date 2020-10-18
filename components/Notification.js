@@ -33,7 +33,7 @@ Notification = (props) => {
                     onPress={() => closeNotification()} 
                     style={styles.alrightButton}>
                     <Text
-                        style={styles.cancelButtonText}>
+                        style={styles.alrightButtonText}>
                         Alright!
                     </Text>
                 </TouchableOpacity>                    
@@ -77,8 +77,8 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         marginTop: '15%'
     },
-    cancelButtonText: {
-        fontSize: 30,
+    alrightButtonText: {
+        fontSize: 26,
         textAlign: 'center',
         fontFamily: 'Rubik-Regular'
     }

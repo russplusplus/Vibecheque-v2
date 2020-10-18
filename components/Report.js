@@ -50,23 +50,55 @@ class Report extends React.Component {
     render() {
         return (
             <Modal visible={this.props.visible} animationType='slide' transparent={true}>
-                <View style={{flex:1, alignItems: 'center', marginLeft:20, marginRight:20, marginTop:120, marginBottom:120, backgroundColor:'#FFFAAC', borderWidth:2, borderColor:'black', borderRadius:10}}>
-                        <Text style={{fontSize:48, textAlign:'center', marginTop:100}}>Bad Vibes?</Text>
-                        <Text style={{fontSize:26, textAlign:'center', marginTop:50}}>The sender will be permanently banned.</Text>
+                <View style={{
+                    flex:1, 
+                    alignItems: 'center', 
+                    justifyContent: 'center', 
+                    marginLeft:'5%', 
+                    marginRight:'5%', 
+                    marginTop:'40%', 
+                    marginBottom:'40%', 
+                    backgroundColor:'#FFFAAC', 
+                    borderWidth:2, 
+                    borderColor:'black', 
+                    borderRadius:10, 
+                    paddingLeft:'5%', 
+                    paddingRight:'5%'
+                }}>
+                        <Text style={{
+                            fontSize:36, 
+                            textAlign:'center', 
+                            fontFamily: 'Rubik-Regular'
+                        }}>
+                            Bad Vibes?
+                        </Text>
+                        <Text style={{
+                            fontSize:20, 
+                            textAlign:'center', 
+                            marginTop:'10%',
+                            fontFamily: 'Rubik-Regular'
+                        }}>
+                                The sender will be temporarily banned.
+                        </Text>
                         <TouchableOpacity 
                             onPress={() => this.report()} 
                             style={{ 
-                                width: '75%', 
+                                width: '75%',
+                                height: 40,
                                 borderWidth: 2,
                                 borderColor: 'black',
                                 borderRadius: 10,
                                 backgroundColor: '#CC375E',
                                 justifyContent: 'center',
-                                marginTop: 50}}>
+                                aligntItems: 'center',
+                                marginTop: '10%'
+                            }}>
                             <Text
                                 style={{
                                     fontSize: 26,
-                                    textAlign: 'center'}}>
+                                    textAlign: 'center',
+                                    fontFamily: 'Rubik-Regular'
+                                }}>
                                 BAD VIBES
                             </Text>
                         </TouchableOpacity>
@@ -74,16 +106,21 @@ class Report extends React.Component {
                             onPress={() => this.props.cancelReport()} 
                             style={{ 
                                 width: '75%', 
+                                height: 40,
                                 borderWidth: 2,
                                 borderColor: 'black',
                                 borderRadius: 10,
                                 backgroundColor: 'transparent',
                                 justifyContent: 'center',
-                                marginTop: 10}}>
+                                alignItems: 'center',
+                                marginTop: 10
+                            }}>
                             <Text
                                 style={{
                                     fontSize: 26,
-                                    textAlign: 'center'}}>
+                                    textAlign: 'center',
+                                    fontFamily: 'Rubik-Regular'
+                                }}>
                                 Cancel
                             </Text>
                         </TouchableOpacity>                    

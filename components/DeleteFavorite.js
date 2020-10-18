@@ -59,7 +59,7 @@ class DeleteFavorite extends React.Component {
                             borderRadius: 10,
                             backgroundColor: '#CC375E',
                             justifyContent: 'center',
-                            marginTop: '10%'
+                            marginTop: '12%'
                         }}>
                         <Text
                             style={{

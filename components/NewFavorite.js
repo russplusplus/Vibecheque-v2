@@ -79,7 +79,7 @@ class NewFavorite extends React.Component {
                             borderRadius: 10,
                             backgroundColor: 'transparent',
                             justifyContent: 'center',
-                            marginTop: '5%'
+                            marginTop: 10
                         }}>
                         <Text style={{
                             fontSize: 26,
