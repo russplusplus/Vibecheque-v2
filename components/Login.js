@@ -36,8 +36,13 @@ const Login = props => {
         }
         setIsLoginLoading(true)
 
-        const confirmation = await auth().signInWithPhoneNumber(phoneNumber);
-        setConfirm(confirmation);
+        try {   
+            const confirmation = await auth().signInWithPhoneNumber(phoneNumber);
+            setConfirm(confirmation);
+        } catch {
+            console.log('Error. Text not sent')
+        }
+        
         setIsLoginLoading(false);
     }
 
@@ -137,6 +142,7 @@ const Login = props => {
         setMessage('')
         setIsRegisterLoading(false)
         setIsLoginLoading(false)
+        setConfirm(null)
         setLoginMode('')
     }
 
