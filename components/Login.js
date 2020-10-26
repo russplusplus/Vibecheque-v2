@@ -8,6 +8,7 @@ import { getPhoneNumber } from 'react-native-device-info';
 
 import messaging from '@react-native-firebase/messaging';
 import database from '@react-native-firebase/database';
+import { absoluteFill } from 'react-native-extended-stylesheet';
 
 const Login = props => {
 
@@ -82,11 +83,11 @@ const Login = props => {
     register = async () => {
         console.log('in register function');
         if (!emailInput) {
-            setMessage("You're gonna need a username.")
+            setMessage("We're gonna need an email address.")
             return
         }
         if (!passwordInput) {
-            setMessage("You're gonna need a password too.")
+            setMessage("You should probably set a password too.")
             return
         }
         if (passwordInput.length < 6) {
@@ -132,6 +133,13 @@ const Login = props => {
             })
     }
 
+    back = () => {
+        setMessage('')
+        setIsRegisterLoading(false)
+        setIsLoginLoading(false)
+        setLoginMode('')
+    }
+
     useEffect(() =>  {
         checkIfLoggedIn()
         console.log('loginMode:', loginMode)
@@ -147,28 +155,30 @@ const Login = props => {
                         {props.reduxState.loginMessage}
                     </Text>
                     <Image source={require('../assets/Vibecheque_logo.png')} style={styles.logo}/>
-                    <TouchableOpacity
-                        onPress={() => setLoginMode('phoneNumber')}
-                        style={styles.wideButton}>
-                        <Text
-                            style={{
-                                fontSize: 20,
-                                fontFamily: 'Rubik-Regular'
-                            }}>
-                            Continue with phone number
-                        </Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity
-                        onPress={() => setLoginMode('email')}
-                        style={styles.wideButton}>
-                        <Text
-                            style={{
-                                fontSize: 20,
-                                fontFamily: 'Rubik-Regular'
-                            }}>
-                            Continue with email
-                        </Text>
-                    </TouchableOpacity>
+                    <View style={styles.menuContainer}>
+                        <TouchableOpacity
+                            onPress={() => setLoginMode('phoneNumber')}
+                            style={styles.wideButton}>
+                            <Text
+                                style={{
+                                    fontSize: 20,
+                                    fontFamily: 'Rubik-Regular'
+                                }}>
+                                Continue with phone number
+                            </Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity
+                            onPress={() => setLoginMode('email')}
+                            style={styles.wideButton}>
+                            <Text
+                                style={{
+                                    fontSize: 20,
+                                    fontFamily: 'Rubik-Regular'
+                                }}>
+                                Continue with email
+                            </Text>
+                        </TouchableOpacity>
+                    </View>
                 </View>
             </>
         )
@@ -181,52 +191,74 @@ const Login = props => {
                         {props.reduxState.loginMessage}
                     </Text>
                     <Image source={require('../assets/Vibecheque_logo.png')} style={styles.logo}/>
-                    <TextInput
-                        style={styles.input}
-                        onChangeText={(text) => setEmailInput(text)}
-                        placeholder='email'
-                        keyboardType='email-address'
-                        autoCapitalize='none'
-                    />
-                    <TextInput
-                        style={styles.input}
-                        onChangeText={(text) => setPasswordInput(text)}
-                        placeholder="password"
-                        secureTextEntry={true}
-                    />
-                    {isLoginLoading ?
-                    <ActivityIndicator/> :
-                    <TouchableOpacity
-                        onPress={login}
-                        style={styles.loginButton}>
-                        <Text
-                            style={{
-                                fontSize: 26}}>
-                            Login
-                        </Text>
-                    </TouchableOpacity>
-                    }
-                    {isRegisterLoading ?
-                    <ActivityIndicator/> :
-                    <TouchableOpacity
-                        onPress={register}
-                        style={styles.registerButton}>
-                        <Text
-                            style={{
-                                fontSize: 26}}>
-                            Register
-                        </Text>
-                    </TouchableOpacity>
-                    }
-                    <TouchableOpacity
-                        onPress={() => setLoginMode('')}
-                        style={styles.registerButton}>
-                        <Text
-                            style={{
-                                fontSize: 26}}>
-                            Back
-                        </Text>
-                    </TouchableOpacity>
+                    
+                    <View style={styles.menuContainer}>
+                    
+                        <TextInput
+                            style={styles.input}
+                            onChangeText={(text) => setEmailInput(text)}
+                            placeholder='email'
+                            keyboardType='email-address'
+                            autoCapitalize='none'
+                        />
+                        <TextInput
+                            style={styles.input}
+                            onChangeText={(text) => setPasswordInput(text)}
+                            placeholder="password"
+                            secureTextEntry={true}
+                        />
+                        <TouchableOpacity
+                            onPress={login}
+                            style={styles.regularButton}>
+                            {isLoginLoading ?
+                                <ActivityIndicator
+                                    size={30}
+                                    style={styles.wheel}
+                                    color='black'
+                                /> 
+                            :
+                                <Text
+                                    style={{
+                                        fontSize: 20,
+                                        fontFamily: 'Rubik-Regular'
+                                    }}>
+                                    Login
+                                </Text>
+                            }
+                        </TouchableOpacity>
+                        <TouchableOpacity
+                            onPress={register}
+                            style={styles.regularButton}>
+                            {isRegisterLoading ? 
+                                <ActivityIndicator
+                                    size={30}
+                                    style={styles.wheel}
+                                    color='black'
+                                /> 
+                            :
+                                <Text
+                                    style={{
+                                        fontSize: 20,
+                                        fontFamily: 'Rubik-Regular'
+                                    }}>
+                                    Register
+                                </Text>
+                            }  
+                        </TouchableOpacity>
+                        <TouchableOpacity
+                            onPress={() => back()}
+                            style={styles.backButton}>
+                            <Text
+                                style={{
+                                    fontSize: 20,
+                                    fontFamily: 'Rubik-Regular'
+                                }}>
+                                Back
+                            </Text>
+                        </TouchableOpacity>
+                        
+                    </View>
+
                 </View>
             </>
         )
@@ -239,6 +271,9 @@ const Login = props => {
                         {props.reduxState.loginMessage}
                     </Text>
                     <Image source={require('../assets/Vibecheque_logo.png')} style={styles.logo}/>
+
+                    <View style={styles.menuContainer}>    
+
                     {!confirm ?
                     <>    
                         <TextInput
@@ -248,19 +283,25 @@ const Login = props => {
                             keyboardType='phone-pad'
                             autoCapitalize='none'
                         />
-                        {isLoginLoading ?
-                            <ActivityIndicator/> 
-                        :
-                            <TouchableOpacity
-                                onPress={sendCode}
-                                style={styles.loginButton}>
+                        <TouchableOpacity
+                            onPress={sendCode}
+                            style={styles.regularButton}>
+                            {isLoginLoading ? 
+                                <ActivityIndicator
+                                    size={30}
+                                    style={styles.wheel}
+                                    color='black'
+                                /> 
+                            :
                                 <Text
                                     style={{
-                                        fontSize: 26}}>
+                                        fontSize: 20,
+                                        fontFamily: 'Rubik-Regular'
+                                    }}>
                                     Send Code
                                 </Text>
-                            </TouchableOpacity>
-                        }
+                            }
+                        </TouchableOpacity>
                     </>
                     :
                     <>
@@ -271,30 +312,41 @@ const Login = props => {
                             keyboardType='visible-password'
                             autoCapitalize='none'
                         />
-                        {isLoginLoading ?
-                            <ActivityIndicator/> 
-                        :
-                            <TouchableOpacity
-                                onPress={confirmCode}
-                                style={styles.loginButton}>
+                        <TouchableOpacity
+                            onPress={confirmCode}
+                            style={styles.regularButton}>
+                            {isLoginLoading ?
+                                <ActivityIndicator
+                                    size={30}
+                                    style={styles.wheel}
+                                    color='black'
+                                /> 
+                            :
                                 <Text
                                     style={{
-                                        fontSize: 26}}>
+                                        fontSize: 20,
+                                        fontFamily: 'Rubik-Regular'
+                                    }}>
                                     Login
                                 </Text>
-                            </TouchableOpacity>
-                        }
+                            }
+                        </TouchableOpacity>
                     </>
                     }
                     <TouchableOpacity
-                        onPress={() => setLoginMode('')}
-                        style={styles.loginButton}>
+                        onPress={() => back()}
+                        style={styles.backButton}>
                         <Text
                             style={{
-                                fontSize: 26}}>
+                                fontSize: 20,
+                                fontFamily: 'Rubik-Regular'
+                            }}>
                             Back
                         </Text>
                     </TouchableOpacity>
+
+                    </View>
+
                 </View>
             </>
         )
@@ -308,41 +360,71 @@ const mapReduxStateToProps = reduxState => ({
 const styles = StyleSheet.create({
     container: { 
         flex: 1,  
-        justifyContent: 'flex-start',
+        justifyContent: 'center',
         alignItems: 'center', 
-        backgroundColor: '#FFFAAC'
+        backgroundColor: '#FFFAAC',
     },
-    message: { 
+    menuContainer: {
+        flex: 1,  
+        position: 'absolute',
+        top: '55%',
+        justifyContent: 'center',
+        alignItems: 'center', 
+        backgroundColor: 'transparent',
+        width: '100%'
+    },
+    message: {
+        position: 'absolute',
+        top: '25%',
         color: '#CC375E', 
         fontSize: 20, 
         marginHorizontal: '15%', 
-        marginTop: Platform.OS === 'ios' ? '45%' : '35%', 
+        //marginTop: Platform.OS === 'ios' ? '45%' : '35%', 
         textAlign: 'center',
         height: Platform.OS === 'ios' ? '10%' : '12%',
+        fontFamily: 'Rubik-Regular'
     },
     logo: {
         resizeMode: Platform.OS === 'ios' ? 'contain' : 'cover', 
+        position: 'absolute',
+        top: '35%',
         width: '100%',
-        height: '17%',
-        marginTop: '5%'
+        height: '18%', // 17% cuts off the q on android and 19% makes the logo wider on android
+        //marginTop: '5%',
+        marginBottom: '5%'
     },
     input: { 
         marginBottom: 2, 
-        fontSize: 24, 
+        fontSize: 20, 
         borderWidth: 2, 
         borderColor: 'black', 
         backgroundColor: 'white', 
         padding: 4, 
-        width: '50%'
+        width: '75%',
+        marginBottom: '3%',
+        fontFamily: 'Rubik-Regular'
     },
-    loginButton: {
-        width: '30%', 
+    regularButton: {
+        width: '50%', 
+        height: 40,
         borderWidth: 2,
         borderColor: 'black',
         borderRadius: 10,
         backgroundColor: 'transparent',
+        justifyContent: 'center',
         alignItems: 'center',
-        marginBottom: 6
+        marginTop: 10,
+    },
+    backButton: {
+        width: '35%', 
+        height: 40,
+        borderWidth: 2,
+        borderColor: 'black',
+        borderRadius: 10,
+        backgroundColor: 'transparent',
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginTop: '10%'
     },
     wideButton: {
         width: '80%',
@@ -353,17 +435,24 @@ const styles = StyleSheet.create({
         backgroundColor: 'transparent',
         justifyContent: 'center',
         alignItems: 'center',
-        marginBottom: 6
+        marginTop: 10,
+        //marginBottom: 6
     },
     registerButton: {
         width: '30%', 
+        height: 40,
         borderWidth: 2,
         borderColor: 'black',
         borderRadius: 10,
         backgroundColor: 'transparent',
+        justifyContent: 'center',
         alignItems: 'center',
         marginBottom: 6
-    }
+    },
+    wheel: {
+        alignSelf: 'center',
+        transform: Platform.OS === 'ios' ? [{ scale: 2 }] : [{ scale: 1 }]
+    },
 })
 
 export default connect(mapReduxStateToProps)(Login);
