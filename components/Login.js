@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, TextInput, ActivityIndicator, Button, ImageBackground, TouchableOpacity, StyleSheet, Platform } from 'react-native';
 import { connect } from 'react-redux';
-import auth from '@react-native-firebase/auth';
 import AsyncStorage from '@react-native-community/async-storage';
 import { Image, KeyboardAvoidingView, ScrollView, TouchableWithoutFeedback, Keyboard } from 'react-native';
 import { getPhoneNumber } from 'react-native-device-info';
 
 import messaging from '@react-native-firebase/messaging';
 import database from '@react-native-firebase/database';
+import auth from '@react-native-firebase/auth';
 import { absoluteFill } from 'react-native-extended-stylesheet';
 
 const Login = props => {
@@ -39,8 +39,10 @@ const Login = props => {
         try {   
             const confirmation = await auth().signInWithPhoneNumber(phoneNumber);
             setConfirm(confirmation);
-        } catch {
-            console.log('Error. Text not sent')
+            setMessage('')
+        } catch (error) {
+            console.log('Error. Text not sent.', error)
+            setMessage('Invalid phone number.')
         }
         
         setIsLoginLoading(false);
@@ -55,13 +57,14 @@ const Login = props => {
           setMessage('')
           props.history.push('/camera')
         } catch (error) {
-          console.log('Invalid code.');
+          console.log('Invalid code.')
+          console.log('error:', error)
           setMessage('Invalid code.')
         }
     }
 
-    login = async () => {
-        console.log('in login function');
+    emailLogin = async () => {
+        console.log('in emailLogin function');
         if (!emailInput && !passwordInput) {
             setMessage('Please enter an email address and a password to proceed.')
             return
@@ -114,6 +117,7 @@ const Login = props => {
     }
 
     checkIfLoggedIn = async () => {
+        console.log('in checkIfLoggedIn function')
         try {
             const user = JSON.parse(await AsyncStorage.getItem("user"))
             console.log('in checkIfLoggedIn. user.uid:', user.uid)
@@ -122,7 +126,8 @@ const Login = props => {
                 props.history.push('/camera')
             }
         } catch (error) {
-            console.log('error retrieving user info')
+            console.log('no user item in async storage')
+            //setTimeout(checkIfLoggedIn, 1000)
         }
     }
 
@@ -214,7 +219,7 @@ const Login = props => {
                             secureTextEntry={true}
                         />
                         <TouchableOpacity
-                            onPress={login}
+                            onPress={emailLogin}
                             style={styles.regularButton}>
                             {isLoginLoading ?
                                 <ActivityIndicator

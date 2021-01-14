@@ -31,6 +31,7 @@ class CameraPage extends React.Component {
     }
 
     logout = () => {
+        console.log('in logout function')
         this.props.dispatch({
             type: 'LOGOUT',
             history: this.props.history
