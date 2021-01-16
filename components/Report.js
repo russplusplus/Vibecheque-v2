@@ -22,20 +22,7 @@ class Report extends React.Component {
         return '(missing token)';
     }
 
-    report = () => {
-        console.log('in report')
-        
-
-        //delete photo from database
-        
-
-        //delete photo from Redux
-        this.props.dispatch({    //dispatch is async- if it responds before the page is changed, there will be an error because the background of the page is deleted
-            type: 'DELETE_IMAGE'
-        })
-
-        this.props.returnToCameraPage();
-    }
+    
 
     async componentDidMount() {
         console.log('in Report componentDidMount')
@@ -59,7 +46,7 @@ class Report extends React.Component {
                     marginRight:'5%', 
                     marginTop:'40%', 
                     marginBottom:'40%', 
-                    backgroundColor:colors.cream, 
+                    backgroundColor:colors.backlight, 
                     borderWidth:2, 
                     borderColor:'black', 
                     borderRadius:10, 
@@ -89,7 +76,7 @@ class Report extends React.Component {
                                 borderWidth: 2,
                                 borderColor: 'black',
                                 borderRadius: 10,
-                                backgroundColor: colors.red,
+                                backgroundColor: colors.bonfire,
                                 justifyContent: 'center',
                                 aligntItems: 'center',
                                 marginTop: '10%'
