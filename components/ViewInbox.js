@@ -89,8 +89,8 @@ class ViewInbox extends React.Component {
             .set(this.props.reduxState.inbox[0].imageName)
         this.setState({
             isFavorited: true,
-            starColor: colors.cream,
-            starBorderColor: colors.cream
+            starColor: colors.backlight,
+            starBorderColor: colors.backlight
         })
     }
 
@@ -172,7 +172,7 @@ class ViewInbox extends React.Component {
                                                 alignItems: 'center',
                                                 borderColor: this.state.starBorderColor,
                                                 borderWidth: 2,
-                                                backgroundColor: colors.blue,
+                                                backgroundColor: colors.nocturnalSea,
                                                 width: '14%',
                                                 aspectRatio: 1,
                                                 borderRadius: 10
@@ -225,7 +225,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         borderColor: 'black',
         borderWidth: 2,
-        backgroundColor: colors.red,
+        backgroundColor: colors.bonfire,
         width: '14%',
         aspectRatio: 1,
         borderRadius: 10
@@ -235,7 +235,7 @@ const styles = StyleSheet.create({
     //     alignItems: 'center',
     //     borderColor: this.state.starBorderColor,
     //     borderWidth: 2,
-    //     backgroundColor: colors.red,
+    //     backgroundColor: colors.bonfire,
     //     width: '14%',
     //     aspectRatio: 1,
     //     borderRadius: 10

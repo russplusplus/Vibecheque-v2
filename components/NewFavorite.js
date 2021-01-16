@@ -28,7 +28,7 @@ class NewFavorite extends React.Component {
                     marginRight:'5%', 
                     marginTop:'40%', 
                     marginBottom:'40%', 
-                    backgroundColor:colors.cream, 
+                    backgroundColor:colors.backlight, 
                     borderWidth:2, 
                     borderColor:'black', 
                     borderRadius:10, 
@@ -58,7 +58,7 @@ class NewFavorite extends React.Component {
                             borderWidth: 2,
                             borderColor: 'black',
                             borderRadius: 10,
-                            backgroundColor: colors.blue,
+                            backgroundColor: colors.nocturnalSea,
                             justifyContent: 'center',
                             marginTop: '10%'
                         }}>

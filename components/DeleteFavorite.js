@@ -29,7 +29,7 @@ class DeleteFavorite extends React.Component {
                     marginRight:'5%', 
                     marginTop:'40%', 
                     marginBottom:'40%', 
-                    backgroundColor:colors.cream, 
+                    backgroundColor:colors.backlight, 
                     borderWidth:2, 
                     borderColor:'black', 
                     borderRadius:10, 
@@ -59,7 +59,7 @@ class DeleteFavorite extends React.Component {
                             borderWidth: 2,
                             borderColor: 'black',
                             borderRadius: 10,
-                            backgroundColor: colors.red,
+                            backgroundColor: colors.bonfire,
                             justifyContent: 'center',
                             marginTop: '12%'
                         }}>

@@ -5,7 +5,7 @@ const colors = {
     bonfire: '#f57b51',
     backlight: '#fdf6f0',
     golderRambler: '#fbbc58',
-    nocturnalSea: '#095'
+    nocturnalSea: '#095d6a'
 }
 
 export default colors

@@ -59,7 +59,7 @@ class Report extends React.Component {
                     marginRight:'5%', 
                     marginTop:'40%', 
                     marginBottom:'40%', 
-                    backgroundColor:colors.cream, 
+                    backgroundColor:colors.backlight, 
                     borderWidth:2, 
                     borderColor:'black', 
                     borderRadius:10, 
@@ -89,7 +89,7 @@ class Report extends React.Component {
                                 borderWidth: 2,
                                 borderColor: 'black',
                                 borderRadius: 10,
-                                backgroundColor: colors.red,
+                                backgroundColor: colors.bonfire,
                                 justifyContent: 'center',
                                 aligntItems: 'center',
                                 marginTop: '10%'

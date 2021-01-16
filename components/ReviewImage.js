@@ -70,7 +70,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         borderColor: 'black',
         borderWidth: 2,
-        backgroundColor: colors.red,
+        backgroundColor: colors.bonfire,
         width: '14%',
         aspectRatio: 1,
         borderRadius: 10
@@ -81,7 +81,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         borderColor: 'black',
         borderWidth: 2,
-        backgroundColor: colors.blue,
+        backgroundColor: colors.nocturnalSea,
         width: '14%',
         aspectRatio: 1,
         borderRadius: 10

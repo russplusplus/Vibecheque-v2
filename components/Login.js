@@ -397,7 +397,7 @@ const styles = StyleSheet.create({
         flex: 1,  
         justifyContent: 'center',
         alignItems: 'center', 
-        backgroundColor: colors.cream,
+        backgroundColor: colors.backlight,
     },
     menuContainer: {
         flex: 1,  
@@ -411,7 +411,7 @@ const styles = StyleSheet.create({
     message: {
         position: 'absolute',
         top: '25%',
-        color: colors.red, 
+        color: colors.bonfire, 
         fontSize: 20, 
         marginHorizontal: '15%', 
         //marginTop: Platform.OS === 'ios' ? '45%' : '35%', 
