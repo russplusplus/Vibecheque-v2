@@ -22,20 +22,7 @@ class Report extends React.Component {
         return '(missing token)';
     }
 
-    report = () => {
-        console.log('in report')
-        
-
-        //delete photo from database
-        
-
-        //delete photo from Redux
-        this.props.dispatch({    //dispatch is async- if it responds before the page is changed, there will be an error because the background of the page is deleted
-            type: 'DELETE_IMAGE'
-        })
-
-        this.props.returnToCameraPage();
-    }
+    
 
     async componentDidMount() {
         console.log('in Report componentDidMount')

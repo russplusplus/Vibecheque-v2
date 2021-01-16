@@ -19,6 +19,8 @@ class ViewInbox extends React.Component {
         newFavoriteMode: false,
         starColor: 'white',
         starBorderColor: 'black',
+        dislikeBorderColor: 'black',
+        dislikeBackgroundColor: colors.bonfire,
         url: '',
         responseMessage: '',
         isFavorited: false
@@ -45,10 +47,6 @@ class ViewInbox extends React.Component {
         this.props.history.push('/camera')
     }
 
-    handleReportPress = () => {
-        console.log('in handleReportPress')
-    }
-
     handleFavoritePress = () => {
         console.log('in handleFavoritePress')
         if (!this.state.isFavorited) {
@@ -66,10 +64,6 @@ class ViewInbox extends React.Component {
         this.setState({newFavoriteMode: false})
     }
 
-    returnToCameraPage = () => {
-        this.props.history.push('/camera')
-    }
-
     indicateFavorite = async () => {
         // send this to the db this.props.reduxState.inbox[0].url
 
@@ -81,7 +75,7 @@ class ViewInbox extends React.Component {
         // console.log('urlRef:', urlRef)
         // console.log('nameRef:', nameRef)
         // console.log('this.props.reduxState.inbox[0].url:', this.props.reduxState.inbox[0].url)
-        await database()
+        await database() //this could maybe be done in one database call
             .ref(urlRef)
             .set(this.props.reduxState.inbox[0].url)
         await database()
@@ -89,12 +83,30 @@ class ViewInbox extends React.Component {
             .set(this.props.reduxState.inbox[0].imageName)
         this.setState({
             isFavorited: true,
-            starColor: colors.backlight,
-            starBorderColor: colors.backlight
+            starColor: colors.golderRambler,
+            starBorderColor: colors.golderRambler,
+            dislikeBackgroundColor: 'transparent',
+            dislikeBorderColor: 'transparent'
         })
     }
 
+    report = () => {
+        console.log('in report function')
+        
+        //ban user && set unban time
+
     
+
+        //delete photo from database
+        
+
+        //delete photo from Redux
+        this.props.dispatch({    //dispatch is async- if it responds before the page is changed, there will be an error because the background of the page is deleted
+            type: 'DELETE_IMAGE'
+        })
+
+        this.props.history.push('/camera')
+    }
 
     componentDidMount() {
         // console.log('in ViewInbox componentDidMount')
@@ -147,7 +159,7 @@ class ViewInbox extends React.Component {
         return (
             <>
                 <NewFavorite visible={this.state.newFavoriteMode} closeNewFavoriteModal={this.closeNewFavoriteModal} indicateFavorite={this.indicateFavorite}></NewFavorite>
-                <Report visible={this.state.reportMode} cancelReport={this.cancelReport} returnToCameraPage={this.returnToCameraPage}></Report>
+                <Report visible={this.state.reportMode} cancelReport={this.cancelReport} report={this.report}></Report>
                     <TouchableWithoutFeedback onPress={this.handlePressAnywhere}>
                         <View style={{ flex: 1 }}>
                             <ImageBackground
@@ -159,11 +171,23 @@ class ViewInbox extends React.Component {
                                     </View>
                                     <View style={styles.bottomIcons}>
                                         <TouchableOpacity
-                                            style={styles.badVibes}
+                                            style={{
+                                                justifyContent: 'center',
+                                                alignItems: 'center',
+                                                borderColor: this.state.dislikeBorderColor,
+                                                borderWidth: 2,
+                                                backgroundColor: this.state.dislikeBackgroundColor,
+                                                width: '14%',
+                                                aspectRatio: 1,
+                                                borderRadius: 10
+                                            }}
                                             onPress={() => this.setState({reportMode: true})}>
                                             <FontAwesome
                                                 name='thumbs-down'
-                                                style={styles.thumbsDownIcon}
+                                                style={{
+                                                    color: this.state.dislikeBorderColor,
+                                                    fontSize: 40
+                                                }}
                                             />
                                         </TouchableOpacity>
                                         <TouchableOpacity
@@ -220,16 +244,16 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         alignItems: 'flex-end',
     },
-    badVibes: {
-        justifyContent: 'center',
-        alignItems: 'center',
-        borderColor: 'black',
-        borderWidth: 2,
-        backgroundColor: colors.bonfire,
-        width: '14%',
-        aspectRatio: 1,
-        borderRadius: 10
-    },
+    // badVibes: {
+    //     justifyContent: 'center',
+    //     alignItems: 'center',
+    //     borderColor: this.state.dislikeBorderColor,
+    //     borderWidth: 2,
+    //     backgroundColor: this.state.dislikeBackgroundColor,
+    //     width: '14%',
+    //     aspectRatio: 1,
+    //     borderRadius: 10
+    // },
     // favorite: {
     //     justifyContent: Platform.OS === 'ios' ? 'flex-end' : 'center',
     //     alignItems: 'center',
@@ -240,10 +264,10 @@ const styles = StyleSheet.create({
     //     aspectRatio: 1,
     //     borderRadius: 10
     // },
-    thumbsDownIcon: {
-        color: 'black',
-        fontSize: 40
-    },
+    // thumbsDownIcon: {
+    //     color: this.state.dislikeBorderColor,
+    //     fontSize: 40
+    // },
     // favoriteIcon: {
     //     color: this.state.starColor,
     //     fontSize: 44

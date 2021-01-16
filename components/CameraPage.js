@@ -314,7 +314,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         borderColor: 'black',
         borderWidth: 2,
-        backgroundColor: colors.backlight,
+        backgroundColor: colors.golderRambler,
         width: '14%',
         aspectRatio: 1,
         borderRadius: 10
