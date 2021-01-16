@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, StyleSheet, Button, Platform, TouchableOpacity, ImageBackground, ActivityIndicator } from 'react-native';
 import Modal from 'react-native-modal';
+import colors from '../assets/colors';
 
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
@@ -69,7 +70,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         borderColor: 'black',
         borderWidth: 2,
-        backgroundColor: '#CC375E',
+        backgroundColor: colors.red,
         width: '14%',
         aspectRatio: 1,
         borderRadius: 10
@@ -80,7 +81,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         borderColor: 'black',
         borderWidth: 2,
-        backgroundColor: '#9EE7FF',
+        backgroundColor: colors.blue,
         width: '14%',
         aspectRatio: 1,
         borderRadius: 10

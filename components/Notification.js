@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { View, Text, TextInput, StyleSheet, Button, Platform, TouchableOpacity, Dimensions } from 'react-native';
 import { connect } from 'react-redux';
 import Modal from 'react-native-modal';
+import colors from '../assets/colors';
 
 Notification = (props) => {
 
@@ -55,7 +56,7 @@ const styles = StyleSheet.create({
         marginRight:'5%', 
         marginTop:'40%', 
         marginBottom:'40%', 
-        backgroundColor:'#FFFAAC', 
+        backgroundColor:colors.cream, 
         borderWidth:2, 
         borderColor:'black', 
         borderRadius:10, 
@@ -73,7 +74,7 @@ const styles = StyleSheet.create({
         borderWidth: 2,
         borderColor: 'black',
         borderRadius: 10,
-        backgroundColor: '#9EE7FF',
+        backgroundColor: colors.blue,
         justifyContent: 'center',
         marginTop: '15%'
     },

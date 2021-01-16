@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, Text, TextInput, StyleSheet, Button, Platform, TouchableOpacity, ImageBackground } from 'react-native';
 import Modal from 'react-native-modal';
+import colors from '../assets/colors';
 
 class Logout extends React.Component {
 
@@ -36,16 +37,16 @@ const styles = StyleSheet.create({
         flex:1, 
         alignItems: 'center', 
         justifyContent: 'center', 
-        marginLeft:'5%', 
-        marginRight:'5%', 
-        marginTop:'40%', 
-        marginBottom:'40%', 
-        backgroundColor:'#FFFAAC', 
-        borderWidth:2, 
-        borderColor:'black', 
-        borderRadius:10, 
-        paddingLeft:'5%', 
-        paddingRight:'5%'
+        marginLeft: '5%', 
+        marginRight: '5%', 
+        marginTop: '40%', 
+        marginBottom: '40%', 
+        backgroundColor: colors.cream, 
+        borderWidth: 2, 
+        borderColor: 'black', 
+        borderRadius: 10, 
+        paddingLeft: '5%', 
+        paddingRight: '5%'
     },
     text: {
         fontSize: 36, 
@@ -58,7 +59,7 @@ const styles = StyleSheet.create({
         borderWidth: 2,
         borderColor: 'black',
         borderRadius: 10,
-        backgroundColor: '#9EE7FF',
+        backgroundColor: colors.blue,
         justifyContent: 'center',
         marginTop: '20%',
         alignItems: 'center'
@@ -73,7 +74,7 @@ const styles = StyleSheet.create({
         borderWidth: 2,
         borderColor: 'black',
         borderRadius: 10,
-        backgroundColor: '#CC375E',
+        backgroundColor: colors.red,
         justifyContent: 'center',
         marginTop: 10,
         alignItems: 'center'

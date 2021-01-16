@@ -10,6 +10,8 @@ import database from '@react-native-firebase/database';
 import auth from '@react-native-firebase/auth';
 import { absoluteFill } from 'react-native-extended-stylesheet';
 
+import colors from '../assets/colors';
+
 const Login = props => {
 
     const [phoneNumber, setPhoneNumber] = useState('');
@@ -25,6 +27,25 @@ const Login = props => {
         props.dispatch({
             type: 'SET_LOGIN_MESSAGE',
             payload: message
+        })
+    }
+
+    checkIfBanned = async (uid) => {
+        console.log('in isBanned. uid:', uid)
+        return await database()
+        .ref(`/users/${uid}/isBanned`)
+        .once('value')
+        .then(snapshot => {
+            const val = snapshot.val()
+            console.log('val:', val)
+            console.log('Type of val:', typeof(val))
+            if (val === 1) {
+                return true
+            } else if (val === 0) {
+                return false
+            } else {
+                return 'neither'
+            }
         })
     }
 
@@ -52,6 +73,9 @@ const Login = props => {
         try {
           let user = await confirm.confirm(code);
           console.log('code is valid! user:', user)
+          let isBanned = await checkIfBanned(user.uid)
+          console.log('isBanned:', isBanned)
+          
           updateRegistrationToken(user)
           await AsyncStorage.setItem("user", JSON.stringify(user))
           setMessage('')
@@ -373,7 +397,7 @@ const styles = StyleSheet.create({
         flex: 1,  
         justifyContent: 'center',
         alignItems: 'center', 
-        backgroundColor: '#FFFAAC',
+        backgroundColor: colors.cream,
     },
     menuContainer: {
         flex: 1,  
@@ -387,7 +411,7 @@ const styles = StyleSheet.create({
     message: {
         position: 'absolute',
         top: '25%',
-        color: '#CC375E', 
+        color: colors.red, 
         fontSize: 20, 
         marginHorizontal: '15%', 
         //marginTop: Platform.OS === 'ios' ? '45%' : '35%', 

@@ -2,6 +2,8 @@ import React from 'react';
 import { View, Text, TextInput, StyleSheet, Button, Platform, TouchableOpacity, ImageBackground } from 'react-native';
 import Modal from 'react-native-modal';
 import AsyncStorage from '@react-native-community/async-storage';
+import colors from '../assets/colors';
+
 
 import { connect } from 'react-redux';
 
@@ -27,7 +29,7 @@ class DeleteFavorite extends React.Component {
                     marginRight:'5%', 
                     marginTop:'40%', 
                     marginBottom:'40%', 
-                    backgroundColor:'#FFFAAC', 
+                    backgroundColor:colors.cream, 
                     borderWidth:2, 
                     borderColor:'black', 
                     borderRadius:10, 
@@ -57,7 +59,7 @@ class DeleteFavorite extends React.Component {
                             borderWidth: 2,
                             borderColor: 'black',
                             borderRadius: 10,
-                            backgroundColor: '#CC375E',
+                            backgroundColor: colors.red,
                             justifyContent: 'center',
                             marginTop: '12%'
                         }}>

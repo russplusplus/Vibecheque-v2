@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, Text, TextInput, StyleSheet, Button, Platform, TouchableOpacity, ImageBackground, Modal } from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
+import colors from '../assets/colors';
 
 import { connect } from 'react-redux';
 
@@ -58,7 +59,7 @@ class Report extends React.Component {
                     marginRight:'5%', 
                     marginTop:'40%', 
                     marginBottom:'40%', 
-                    backgroundColor:'#FFFAAC', 
+                    backgroundColor:colors.cream, 
                     borderWidth:2, 
                     borderColor:'black', 
                     borderRadius:10, 
@@ -88,7 +89,7 @@ class Report extends React.Component {
                                 borderWidth: 2,
                                 borderColor: 'black',
                                 borderRadius: 10,
-                                backgroundColor: '#CC375E',
+                                backgroundColor: colors.red,
                                 justifyContent: 'center',
                                 aligntItems: 'center',
                                 marginTop: '10%'

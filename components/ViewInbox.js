@@ -8,6 +8,7 @@ import database from '@react-native-firebase/database';
 
 import Report from './Report';
 import NewFavorite from './NewFavorite';
+import colors from '../assets/colors';
 
 import { connect } from 'react-redux';
 
@@ -88,8 +89,8 @@ class ViewInbox extends React.Component {
             .set(this.props.reduxState.inbox[0].imageName)
         this.setState({
             isFavorited: true,
-            starColor: '#FFFAAC',
-            starBorderColor: '#FFFAAC'
+            starColor: colors.cream,
+            starBorderColor: colors.cream
         })
     }
 
@@ -171,7 +172,7 @@ class ViewInbox extends React.Component {
                                                 alignItems: 'center',
                                                 borderColor: this.state.starBorderColor,
                                                 borderWidth: 2,
-                                                backgroundColor: '#9EE7FF',
+                                                backgroundColor: colors.blue,
                                                 width: '14%',
                                                 aspectRatio: 1,
                                                 borderRadius: 10
@@ -224,7 +225,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         borderColor: 'black',
         borderWidth: 2,
-        backgroundColor: '#CC375E',
+        backgroundColor: colors.red,
         width: '14%',
         aspectRatio: 1,
         borderRadius: 10
@@ -234,7 +235,7 @@ const styles = StyleSheet.create({
     //     alignItems: 'center',
     //     borderColor: this.state.starBorderColor,
     //     borderWidth: 2,
-    //     backgroundColor: '#9EE7FF',
+    //     backgroundColor: colors.red,
     //     width: '14%',
     //     aspectRatio: 1,
     //     borderRadius: 10

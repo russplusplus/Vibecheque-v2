@@ -14,6 +14,8 @@ import Logout from './Logout';
 import ReviewImage from './ReviewImage';
 import NoFavorite from './NoFavorite';
 
+import colors from '../assets/colors';
+
 FontAwesome.loadFont()
 Ionicons.loadFont()
 
@@ -312,7 +314,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         borderColor: 'black',
         borderWidth: 2,
-        backgroundColor: '#FFFAAC',
+        backgroundColor: colors.cream,
         width: '14%',
         aspectRatio: 1,
         borderRadius: 10
@@ -322,7 +324,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         borderColor: 'black',
         borderWidth: 2,
-        backgroundColor: '#9EE7FF',
+        backgroundColor: colors.blue,
         width: '14%',
         aspectRatio: 1,
         borderRadius: 10
