@@ -31,20 +31,20 @@ const Login = props => {
     }
 
     checkIfBanned = async (uid) => {
-        console.log('in isBanned. uid:', uid)
+        console.log('in checkIfBanned. uid:', uid)
         return await database()
-        .ref(`/users/${uid}/isBanned`)
+        .ref(`/users/${uid}/unbanTime`)
         .once('value')
         .then(snapshot => {
-            const val = snapshot.val()
-            console.log('val:', val)
-            console.log('Type of val:', typeof(val))
-            if (val === 1) {
+            const unbanTime = snapshot.val()
+            const currentTime = new Date().getTime()
+            console.log('unbanTime:', unbanTime)
+            if (currentTime < unbanTime) {
+                console.log('user is banned')
                 return true
-            } else if (val === 0) {
-                return false
             } else {
-                return 'neither'
+                console.log('user is not banned')
+                return false
             }
         })
     }
@@ -75,11 +75,16 @@ const Login = props => {
           console.log('code is valid! user:', user)
           let isBanned = await checkIfBanned(user.uid)
           console.log('isBanned:', isBanned)
+          if (!isBanned) {
+            updateRegistrationToken(user)
+            await AsyncStorage.setItem("user", JSON.stringify(user))
+            setMessage('')
+            props.history.push('/camera')
+          } else {
+            setMessage('You have been temporarily banned for spreading bad vibes. Try again later.')
+          }
           
-          updateRegistrationToken(user)
-          await AsyncStorage.setItem("user", JSON.stringify(user))
-          setMessage('')
-          props.history.push('/camera')
+          
         } catch (error) {
           console.log('Invalid code.')
           console.log('error:', error)

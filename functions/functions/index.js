@@ -8,7 +8,7 @@ exports.addUser = functions.auth.user().onCreate(user => {
     .database()
     .ref(`users/${user.uid}`)
     .set({
-      isBanned: 0,
+      unbanTime: 0,
       email: user.email,
       phoneNumber: user.phoneNumber,
   });
@@ -91,7 +91,8 @@ exports.addImage = functions.storage.object('/images').onFinalize(async (object)
         do {
           recipientUid = uidArr[Math.floor(Math.random() * uidArr.length)]
           i++
-        } while ((recipientUid === senderUid && i < 100) || users[recipientUid].isBanned === 1) //delete i < 100 in prod
+          console.log(`recipientUid number ${i}:`, recipientUid)
+        } while ((recipientUid === senderUid && i < 100) || users[recipientUid].unbanTime > new Date().getTime()) //delete i < 100 in prod
         console.log('recipientUid:', recipientUid)
         let recipientToken = users[recipientUid].registrationToken
         console.log('recipientToken:', recipientToken)

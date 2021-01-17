@@ -58,6 +58,7 @@ class ViewInbox extends React.Component {
 
     handleReportPress = () => {
         console.log('in handleReportPress')
+    
         if (this.state.isFavorited) {
             console.log('report rejected because already favorited')
         } else {
@@ -99,10 +100,26 @@ class ViewInbox extends React.Component {
         })
     }
 
-    report = () => {
+    report = async () => {
         console.log('in report function')
         
         //ban user && set unban time
+        let banDays = Math.floor(Math.random() * 45) + 1
+        console.log('banDays:', banDays)
+        let banMilliSeconds = 86400000 * banDays
+        console.log('banMilliSeconds:', banMilliSeconds)
+        let time = new Date().getTime()
+        console.log('time:', time)
+        let unbanTime = time + banMilliSeconds
+        console.log('unbanTime:', unbanTime)
+
+        let unbanTimeRef = 'users/' + this.props.reduxState.inbox[0].from + '/unbanTime';
+        console.log('unbanTimeRef:', unbanTimeRef)
+        await database() //this could maybe be done in one database call
+            .ref(unbanTimeRef)
+            .set(unbanTime)
+
+
 
     
 

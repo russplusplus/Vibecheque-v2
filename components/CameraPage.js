@@ -186,11 +186,11 @@ class CameraPage extends React.Component {
         //         isResponding: false
         //     })
         // }
-        console.log('favoriteUrl:', this.props.reduxState.favoriteUrl)
+        //console.log('favoriteUrl:', this.props.reduxState.favoriteUrl)
     }
 
     render() {
-        console.log('in CameraPage render. reduxState:', this.props.reduxState)
+        //console.log('in CameraPage render. reduxState:', this.props.reduxState)
         return (
             <>
                 <View style={styles.container}>

@@ -9,13 +9,21 @@ function* login(action) {
     try {
         let user = yield auth().signInWithEmailAndPassword(action.payload.email, action.payload.password)
         console.log('user:', user)
-        yield AsyncStorage.setItem("user", JSON.stringify(user.user))
-        action.history.push('/camera');
-        console.log('User signed in!');
-        yield put({
-            type: 'SET_LOGIN_MESSAGE',
-            payload: ''
-        })
+        if (user.unbanTime < new Date().getTime) {
+            yield AsyncStorage.setItem("user", JSON.stringify(user.user))
+            action.history.push('/camera');
+            console.log('User signed in!');
+            yield put({
+                type: 'SET_LOGIN_MESSAGE',
+                payload: ''
+            })
+        } else {
+            yield put({
+                type: 'SET_LOGIN_MESSAGE',
+                payload: 'You have been temporarily banned for spreading bad vibes.'
+            })
+        }
+        
     } 
     catch (err) {
         console.log('error code:', err.code, typeof(err.code))
