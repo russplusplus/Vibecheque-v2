@@ -74,7 +74,7 @@ const styles = StyleSheet.create({
         borderWidth: 2,
         borderColor: 'black',
         borderRadius: 10,
-        backgroundColor: colors.bonfire,
+        backgroundColor: colors.golderRambler,
         justifyContent: 'center',
         marginTop: 10,
         alignItems: 'center'

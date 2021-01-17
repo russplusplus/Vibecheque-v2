@@ -91,7 +91,7 @@ exports.addImage = functions.storage.object('/images').onFinalize(async (object)
         do {
           recipientUid = uidArr[Math.floor(Math.random() * uidArr.length)]
           i++
-        } while (recipientUid === senderUid && i < 100 && users.recipientUid.isBanned === 1) //delete i < 100 in prod
+        } while ((recipientUid === senderUid && i < 100) || users[recipientUid].isBanned === 1) //delete i < 100 in prod
         console.log('recipientUid:', recipientUid)
         let recipientToken = users[recipientUid].registrationToken
         console.log('recipientToken:', recipientToken)

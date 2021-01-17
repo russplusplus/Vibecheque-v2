@@ -69,7 +69,7 @@ class Report extends React.Component {
                                 The sender will be temporarily banned.
                         </Text>
                         <TouchableOpacity 
-                            onPress={() => this.report()} 
+                            onPress={() => this.props.report()} 
                             style={{ 
                                 width: '75%',
                                 height: 40,
@@ -98,7 +98,7 @@ class Report extends React.Component {
                                 borderWidth: 2,
                                 borderColor: 'black',
                                 borderRadius: 10,
-                                backgroundColor: 'transparent',
+                                backgroundColor: colors.golderRambler,
                                 justifyContent: 'center',
                                 alignItems: 'center',
                                 marginTop: 10

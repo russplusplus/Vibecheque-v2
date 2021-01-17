@@ -56,6 +56,15 @@ class ViewInbox extends React.Component {
         }  
     }
 
+    handleReportPress = () => {
+        console.log('in handleReportPress')
+        if (this.state.isFavorited) {
+            console.log('report rejected because already favorited')
+        } else {
+            this.setState({reportMode: true})
+        }
+    }
+
     cancelReport = () => {
         this.setState({reportMode: false})
     }
@@ -102,7 +111,10 @@ class ViewInbox extends React.Component {
 
         //delete photo from Redux
         this.props.dispatch({    //dispatch is async- if it responds before the page is changed, there will be an error because the background of the page is deleted
-            type: 'DELETE_IMAGE'
+            type: 'DELETE_IMAGE',
+            payload: {
+                isFavorited: this.state.isFavorited
+            }
         })
 
         this.props.history.push('/camera')
@@ -181,7 +193,7 @@ class ViewInbox extends React.Component {
                                                 aspectRatio: 1,
                                                 borderRadius: 10
                                             }}
-                                            onPress={() => this.setState({reportMode: true})}>
+                                            onPress={() => this.handleReportPress()}>
                                             <FontAwesome
                                                 name='thumbs-down'
                                                 style={{

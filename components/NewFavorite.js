@@ -78,7 +78,7 @@ class NewFavorite extends React.Component {
                             borderWidth: 2,
                             borderColor: 'black',
                             borderRadius: 10,
-                            backgroundColor: colors.bonfire,
+                            backgroundColor: colors.golderRambler,
                             justifyContent: 'center',
                             marginTop: 10
                         }}>
