@@ -1,16 +1,30 @@
 import { put, takeEvery } from 'redux-saga/effects';
 import AsyncStorage from '@react-native-community/async-storage';
 import auth from '@react-native-firebase/auth';
+import database from '@react-native-firebase/database';
 
 
 function* login(action) {
     console.log('in login saga')
     
     try {
-        let user = yield auth().signInWithEmailAndPassword(action.payload.email, action.payload.password)
+        let _user = yield auth().signInWithEmailAndPassword(action.payload.email, action.payload.password)
+        user = _user.user
         console.log('user:', user)
-        if (user.unbanTime < new Date().getTime) {
-            yield AsyncStorage.setItem("user", JSON.stringify(user.user))
+        let time = new Date().getTime()
+        let unbanTime = yield database()
+            .ref(`/users/${user.uid}/unbanTime`)
+            .once('value')
+            .then(snapshot => {
+                let unbanTime = snapshot.val()
+                return unbanTime
+            })   
+                
+        console.log('time:', time)
+        console.log('unbanTime:', unbanTime)
+        console.log('typeof unbanTime:', typeof(unbanTime))
+        if (unbanTime < time) {
+            yield AsyncStorage.setItem("user", JSON.stringify(user))
             action.history.push('/camera');
             console.log('User signed in!');
             yield put({

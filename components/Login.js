@@ -75,6 +75,7 @@ const Login = props => {
           console.log('code is valid! user:', user)
           let isBanned = await checkIfBanned(user.uid)
           console.log('isBanned:', isBanned)
+          console.log('typeof isBanned:', typeof(isBanned))
           if (!isBanned) {
             updateRegistrationToken(user)
             await AsyncStorage.setItem("user", JSON.stringify(user))
