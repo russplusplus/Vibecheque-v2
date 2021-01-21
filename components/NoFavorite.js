@@ -21,7 +21,7 @@ class NoFavorite extends React.Component {
                     marginRight:'5%', 
                     marginTop:'40%', 
                     marginBottom:'40%', 
-                    backgroundColor:colors.backlight, 
+                    backgroundColor:colors.cream, 
                     borderWidth:2, 
                     borderColor:'black', 
                     borderRadius:10, 
@@ -43,7 +43,7 @@ class NoFavorite extends React.Component {
                             borderWidth: 2,
                             borderColor: 'black',
                             borderRadius: 10,
-                            backgroundColor: colors.nocturnalSea,
+                            backgroundColor: colors.green,
                             justifyContent: 'center',
                             height: 40
                         }}>

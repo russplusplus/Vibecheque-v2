@@ -203,18 +203,19 @@ const Login = props => {
                     <View style={styles.menuContainer}>
                         <TouchableOpacity
                             onPress={() => setLoginMode('phoneNumber')}
-                            style={styles.wideButton}>
+                            style={styles.wideButtonBlue}>
                             <Text
                                 style={{
                                     fontSize: 20,
-                                    fontFamily: 'Rubik-Regular'
+                                    fontFamily: 'Rubik-Regular',
+                                    // color: colors.cream
                                 }}>
                                 Continue with phone number
                             </Text>
                         </TouchableOpacity>
                         <TouchableOpacity
                             onPress={() => setLoginMode('email')}
-                            style={styles.wideButton}>
+                            style={styles.wideButtonGreen}>
                             <Text
                                 style={{
                                     fontSize: 20,
@@ -254,7 +255,7 @@ const Login = props => {
                         />
                         <TouchableOpacity
                             onPress={emailLogin}
-                            style={styles.regularButton}>
+                            style={styles.regularButtonBlue}>
                             {isLoginLoading ?
                                 <ActivityIndicator
                                     size={30}
@@ -273,7 +274,7 @@ const Login = props => {
                         </TouchableOpacity>
                         <TouchableOpacity
                             onPress={register}
-                            style={styles.regularButton}>
+                            style={styles.regularButtonGreen}>
                             {isRegisterLoading ? 
                                 <ActivityIndicator
                                     size={30}
@@ -330,7 +331,7 @@ const Login = props => {
                         />
                         <TouchableOpacity
                             onPress={sendCode}
-                            style={styles.regularButton}>
+                            style={styles.regularButtonBlue}>
                             {isLoginLoading ? 
                                 <ActivityIndicator
                                     size={30}
@@ -359,7 +360,7 @@ const Login = props => {
                         />
                         <TouchableOpacity
                             onPress={confirmCode}
-                            style={styles.regularButton}>
+                            style={styles.regularButtonBlue}>
                             {isLoginLoading ?
                                 <ActivityIndicator
                                     size={30}
@@ -407,7 +408,7 @@ const styles = StyleSheet.create({
         flex: 1,  
         justifyContent: 'center',
         alignItems: 'center', 
-        backgroundColor: colors.backlight,
+        backgroundColor: colors.cream,
     },
     menuContainer: {
         flex: 1,  
@@ -421,7 +422,7 @@ const styles = StyleSheet.create({
     message: {
         position: 'absolute',
         top: '25%',
-        color: colors.bonfire, 
+        color: colors.red, 
         fontSize: 20, 
         marginHorizontal: '15%', 
         //marginTop: Platform.OS === 'ios' ? '45%' : '35%', 
@@ -449,13 +450,24 @@ const styles = StyleSheet.create({
         marginBottom: '3%',
         fontFamily: 'Rubik-Regular'
     },
-    regularButton: {
+    regularButtonBlue: {
         width: '50%', 
         height: 40,
-        borderWidth: 2,
+        borderWidth: 0,
         borderColor: 'black',
         borderRadius: 10,
-        backgroundColor: 'transparent',
+        backgroundColor: colors.blue,
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginTop: 10,
+    },
+    regularButtonGreen: {
+        width: '50%', 
+        height: 40,
+        borderWidth: 0,
+        borderColor: 'black',
+        borderRadius: 10,
+        backgroundColor: colors.green,
         justifyContent: 'center',
         alignItems: 'center',
         marginTop: 10,
@@ -463,36 +475,37 @@ const styles = StyleSheet.create({
     backButton: {
         width: '35%', 
         height: 40,
-        borderWidth: 2,
+        borderWidth: 0,
         borderColor: 'black',
         borderRadius: 10,
-        backgroundColor: 'transparent',
+        backgroundColor: colors.red,
         justifyContent: 'center',
         alignItems: 'center',
         marginTop: '10%'
     },
-    wideButton: {
+    wideButtonBlue: {
         width: '80%',
         height: 40, 
-        borderWidth: 2,
-        borderColor: 'black',
+        borderWidth: 0,
+        borderColor: colors.red,
         borderRadius: 10,
-        backgroundColor: 'transparent',
+        backgroundColor: colors.blue,
         justifyContent: 'center',
         alignItems: 'center',
         marginTop: 10,
         //marginBottom: 6
     },
-    registerButton: {
-        width: '30%', 
-        height: 40,
-        borderWidth: 2,
-        borderColor: 'black',
+    wideButtonGreen: {
+        width: '80%',
+        height: 40, 
+        borderWidth: 0,
+        borderColor: colors.red,
         borderRadius: 10,
-        backgroundColor: 'transparent',
+        backgroundColor: colors.green,
         justifyContent: 'center',
         alignItems: 'center',
-        marginBottom: 6
+        marginTop: 10,
+        //marginBottom: 6
     },
     wheel: {
         alignSelf: 'center',
