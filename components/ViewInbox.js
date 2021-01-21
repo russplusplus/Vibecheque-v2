@@ -23,7 +23,8 @@ class ViewInbox extends React.Component {
         dislikeBackgroundColor: colors.bonfire,
         url: '',
         responseMessage: '',
-        isFavorited: false
+        isFavorited: false,
+        isReported: false
     }
     
     handlePressAnywhere = () => {
@@ -119,19 +120,15 @@ class ViewInbox extends React.Component {
             .ref(unbanTimeRef)
             .set(unbanTime)
 
-
-
-    
-
-        //delete photo from database
-        
-
         //delete photo from Redux
         this.props.dispatch({    //dispatch is async- if it responds before the page is changed, there will be an error because the background of the page is deleted
             type: 'DELETE_IMAGE',
             payload: {
                 isFavorited: this.state.isFavorited
             }
+        })
+        this.props.dispatch({
+            type: 'SET_NOT_RESPONDING'
         })
 
         this.props.history.push('/camera')

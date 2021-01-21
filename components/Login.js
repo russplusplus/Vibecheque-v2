@@ -70,6 +70,7 @@ const Login = props => {
     }
 
     confirmCode = async () => {
+        setIsLoginLoading(true)
         try {
           let user = await confirm.confirm(code);
           console.log('code is valid! user:', user)
@@ -82,6 +83,7 @@ const Login = props => {
             setMessage('')
             props.history.push('/camera')
           } else {
+            setIsLoginLoading(false)
             setMessage('You have been temporarily banned for spreading bad vibes. Try again later.')
           }
           
@@ -94,16 +96,18 @@ const Login = props => {
     }
 
     emailLogin = async () => {
+        setIsLoginLoading(true)
         console.log('in emailLogin function');
         if (!emailInput && !passwordInput) {
+            setIsLoginLoading(false)
             setMessage('Please enter an email address and a password to proceed.')
             return
         }
         if (!emailInput || !passwordInput) {
+            setIsLoginLoading(false)
             setMessage('Please enter an email address AND a password to proceed.')
             return
         }
-        setIsLoginLoading(true)
 
         // Firebase login
         props.dispatch({
