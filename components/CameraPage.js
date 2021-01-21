@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, TextInput, StyleSheet, Button, Platform, TouchableOpacity, ImageBackground, TouchableNativeFeedbackBase } from 'react-native';
+import { View, Text, TextInput, StyleSheet, Button, Platform, TouchableOpacity, ImageBackground, TouchableNativeFeedbackBase, ActivityIndicator } from 'react-native';
 
 import { connect } from 'react-redux';
 import { RNCamera } from 'react-native-camera';
@@ -30,6 +30,7 @@ class CameraPage extends React.Component {
         capturedImageUri: '',
         uid: '',
         isSending: false,
+        isInboxLoading: false
     }
 
     logout = () => {
@@ -126,6 +127,16 @@ class CameraPage extends React.Component {
             }
         } else {
             console.log('inbox is empty')
+            this.setState({
+                isInboxLoading: true
+            })
+            await this.props.dispatch({
+                type: 'GET_INBOX'
+            })
+            this.setState({
+                isInboxLoading: false
+            })
+            console.log('already done')
         }
     }
 
@@ -186,11 +197,11 @@ class CameraPage extends React.Component {
         //         isResponding: false
         //     })
         // }
-        console.log('favoriteUrl:', this.props.reduxState.favoriteUrl)
+        //console.log('favoriteUrl:', this.props.reduxState.favoriteUrl)
     }
 
     render() {
-        console.log('in CameraPage render. reduxState:', this.props.reduxState)
+        //console.log('in CameraPage render. reduxState:', this.props.reduxState)
         return (
             <>
                 <View style={styles.container}>
@@ -254,7 +265,11 @@ class CameraPage extends React.Component {
                             :
                                 <View style={styles.bottomIcons}>
                                     <TouchableOpacity onPress={this.viewInbox} style={styles.viewInbox}>
-                                        <Text style={styles.inboxText}>{this.props.reduxState.inbox.length}</Text>
+                                        {this.state.isInboxLoading ? 
+                                            <ActivityIndicator/>
+                                        :
+                                            <Text style={styles.inboxText}>{this.props.reduxState.inbox.length}</Text>
+                                        }
                                     </TouchableOpacity>
                                     <TouchableOpacity onPress={this.takePicture.bind(this)}>
                                         <FontAwesome

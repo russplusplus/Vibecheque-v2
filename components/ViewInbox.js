@@ -23,7 +23,8 @@ class ViewInbox extends React.Component {
         dislikeBackgroundColor: colors.bonfire,
         url: '',
         responseMessage: '',
-        isFavorited: false
+        isFavorited: false,
+        isReported: false
     }
     
     handlePressAnywhere = () => {
@@ -58,6 +59,7 @@ class ViewInbox extends React.Component {
 
     handleReportPress = () => {
         console.log('in handleReportPress')
+    
         if (this.state.isFavorited) {
             console.log('report rejected because already favorited')
         } else {
@@ -99,15 +101,24 @@ class ViewInbox extends React.Component {
         })
     }
 
-    report = () => {
+    report = async () => {
         console.log('in report function')
         
         //ban user && set unban time
+        let banDays = Math.floor(Math.random() * 45) + 1
+        console.log('banDays:', banDays)
+        let banMilliSeconds = 86400000 * banDays
+        console.log('banMilliSeconds:', banMilliSeconds)
+        let time = new Date().getTime()
+        console.log('time:', time)
+        let unbanTime = time + banMilliSeconds
+        console.log('unbanTime:', unbanTime)
 
-    
-
-        //delete photo from database
-        
+        let unbanTimeRef = 'users/' + this.props.reduxState.inbox[0].from + '/unbanTime';
+        console.log('unbanTimeRef:', unbanTimeRef)
+        await database() //this could maybe be done in one database call
+            .ref(unbanTimeRef)
+            .set(unbanTime)
 
         //delete photo from Redux
         this.props.dispatch({    //dispatch is async- if it responds before the page is changed, there will be an error because the background of the page is deleted
@@ -115,6 +126,9 @@ class ViewInbox extends React.Component {
             payload: {
                 isFavorited: this.state.isFavorited
             }
+        })
+        this.props.dispatch({
+            type: 'SET_NOT_RESPONDING'
         })
 
         this.props.history.push('/camera')
