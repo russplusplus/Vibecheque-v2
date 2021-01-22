@@ -122,8 +122,8 @@ const styles = StyleSheet.create({
         justifyContent: Platform.OS === 'ios' ? 'flex-end' : 'center',
         alignItems: 'center',
         borderColor: 'black',
-        borderWidth: 2,
-        backgroundColor: colors.golderRambler,
+        borderWidth: 0,
+        backgroundColor: colors.blue,
         width: '14%',
         aspectRatio: 1,
         borderRadius: 10
@@ -132,8 +132,8 @@ const styles = StyleSheet.create({
         justifyContent: Platform.OS === 'ios' ? 'flex-end' : 'center',
         alignItems: 'center',
         borderColor: 'black',
-        borderWidth: 2,
-        backgroundColor: colors.bonfire,
+        borderWidth: 0,
+        backgroundColor: colors.red,
         width: '14%',
         aspectRatio: 1,
         borderRadius: 10

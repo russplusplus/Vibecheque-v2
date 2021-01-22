@@ -20,7 +20,7 @@ class ViewInbox extends React.Component {
         starColor: 'white',
         starBorderColor: 'black',
         dislikeBorderColor: 'black',
-        dislikeBackgroundColor: colors.bonfire,
+        dislikeBackgroundColor: colors.red,
         url: '',
         responseMessage: '',
         isFavorited: false,
@@ -94,8 +94,8 @@ class ViewInbox extends React.Component {
             .set(this.props.reduxState.inbox[0].imageName)
         this.setState({
             isFavorited: true,
-            starColor: colors.golderRambler,
-            starBorderColor: colors.golderRambler,
+            starColor: colors.cream,
+            starBorderColor: colors.cream,
             dislikeBackgroundColor: 'transparent',
             dislikeBorderColor: 'transparent'
         })
@@ -201,7 +201,7 @@ class ViewInbox extends React.Component {
                                                 justifyContent: 'center',
                                                 alignItems: 'center',
                                                 borderColor: this.state.dislikeBorderColor,
-                                                borderWidth: 2,
+                                                borderWidth: 0,
                                                 backgroundColor: this.state.dislikeBackgroundColor,
                                                 width: '14%',
                                                 aspectRatio: 1,
@@ -221,8 +221,8 @@ class ViewInbox extends React.Component {
                                                 justifyContent: Platform.OS === 'ios' ? 'flex-end' : 'center',
                                                 alignItems: 'center',
                                                 borderColor: this.state.starBorderColor,
-                                                borderWidth: 2,
-                                                backgroundColor: colors.nocturnalSea,
+                                                borderWidth: 0,
+                                                backgroundColor: colors.blue,
                                                 width: '14%',
                                                 aspectRatio: 1,
                                                 borderRadius: 10
@@ -285,7 +285,7 @@ const styles = StyleSheet.create({
     //     alignItems: 'center',
     //     borderColor: this.state.starBorderColor,
     //     borderWidth: 2,
-    //     backgroundColor: colors.bonfire,
+    //     backgroundColor: colors.red,
     //     width: '14%',
     //     aspectRatio: 1,
     //     borderRadius: 10

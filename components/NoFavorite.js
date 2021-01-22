@@ -21,8 +21,8 @@ class NoFavorite extends React.Component {
                     marginRight:'5%', 
                     marginTop:'40%', 
                     marginBottom:'40%', 
-                    backgroundColor:colors.backlight, 
-                    borderWidth:2, 
+                    backgroundColor:colors.cream, 
+                    borderWidth:0, 
                     borderColor:'black', 
                     borderRadius:10, 
                     paddingLeft:'5%', 
@@ -40,10 +40,10 @@ class NoFavorite extends React.Component {
                         style={{ 
                             marginTop: '15%',
                             width: '75%', 
-                            borderWidth: 2,
+                            borderWidth: 0,
                             borderColor: 'black',
                             borderRadius: 10,
-                            backgroundColor: colors.nocturnalSea,
+                            backgroundColor: colors.green,
                             justifyContent: 'center',
                             height: 40
                         }}>
