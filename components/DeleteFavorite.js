@@ -20,7 +20,7 @@ class DeleteFavorite extends React.Component {
 
     render() {
         return (
-            <Modal visible={this.props.visible} animationType='slide' transparent={true}>
+            <Modal visible={this.props.visible} animationType='slide' transparent={true} hasBackdrop={true} backdropColor={'black'} backdropOpacity={0.70}>
                 <View style={{
                     flex:1, 
                     alignItems: 'center', 

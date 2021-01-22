@@ -355,7 +355,7 @@ const Login = props => {
                             style={styles.input}
                             onChangeText={text => setCode(text)}
                             placeholder='code'
-                            keyboardType='visible-password'
+                            keyboardType='number-pad'
                             autoCapitalize='none'
                         />
                         <TouchableOpacity
