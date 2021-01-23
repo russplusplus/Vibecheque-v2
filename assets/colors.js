@@ -1,7 +1,8 @@
 const colors = {
     green: '#CCE2D6',   //negative
     blue: '#5EA5DD',    //background
-    red: '#FF763D',     //neutral
+    red: '#FF643D',
+    //red: '#FF763D',     //neutral
     cream: '#FFE8C6',    //positive
 
 }

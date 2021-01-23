@@ -1,9 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { View, Text, TextInput, ActivityIndicator, Button, ImageBackground, TouchableOpacity, StyleSheet, Platform } from 'react-native';
 import { connect } from 'react-redux';
 import AsyncStorage from '@react-native-community/async-storage';
 import { Image, KeyboardAvoidingView, ScrollView, TouchableWithoutFeedback, Keyboard } from 'react-native';
 import { getPhoneNumber } from 'react-native-device-info';
+import PhoneInput from 'react-native-phone-number-input';
 
 import messaging from '@react-native-firebase/messaging';
 import database from '@react-native-firebase/database';
@@ -22,6 +23,8 @@ const Login = props => {
     const [loginMode, setLoginMode] = useState('');
     const [emailInput, setEmailInput] = useState('');
     const [passwordInput, setPasswordInput] = useState('');
+
+    const phoneInput = useRef(null);
 
     setMessage = (message) => {
         props.dispatch({
@@ -50,7 +53,9 @@ const Login = props => {
     }
 
     sendCode = async () => {
-        console.log('in sendCode function');
+        console.log('in sendCode function. phoneNumber:', phoneNumber);
+        const fullPhoneNumber = '+' + phoneInput.current?.getCallingCode() + phoneNumber
+        console.log('fullPhoneNumber:', fullPhoneNumber)
         if (!phoneNumber) {
             setMessage('Please enter a valid phone number to proceed.')
             return
@@ -58,7 +63,7 @@ const Login = props => {
         setIsLoginLoading(true)
 
         try {   
-            const confirmation = await auth().signInWithPhoneNumber(phoneNumber);
+            const confirmation = await auth().signInWithPhoneNumber(fullPhoneNumber);
             setConfirm(confirmation);
             setMessage('')
         } catch (error) {
@@ -72,26 +77,27 @@ const Login = props => {
     confirmCode = async () => {
         setIsLoginLoading(true)
         try {
-          let user = await confirm.confirm(code);
-          console.log('code is valid! user:', user)
-          let isBanned = await checkIfBanned(user.uid)
-          console.log('isBanned:', isBanned)
-          console.log('typeof isBanned:', typeof(isBanned))
-          if (!isBanned) {
-            updateRegistrationToken(user)
-            await AsyncStorage.setItem("user", JSON.stringify(user))
-            setMessage('')
-            props.history.push('/camera')
-          } else {
-            setIsLoginLoading(false)
-            setMessage('You have been temporarily banned for spreading bad vibes. Try again later.')
-          }
-          
-          
+            let user = await confirm.confirm(code);
+            console.log('code is valid! user:', user)
+            let isBanned = await checkIfBanned(user.uid)
+            console.log('isBanned:', isBanned)
+            console.log('typeof isBanned:', typeof(isBanned))
+            if (!isBanned) {
+                updateRegistrationToken(user)
+                await AsyncStorage.setItem("user", JSON.stringify(user))
+                setMessage('')
+                props.history.push('/camera')
+            } else {
+                setIsLoginLoading(false)
+                setMessage('You have been temporarily banned for spreading bad vibes. Try again later.')
+            }
+            
+            
         } catch (error) {
-          console.log('Invalid code.')
-          console.log('error:', error)
-          setMessage('Invalid code.')
+            setIsLoginLoading(false)
+            console.log('Invalid code.')
+            console.log('error:', error)
+            setMessage('Invalid code.')
         }
     }
 
@@ -258,7 +264,6 @@ const Login = props => {
                             style={styles.regularButtonBlue}>
                             {isLoginLoading ?
                                 <ActivityIndicator
-                                    size={30}
                                     style={styles.wheel}
                                     color='black'
                                 /> 
@@ -277,7 +282,6 @@ const Login = props => {
                             style={styles.regularButtonGreen}>
                             {isRegisterLoading ? 
                                 <ActivityIndicator
-                                    size={30}
                                     style={styles.wheel}
                                     color='black'
                                 /> 
@@ -322,19 +326,31 @@ const Login = props => {
 
                     {!confirm ?
                     <>    
-                        <TextInput
+                        {/* <TextInput
                             style={styles.input}
                             onChangeText={text => setPhoneNumber(text)}
                             placeholder='phone number'
                             keyboardType='phone-pad'
                             autoCapitalize='none'
-                        />
+                        /> */}
+                        <PhoneInput
+                            // style={styles.input}
+                            ref={phoneInput}
+                            onChangeText={text => setPhoneNumber(text)}
+                            defaultCode={"US"}
+                            placeholder={"1-800-your-mom"}
+                            //textInputProps={styles.input}
+                            //textContainerStyle={styles.phoneInputText}
+                            containerStyle={styles.phoneInput}
+                            layout='second'
+                            autoFocus
+                        >
+                        </PhoneInput>
                         <TouchableOpacity
                             onPress={sendCode}
                             style={styles.regularButtonBlue}>
                             {isLoginLoading ? 
                                 <ActivityIndicator
-                                    size={30}
                                     style={styles.wheel}
                                     color='black'
                                 /> 
@@ -363,7 +379,6 @@ const Login = props => {
                             style={styles.regularButtonBlue}>
                             {isLoginLoading ?
                                 <ActivityIndicator
-                                    size={30}
                                     style={styles.wheel}
                                     color='black'
                                 /> 
@@ -440,15 +455,31 @@ const styles = StyleSheet.create({
         marginBottom: '5%'
     },
     input: { 
-        marginBottom: 2, 
+        //marginBottom: 2, 
         fontSize: 20, 
-        borderWidth: 2, 
+        borderWidth: 0, 
         borderColor: 'black', 
         backgroundColor: 'white', 
-        padding: 4, 
+        padding: 12, 
         width: '75%',
-        marginBottom: '3%',
-        fontFamily: 'Rubik-Regular'
+        height: 50,
+        //marginBottom: '3%',
+        fontFamily: 'Rubik-Regular',
+        textAlign: 'center'
+    },
+    phoneInput: {
+        width: '75%',
+        height: 50,
+        fontSize: 44,
+        margin:0,
+        padding: 0
+    },
+    phoneInputText: {
+        height: 50,
+        justifyContent: 'center',
+        alignItems: 'center',
+        margin: 0,
+        padding: 50
     },
     regularButtonBlue: {
         width: '50%', 
@@ -459,7 +490,7 @@ const styles = StyleSheet.create({
         backgroundColor: colors.blue,
         justifyContent: 'center',
         alignItems: 'center',
-        marginTop: 10,
+        marginTop: 25,
     },
     regularButtonGreen: {
         width: '50%', 
@@ -509,7 +540,7 @@ const styles = StyleSheet.create({
     },
     wheel: {
         alignSelf: 'center',
-        transform: Platform.OS === 'ios' ? [{ scale: 2 }] : [{ scale: 1 }]
+        transform: Platform.OS === 'ios' ? [{ scale: 1 }] : [{ scale: 1 }]
     },
 })
 

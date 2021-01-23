@@ -266,7 +266,10 @@ class CameraPage extends React.Component {
                                 <View style={styles.bottomIcons}>
                                     <TouchableOpacity onPress={this.viewInbox} style={styles.viewInbox}>
                                         {this.state.isInboxLoading ? 
-                                            <ActivityIndicator/>
+                                            <ActivityIndicator
+                                                style={styles.wheel}
+                                                color='black'
+                                            /> 
                                         :
                                             <Text style={styles.inboxText}>{this.props.reduxState.inbox.length}</Text>
                                         }
@@ -332,7 +335,8 @@ const styles = StyleSheet.create({
         backgroundColor: colors.cream,
         width: '14%',
         aspectRatio: 1,
-        borderRadius: 10
+        borderRadius: 10,
+        paddingBottom: 2
     },
     viewFavorite: {
         justifyContent: Platform.OS === 'ios' ? 'flex-end' : 'center',
@@ -342,7 +346,8 @@ const styles = StyleSheet.create({
         backgroundColor: colors.blue,
         width: '14%',
         aspectRatio: 1,
-        borderRadius: 10
+        borderRadius: 10,
+        paddingBottom: 1
     },
     logoutIcon: {
         color: 'white', 
@@ -369,6 +374,10 @@ const styles = StyleSheet.create({
     favoriteIcon: {
         color: 'white',
         fontSize: 44
+    },
+    wheel: {
+        alignSelf: 'center',
+        transform: Platform.OS === 'ios' ? [{ scale: 2 }] : [{ scale: 1 }]
     }
 });
 
