@@ -36,7 +36,11 @@ export default App = () => {
 
   // handle user state changes
   function onAuthStateChanged(user) {
-    console.log('user:', user);
+    if (user) {
+      console.log('user was signed in')
+    } else {
+      console.log('user was signed out')
+    }
     if (initializing) setInitializing(false);
   }
 

@@ -225,14 +225,17 @@ class ViewInbox extends React.Component {
                                                 backgroundColor: colors.blue,
                                                 width: '14%',
                                                 aspectRatio: 1,
-                                                borderRadius: 10
+                                                borderRadius: 10,
+
                                             }}
                                             onPress={() => this.handleFavoritePress()}>
                                             <Ionicons
                                                 name='md-star'
                                                 style={{
                                                     color: this.state.starColor,
-                                                    fontSize: 44
+                                                    fontSize: 44,
+                                                    paddingBottom: 1
+
                                                 }}
                                             />
                                         </TouchableOpacity>

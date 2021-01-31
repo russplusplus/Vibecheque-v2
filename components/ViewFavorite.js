@@ -119,24 +119,26 @@ const styles = StyleSheet.create({
         alignItems: 'flex-end',
     },
     return: {
-        justifyContent: Platform.OS === 'ios' ? 'flex-end' : 'center',
+        justifyContent: Platform.OS === 'ios' ? 'flex-end' : 'flex-end',
         alignItems: 'center',
         borderColor: 'black',
         borderWidth: 0,
         backgroundColor: colors.blue,
         width: '14%',
         aspectRatio: 1,
-        borderRadius: 10
+        borderRadius: 10,
+        paddingBottom: Platform.OS === 'ios' ? 2 : 4
     },
     deleteFavorite: {
-        justifyContent: Platform.OS === 'ios' ? 'flex-end' : 'center',
+        justifyContent: Platform.OS === 'ios' ? 'flex-end' : 'flex-end',
         alignItems: 'center',
         borderColor: 'black',
         borderWidth: 0,
         backgroundColor: colors.red,
         width: '14%',
         aspectRatio: 1,
-        borderRadius: 10
+        borderRadius: 10,
+        paddingBottom: Platform.OS === 'ios' ? 1 : 6
     },
     returnIcon: {
         color: 'black',

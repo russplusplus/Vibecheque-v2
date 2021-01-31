@@ -73,7 +73,8 @@ const styles = StyleSheet.create({
         backgroundColor: colors.red,
         width: '14%',
         aspectRatio: 1,
-        borderRadius: 10
+        borderRadius: 10,
+        paddingTop: 2
     },
     sendImage: {
         flexDirection: 'column',
@@ -84,7 +85,8 @@ const styles = StyleSheet.create({
         backgroundColor: colors.blue,
         width: '14%',
         aspectRatio: 1,
-        borderRadius: 10
+        borderRadius: 10,
+        paddingTop: 2
     },
     wheel: {
         alignSelf: 'center',

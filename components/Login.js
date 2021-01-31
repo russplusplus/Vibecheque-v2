@@ -191,6 +191,57 @@ const Login = props => {
         setLoginMode('')
     }
 
+
+    async function onAuthStateChanged(user) {
+        console.log('in onAuthStateChanged. user:', user)
+
+        if (user) {
+
+        
+
+        try {
+            console.log('code is valid! user:', user)
+            let isBanned = await checkIfBanned(user.uid)
+            console.log('isBanned:', isBanned)
+            console.log('typeof isBanned:', typeof(isBanned))
+            if (!isBanned) {
+                updateRegistrationToken(user)
+                await AsyncStorage.setItem("user", JSON.stringify(user))
+                setMessage('')
+                props.history.push('/camera')
+            } else {
+                setIsLoginLoading(false)
+                setMessage('You have been temporarily banned for spreading bad vibes. Try again later.')
+            }
+            
+            
+        } catch (error) {
+            setIsLoginLoading(false)
+            console.log('Invalid code.')
+            console.log('error:', error)
+            setMessage('Invalid code.')
+        }
+
+        }
+
+        checkIfLoggedIn()
+        console.log('user:', user);
+      }
+    
+    //   useEffect(() => {
+    //     const subscriber = auth().onAuthStateChanged((user) => {
+    //         if (user) {
+    //             console.log('user has been signed in')
+    //         } else {
+    //             // User has been signed out, reset the state
+    //             console.log('user has been signed out')
+    //         }
+    //       });
+    //     return subscriber; // this line supposedly unsubscribes on unmount 
+    //   }, []);
+
+
+
     useEffect(() =>  {
         checkIfLoggedIn()
         console.log('loginMode:', loginMode)

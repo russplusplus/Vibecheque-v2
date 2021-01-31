@@ -5,10 +5,11 @@ import { connect } from 'react-redux';
 import { RNCamera } from 'react-native-camera';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import AsyncStorage from '@react-native-community/async-storage';
 
 import storage from '@react-native-firebase/storage';
 import messaging from '@react-native-firebase/messaging';
-import AsyncStorage from '@react-native-community/async-storage';
+import auth from '@react-native-firebase/auth';
 
 import Logout from './Logout';
 import ReviewImage from './ReviewImage';
@@ -164,6 +165,7 @@ class CameraPage extends React.Component {
     // }
 
     componentDidMount = async () => {
+        console.log('auth().currentUser:', auth().currentUser)
         //get user ID
         let uid = JSON.parse(await AsyncStorage.getItem('user')).uid
         this.props.dispatch({
@@ -336,10 +338,10 @@ const styles = StyleSheet.create({
         width: '14%',
         aspectRatio: 1,
         borderRadius: 10,
-        paddingBottom: 2
+        paddingBottom: Platform.OS === 'ios' ? 2 : 1
     },
     viewFavorite: {
-        justifyContent: Platform.OS === 'ios' ? 'flex-end' : 'center',
+        justifyContent: Platform.OS === 'ios' ? 'flex-end' : 'flex-end',
         alignItems: 'center',
         borderColor: 'black',
         borderWidth: 0,
@@ -347,7 +349,7 @@ const styles = StyleSheet.create({
         width: '14%',
         aspectRatio: 1,
         borderRadius: 10,
-        paddingBottom: 1
+        paddingBottom: Platform.OS === 'ios' ? 1 : 4
     },
     logoutIcon: {
         color: 'white', 
