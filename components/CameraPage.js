@@ -88,7 +88,7 @@ class CameraPage extends React.Component {
                 isSending: true
             })
             let registrationToken = this.props.reduxState.registrationToken
-            console.log('token:', registrationToken)
+            //console.log('token:', registrationToken)
             
             // generate filename from current time in milliseconds
             let d = new Date();
@@ -165,13 +165,22 @@ class CameraPage extends React.Component {
     // }
 
     componentDidMount = async () => {
-        console.log('auth().currentUser:', auth().currentUser)
+        //console.log('auth().currentUser:', auth().currentUser)
+
+        console.log('this.props.reduxState.userData:', this.props.reduxState.userData)
+
         //get user ID
         let uid = JSON.parse(await AsyncStorage.getItem('user')).uid
         this.props.dispatch({
             type: 'SET_USER_ID',
             payload: uid
         })
+
+        //NEW SAGA SCHEME - CONSOLIDATE ALL USER INFO INTO ONE DATABASE CALL
+        this.props.dispatch({
+            type: 'GET_USER_DATA'
+        })
+        //NEW NEW NEW NEW
 
         this.props.dispatch({
             type: 'GET_INBOX'

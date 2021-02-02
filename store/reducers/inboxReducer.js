@@ -10,11 +10,6 @@ const inboxReducer = (state = [], action) => {
             console.log('inbox with url:', inbox)
             return inbox
         }
-    // } else if (action.type === 'DELETE_IMAGE') {
-    //     console.log('in DELETE_IMAGE. before state:', state)
-    //     state.shift();
-    //     console.log('after state:', state)
-    //     return state;
     } else {
         return state;
     }

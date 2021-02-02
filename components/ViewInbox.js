@@ -54,6 +54,29 @@ class ViewInbox extends React.Component {
             this.setState({
                 newFavoriteMode: true
             })
+    //         // send this to the db this.props.reduxState.inbox[0].url
+
+    //         // we might need to store the filename (timestamp) rather than the url, as it is
+    //         // unclear how long the urls last
+
+    //         let urlRef = 'users/' + JSON.parse(await AsyncStorage.getItem('user')).uid + '/favorite/url';
+    //         let nameRef = 'users/' + JSON.parse(await AsyncStorage.getItem('user')).uid + '/favorite/name';
+    //         // console.log('urlRef:', urlRef)
+    //         // console.log('nameRef:', nameRef)
+    //         // console.log('this.props.reduxState.inbox[0].url:', this.props.reduxState.inbox[0].url)
+    //         await database() //this could maybe be done in one database call
+    //             .ref(urlRef)
+    //             .set(this.props.reduxState.inbox[0].url)
+    //         await database()
+    //             .ref(nameRef)
+    //             .set(this.props.reduxState.inbox[0].imageName)
+    //         this.setState({
+    //             isFavorited: true,
+    //             starColor: colors.cream,
+    //             starBorderColor: colors.cream,
+    //             dislikeBackgroundColor: 'transparent',
+    //             dislikeBorderColor: 'transparent'
+    //         })
         }  
     }
 
@@ -99,6 +122,7 @@ class ViewInbox extends React.Component {
             dislikeBackgroundColor: 'transparent',
             dislikeBorderColor: 'transparent'
         })
+    
     }
 
     report = async () => {

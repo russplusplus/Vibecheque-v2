@@ -86,6 +86,10 @@ const Login = props => {
                 updateRegistrationToken(user)
                 await AsyncStorage.setItem("user", JSON.stringify(user))
                 setMessage('')
+                await props.dispatch({
+                    type: 'GET_USER_DATA',
+                    payload: user.uid
+                })
                 props.history.push('/camera')
             } else {
                 setIsLoginLoading(false)
@@ -172,10 +176,10 @@ const Login = props => {
     }
 
     updateRegistrationToken = async (user) => {
-        console.log('in updateRegistrationToken', user)
-        console.log('user.uid:', user.uid)
+        //console.log('in updateRegistrationToken', user)
+        //console.log('user.uid:', user.uid)
         let registrationToken = await messaging().getToken()
-        console.log('updateRegistrationToken token:', registrationToken)
+        //console.log('updateRegistrationToken token:', registrationToken)
         await database()
             .ref(`/users/${user.uid}`)
             .update({
