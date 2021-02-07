@@ -95,8 +95,6 @@ const Login = props => {
                 setIsLoginLoading(false)
                 setMessage('You have been temporarily banned for spreading bad vibes. Try again later.')
             }
-            
-            
         } catch (error) {
             setIsLoginLoading(false)
             console.log('Invalid code.')

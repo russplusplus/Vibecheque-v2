@@ -1,6 +1,9 @@
 const functions = require('firebase-functions');
 const admin = require('firebase-admin');
 admin.initializeApp();
+const keyFile = require('./service-account.json')
+const {Storage} = require('@google-cloud/storage');
+const gcs = new Storage({keyFilename: './service-account.json'});
 
 exports.addUser = functions.auth.user().onCreate(user => {
   console.log(user)
@@ -35,47 +38,57 @@ exports.addImage = functions.storage.object('/images').onFinalize(async (object)
       .ref('users')
       .once('value')
       // .then(snapshot => {
-        let users = snapshot.val()
-        let recipientToken = users[recipientUid].registrationToken
-        console.log('response block recipientToken:', recipientToken)
-        let payload = {
-          notification: {
-            title: 'New Vibecheque response!',
-            body: 'Open the app to view it',
-            imageUrl: 'https://my-cdn.com/app-logo.png',
-          },
-        }
-        admin
-          .messaging()
-          .sendToDevice(recipientToken, payload)
-          .then(function(response) {
-            console.log("Successfully sent message:", response);
-          })
-          .catch(function(error) {
-            console.log("Error sending message:", error);
-        });
-            
-        // generate download URL
-        let url = await admin
-          .storage()
-          .ref(`images/${filename}`)
-          .getDownloadURL()
-        console.log('in add image function. storage url:', url)
+    let users = snapshot.val()
+    
+    // generate download URL
+    const bucket = gcs.bucket("vibecheque-543ff.appspot.com");
+    console.log('bucket:', bucket)
+    const file = bucket.file(object.name);
+    console.log('file:', file)
+    const urlArr = await file.getSignedUrl({
+      action: 'read',
+      expires: '03-09-2491'
+    })
+    const url = urlArr[0]
 
-        // add entry to database
-        console.log('recipientUid:', recipientUid)
-        console.log('senderUid:', senderUid) 
-        admin
-          .database()
-          .ref(`users/${recipientUid}/inbox/${filename}`)
-          .set({
-            from: senderUid,
-            to: recipientUid,
-            isResponse: isResponse,
-            url: url
-          })
+    // let url = await admin
+    //   .storage()
+    //   .ref(`images/${filename}`)
+    //   .getDownloadURL()
+    console.log('in add image function. storage url:', url)
 
-      // })
+    // add entry to database
+    console.log('recipientUid:', recipientUid)
+    console.log('senderUid:', senderUid) 
+    admin
+      .database()
+      .ref(`users/${recipientUid}/inbox/${filename}`)
+      .set({
+        from: senderUid,
+        to: recipientUid,
+        isResponse: isResponse,
+        url: url
+      })
+
+    // send FCM
+    let recipientToken = users[recipientUid].registrationToken
+    console.log('response block recipientToken:', recipientToken)
+    let payload = {
+      notification: {
+        title: 'New Vibecheque response!',
+        body: 'Open the app to view it',
+        imageUrl: 'https://my-cdn.com/app-logo.png',
+      },
+    }
+    admin
+      .messaging()
+      .sendToDevice(recipientToken, payload)
+      .then(function(response) {
+        console.log("Successfully sent message:", response);
+      })
+      .catch(function(error) {
+        console.log("Error sending message:", error);
+    });
   } else {
     let isResponse = false
     console.log('vibe does not have recipient metadata and therefore is not a response')
@@ -89,21 +102,21 @@ exports.addImage = functions.storage.object('/images').onFinalize(async (object)
     console.log('snapshot:', users)
     let uidArr = []
     for (user in users) {
-      console.log('user:', user)
+      //console.log('user:', user)
       if (users[user].unbanTime < new Date().getTime() && user != senderUid) {   // add [if in geographic radius...]
         console.log('user', user, 'is a suitable recipient')
-        console.log('senderUid:', senderUid)
+        //console.log('senderUid:', senderUid)
         uidArr.push(user)
       } else {
         console.log('user', user, 'is NOT a suitable recipient')
-        console.log('senderUid:', senderUid)
+        //console.log('senderUid:', senderUid)
       }
     }
     console.log('uidArr:', uidArr)
     console.log('senderUid:', senderUid)
+    let recipientUid = uidArr[Math.floor(Math.random() * uidArr.length)]
 
     // randomly select from array of suitable UIDs
-    let recipientUid
     // let i = 0
     // do {
     //   recipientUid = uidArr[Math.floor(Math.random() * uidArr.length)]
@@ -112,13 +125,58 @@ exports.addImage = functions.storage.object('/images').onFinalize(async (object)
     // } while ((recipientUid === senderUid && i < 100) || users[recipientUid].unbanTime > new Date().getTime()) //delete i < 100 in prod
     
     //previously, uidArr contained all uids. Now, uid only contains suitable recipients, so the loop is not necessary.
-    recipientUid = uidArr[Math.floor(Math.random() * uidArr.length)]
     
+    
+    // generate download URL
+    const bucket = gcs.bucket("vibecheque-543ff.appspot.com");
+    //const bucket = {"test":"data","test2":"data2"}
+    console.log('bucket:', bucket)
+    const file = bucket.file(object.name);
+    console.log('file:', file)
+    const urlArr = await file.getSignedUrl({
+      action: 'read',
+      expires: '03-09-2491'
+    })
+    const url = urlArr[0]
+    
+    
+    
+    
+    
+    // const bucket = object.bucket
+    // console.log('bucket:', bucket)
+    // const file = bucket.file(object.name)
+    // console.log('file:', file)
+    // const options = {
+    //   action: 'read',
+    //   expires: '01-01-2050'
+    // };
+    // const url = file.getSignedUrl(options)
+
+
+    // let url = await admin
+    //   .storage()
+    //   .ref(`images/${filename}`)
+    //   .getDownloadURL()
+    console.log('storage url:', url)
+
+            
+    // add entry to database
     console.log('recipientUid:', recipientUid)
-    let recipientToken = users[recipientUid].registrationToken
-    console.log('recipientToken:', recipientToken)
+    console.log('senderUid:', senderUid) 
+    console.log(`ref: users/${recipientUid}/inbox/${filename}`)
+    admin
+      .database()
+      .ref(`users/${recipientUid}/inbox/${filename}`)
+      .set({
+        from: senderUid,
+        to: recipientUid,
+        isResponse: isResponse,
+        url: url
+    })
 
     // send FCM to recipient device registration token
+    let recipientToken = users[recipientUid].registrationToken
     let payload = {
       notification: {
         title: 'New Vibe!',
@@ -135,26 +193,6 @@ exports.addImage = functions.storage.object('/images').onFinalize(async (object)
       .catch(function(error) {
         console.log("Error sending message:", error);
     });
-
-    let url = await admin
-      .storage()
-      .ref(`images/${filename}`)
-      .getDownloadURL()
-    console.log('in add image function. storage url:', url)
-
-            
-    // add entry to database
-    console.log('recipientUid:', recipientUid)
-    console.log('senderUid:', senderUid) 
-    admin
-      .database()
-      .ref(`users/${recipientUid}/inbox/${filename}`)
-      .set({
-        from: senderUid,
-        to: recipientUid,
-        isResponse: isResponse,
-        url: url
-    })
   }
 });
   

@@ -54,29 +54,6 @@ class ViewInbox extends React.Component {
             this.setState({
                 newFavoriteMode: true
             })
-    //         // send this to the db this.props.reduxState.inbox[0].url
-
-    //         // we might need to store the filename (timestamp) rather than the url, as it is
-    //         // unclear how long the urls last
-
-    //         let urlRef = 'users/' + JSON.parse(await AsyncStorage.getItem('user')).uid + '/favorite/url';
-    //         let nameRef = 'users/' + JSON.parse(await AsyncStorage.getItem('user')).uid + '/favorite/name';
-    //         // console.log('urlRef:', urlRef)
-    //         // console.log('nameRef:', nameRef)
-    //         // console.log('this.props.reduxState.inbox[0].url:', this.props.reduxState.inbox[0].url)
-    //         await database() //this could maybe be done in one database call
-    //             .ref(urlRef)
-    //             .set(this.props.reduxState.inbox[0].url)
-    //         await database()
-    //             .ref(nameRef)
-    //             .set(this.props.reduxState.inbox[0].imageName)
-    //         this.setState({
-    //             isFavorited: true,
-    //             starColor: colors.cream,
-    //             starBorderColor: colors.cream,
-    //             dislikeBackgroundColor: 'transparent',
-    //             dislikeBorderColor: 'transparent'
-    //         })
         }  
     }
 
@@ -138,7 +115,7 @@ class ViewInbox extends React.Component {
         let unbanTime = time + banMilliSeconds
         console.log('unbanTime:', unbanTime)
 
-        let unbanTimeRef = 'users/' + this.props.reduxState.inbox[0].from + '/unbanTime';
+        let unbanTimeRef = 'users/' + this.props.reduxState.userData.inbox[Object.keys(this.props.reduxState.userData.inbox)[0]].from + '/unbanTime';
         console.log('unbanTimeRef:', unbanTimeRef)
         await database() //this could maybe be done in one database call
             .ref(unbanTimeRef)
@@ -159,12 +136,8 @@ class ViewInbox extends React.Component {
     }
 
     componentDidMount() {
-        // console.log('in ViewInbox componentDidMount')
-        // console.log('reduxState.inbox:', this.props.reduxState.inbox)
-        //console.log('this.props.reduxState.inbox[0]:'. this.props.reduxState.inbox[0])
-
         // Set response message
-        if (this.props.reduxState.inbox[0].isResponse) {
+        if (this.props.reduxState.userData.inbox[Object.keys(this.props.reduxState.userData.inbox)[0]].isResponse) {
             this.setState({
                 responseMessage: 'Response'
             })
@@ -178,15 +151,10 @@ class ViewInbox extends React.Component {
             // Set recipient if image is not response
             this.props.dispatch({
                 type: 'SET_RESPONDING_TO',
-                payload: this.props.reduxState.inbox[0].from
+                payload: this.props.reduxState.userData.inbox[Object.keys(this.props.reduxState.userData.inbox)[0]].from
             })
         }
-
-        
-        // if (this.props.reduxState.inbox[0].is_response) {
-        //     this.setState({responseMessage: 'Response'})
-        // }
-
+        // this issue was solved long ago but I like remembering this nice note I left 
         //Russ,
         //
         //You need to figure out how to get isResponding from the image.
@@ -204,8 +172,6 @@ class ViewInbox extends React.Component {
     }
     
     render() {
-        // console.log('in render(). this.state.url:', this.state.url)
-        // console.log('this.props.reduxState.inbox[0].url:', this.props.reduxState.inbox[0].url)
         return (
             <>
                 <NewFavorite visible={this.state.newFavoriteMode} closeNewFavoriteModal={this.closeNewFavoriteModal} indicateFavorite={this.indicateFavorite}></NewFavorite>
@@ -214,7 +180,7 @@ class ViewInbox extends React.Component {
                         <View style={{ flex: 1 }}>
                             <ImageBackground
                             style={{ flex: 1 }}
-                            source={{ uri: this.props.reduxState.inbox[0].url }}>
+                            source={{ uri: this.props.reduxState.userData.inbox[Object.keys(this.props.reduxState.userData.inbox)[0]].url }}>
                                 <View style={styles.iconContainer}>
                                     <View style={styles.topIcons}>
                                         <Text style={{fontFamily: 'Rubik-Regular', fontSize: 32, color: 'white', textAlign: 'center', marginTop: 10}}>{this.state.responseMessage}</Text>
