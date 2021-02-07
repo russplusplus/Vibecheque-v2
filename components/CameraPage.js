@@ -88,8 +88,6 @@ class CameraPage extends React.Component {
             this.setState({
                 isSending: true
             })
-            let registrationToken = this.props.reduxState.registrationToken
-            //console.log('token:', registrationToken)
             
             // generate filename from current time in milliseconds
             let filename = new Date().getTime();

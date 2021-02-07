@@ -1,7 +1,6 @@
 const functions = require('firebase-functions');
 const admin = require('firebase-admin');
 admin.initializeApp();
-const keyFile = require('./service-account.json')
 const {Storage} = require('@google-cloud/storage');
 const gcs = new Storage({keyFilename: './service-account.json'});
 
@@ -14,6 +13,10 @@ exports.addUser = functions.auth.user().onCreate(user => {
       unbanTime: 0,
       email: user.email,
       phoneNumber: user.phoneNumber,
+      settings: {
+        location: false,
+        distance: 500
+      }
   });
 });
 
@@ -37,7 +40,6 @@ exports.addImage = functions.storage.object('/images').onFinalize(async (object)
       .database()
       .ref('users')
       .once('value')
-      // .then(snapshot => {
     let users = snapshot.val()
     
     // generate download URL
@@ -51,10 +53,6 @@ exports.addImage = functions.storage.object('/images').onFinalize(async (object)
     })
     const url = urlArr[0]
 
-    // let url = await admin
-    //   .storage()
-    //   .ref(`images/${filename}`)
-    //   .getDownloadURL()
     console.log('in add image function. storage url:', url)
 
     // add entry to database
@@ -129,7 +127,6 @@ exports.addImage = functions.storage.object('/images').onFinalize(async (object)
     
     // generate download URL
     const bucket = gcs.bucket("vibecheque-543ff.appspot.com");
-    //const bucket = {"test":"data","test2":"data2"}
     console.log('bucket:', bucket)
     const file = bucket.file(object.name);
     console.log('file:', file)
@@ -138,28 +135,8 @@ exports.addImage = functions.storage.object('/images').onFinalize(async (object)
       expires: '03-09-2491'
     })
     const url = urlArr[0]
-    
-    
-    
-    
-    
-    // const bucket = object.bucket
-    // console.log('bucket:', bucket)
-    // const file = bucket.file(object.name)
-    // console.log('file:', file)
-    // const options = {
-    //   action: 'read',
-    //   expires: '01-01-2050'
-    // };
-    // const url = file.getSignedUrl(options)
 
-
-    // let url = await admin
-    //   .storage()
-    //   .ref(`images/${filename}`)
-    //   .getDownloadURL()
     console.log('storage url:', url)
-
             
     // add entry to database
     console.log('recipientUid:', recipientUid)
@@ -194,27 +171,4 @@ exports.addImage = functions.storage.object('/images').onFinalize(async (object)
         console.log("Error sending message:", error);
     });
   }
-});
-  
-exports.updateInbox = functions.https.onCall((data, context) => {
-  //console.log('data.registrationToken:', data.uid)
-  let inboxArr = []
-  return admin  
-    .database()
-    .ref(`users/${data.uid}/inbox`)
-    .once('value')
-    .then(snapshot => {
-      console.log('snapshot.val():', snapshot.val())
-      let images = snapshot.val()
-      for (image in images) {
-        inboxArr.push({
-          imageName: image,
-          url: '',
-          isResponse: images[image].isResponse,
-          from: images[image].from
-        })
-      }
-      console.log('in .then. inboxArr:', inboxArr)
-      return inboxArr
-    })
 });

@@ -3,7 +3,6 @@ import { all } from 'redux-saga/effects';
 import login from './loginSaga';
 import signUp from './signUpSaga';
 import logout from './logoutSaga';
-import getInbox from './getInboxSaga';
 import getRegistrationToken from './getRegistrationTokenSaga';
 import deleteImage from './deleteImageSaga';
 import deleteFavorite from './deleteFavoriteSaga';
@@ -15,7 +14,6 @@ function* rootSaga() {
         login(),
         signUp(),
         logout(),
-        getInbox(),
         getRegistrationToken(),
         deleteImage(),
         deleteFavorite(),

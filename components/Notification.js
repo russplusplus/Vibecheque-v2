@@ -1,35 +1,22 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { View, Text, TextInput, StyleSheet, Button, Platform, TouchableOpacity, Dimensions } from 'react-native';
 import { connect } from 'react-redux';
 import Modal from 'react-native-modal';
 import colors from '../assets/colors';
 
 Notification = (props) => {
-
-    // const [width, setWidth] = useState('')
-    // const [height, setHeight] = useState('')
-
     closeNotification = async () => {
         props.dispatch({
-            type: 'GET_INBOX'
+            type: 'GET_USER_DATA'
         })
         props.setIsVisible(false)
     }
-
-    // useEffect(() => {
-    //     setWidth(Dimensions.get('window').width)
-    //     setHeight(Dimensions.get('window').height)
-    // })
 
     return (
         <Modal isVisible={props.isVisible} animationIn='zoomIn' animationOut='zoomOut'>
             <View style={styles.container}>
                 <Text style={styles.title}>You've received</Text>
                 <Text style={styles.title}>a vibe!</Text>
-                
-                {/* <Text style={styles.subtitle}>width: {width}</Text>
-                <Text style={styles.subtitle}>height: {height}</Text> */}
-
                 <TouchableOpacity 
                     onPress={() => closeNotification()} 
                     style={styles.alrightButton}>
