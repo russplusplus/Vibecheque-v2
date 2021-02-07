@@ -8,17 +8,19 @@ function* deleteFavorite() {
 
     // delete from database
     yield database().ref(`users/${reduxState.userID}/favorite`).remove();
+
     // delete from storage
-    yield storage().ref(`images/${reduxState.favoriteUrl.name}`).delete();
-    // reset redux favorite
-    const initFav = {
-        name: 'none',
-        url: 'none'
-    }
-    yield put({
-        type: 'SET_FAVORITE_URL',
-        payload: initFav   // snapshot object has a bunch of hidden metadata that messes up retrieval on the ViewFavorite page. This is the true data.
-    })
+    yield storage().ref(`images/${reduxState.userData.favorite.name}`).delete();
+
+    // // reset redux favorite
+    // const initFav = {
+    //     name: 'none',
+    //     url: 'none'
+    // }
+    // yield put({
+    //     type: 'SET_FAVORITE_URL',
+    //     payload: initFav   // snapshot object has a bunch of hidden metadata that messes up retrieval on the ViewFavorite page. This is the true data.
+    // })
 }
 
 function* deleteFavoriteSaga() {

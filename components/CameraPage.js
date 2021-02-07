@@ -137,10 +137,10 @@ class CameraPage extends React.Component {
 
     viewFavorite = () => {
         console.log('in viewFavorite')
-        if (this.props.reduxState.favoriteUrl.name === 'none') {
-            this.toggleNoFavoriteMode()
-        } else {
+        if (this.props.reduxState.userData.favorite) {
             this.props.history.push('/favorite')
+        } else {
+            this.toggleNoFavoriteMode()
         }
     }
 

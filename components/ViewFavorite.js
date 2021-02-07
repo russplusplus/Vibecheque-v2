@@ -6,7 +6,6 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
 
 import database from '@react-native-firebase/database';
 
-import Report from './Report';
 import DeleteFavorite from './DeleteFavorite';
 import colors from '../assets/colors';
 
@@ -18,7 +17,6 @@ class Favorite extends React.Component {
 
     state = {
         deleteFavoriteMode: false,
-        //url: 'none'
     }
 
     deleteFavorite = async () => {
@@ -40,11 +38,9 @@ class Favorite extends React.Component {
     }
     
     render() {
-        // console.log('this.props.reduxState.favoriteUrl:', this.props.reduxState.favoriteUrl._ref)
-        // console.log('type of url:', typeof(this.props.reduxState.favoriteUrl))
-        // console.log('this should be the url:', this.props.reduxState.favoriteUrl._ref)        
         
         // The below problem was solved. Firebase attached hidden metadata to database objects it returns. The actual data is nested two levels deeper in the object.
+        // SOLUTION: just use the .val() method 
         //
         // This is an interesting problem that I do not understand at all, but accessing the '_ref' attribute of the object 
         // returns what should be returned from the 'url' attribute. If the object (this.props.reduxState.favoriteUrl) is 
@@ -53,18 +49,13 @@ class Favorite extends React.Component {
         // a solution to the problem, but it is still shrouded in mystery...
         //
 
-
-        // for (let key in this.props.reduxState.favoriteUrl) {
-        //     console.log('key:', key)
-        //     console.log('value:', this.props.reduxState.favoriteUrl[key])
-        // }
         return (
             <>
                 <DeleteFavorite visible={this.state.deleteFavoriteMode} closeDeleteFavoriteModal={this.closeDeleteFavoriteModal} returnToCameraPage={this.returnToCameraPage}></DeleteFavorite>
                 <View style={{ flex: 1 }}>
                     <ImageBackground
                     style={{ flex: 1 }}
-                    source={{ uri: this.props.reduxState.favoriteUrl.url }}>
+                    source={{ uri: this.props.reduxState.userData.favorite.url }}>
                         <View style={styles.iconContainer}>
                             <View style={styles.topIcons}>
                             </View>
