@@ -76,18 +76,12 @@ class ViewInbox extends React.Component {
     }
 
     indicateFavorite = async () => {
-        let favRef = 'users/' + this.props.reduxState.userID + '/favorite';
-        console.log('in indicateFavorite. favRef:', favRef)
-        let favObj = {
-            name: Object.keys(this.props.reduxState.userData.inbox)[0],
-            url: this.props.reduxState.userData.inbox[Object.keys(this.props.reduxState.userData.inbox)[0]].url
-        }
-        console.log('in indicateFavorite. favObj:', favObj)
         
-        await database() 
-            .ref(favRef)
-            .set(favObj)
-
+        
+        this.props.dispatch({
+            type: 'INDICATE_FAVORITE'
+        })
+        
         this.setState({
             isFavorited: true,
             starColor: colors.cream,

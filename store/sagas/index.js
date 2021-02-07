@@ -1,24 +1,26 @@
 import { all } from 'redux-saga/effects';
 
-import loginSaga from './loginSaga';
-import signUpSaga from './signUpSaga';
-import logoutSaga from './logoutSaga';
-import getInboxSaga from './getInboxSaga';
-import getRegistrationTokenSaga from './getRegistrationTokenSaga';
-import deleteImageSaga from './deleteImageSaga';
-import deleteFavoriteSaga from './deleteFavoriteSaga';
+import login from './loginSaga';
+import signUp from './signUpSaga';
+import logout from './logoutSaga';
+import getInbox from './getInboxSaga';
+import getRegistrationToken from './getRegistrationTokenSaga';
+import deleteImage from './deleteImageSaga';
+import deleteFavorite from './deleteFavoriteSaga';
 import getUserData from './getUserDataSaga';
+import indicateFavorite from './indicateFavoriteSaga';
 
 function* rootSaga() {
     yield all([
-        loginSaga(),
-        signUpSaga(),
-        logoutSaga(),
-        getInboxSaga(),
-        getRegistrationTokenSaga(),
-        deleteImageSaga(),
-        deleteFavoriteSaga(),
-        getUserData()
+        login(),
+        signUp(),
+        logout(),
+        getInbox(),
+        getRegistrationToken(),
+        deleteImage(),
+        deleteFavorite(),
+        getUserData(),
+        indicateFavorite()
     ]);
   }
 

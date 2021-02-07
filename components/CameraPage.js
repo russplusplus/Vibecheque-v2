@@ -126,7 +126,7 @@ class CameraPage extends React.Component {
                 isInboxLoading: true
             })
             await this.props.dispatch({
-                type: 'GET_INBOX'
+                type: 'GET_USER_DATA'
             })
             this.setState({
                 isInboxLoading: false
@@ -171,37 +171,14 @@ class CameraPage extends React.Component {
         })
         //NEW NEW NEW NEW
 
-        // this.props.dispatch({
-        //     type: 'GET_INBOX'
-        // })
-        // this.props.dispatch({
-        //     type: 'GET_INBOX_URL'
-        // })
-        // this.props.dispatch({
-        //     type: 'GET_FAVORITE_URL'
-        // })
-        // this.setState({    //this is in redux now
-        //     uid: JSON.parse(await AsyncStorage.getItem('user')).uid
-        // })
         this.props.dispatch({  // updates user's divice registration token in database
             type: 'GET_REGISTRATION_TOKEN'
         })
         
         this.requestUserPermission()
-        // if (this.props.reduxState.respondingTo) {
-        //     this.setState({
-        //         isResponding: true
-        //     })
-        // } else {
-        //     this.setState({
-        //         isResponding: false
-        //     })
-        // }
-        //console.log('favoriteUrl:', this.props.reduxState.favoriteUrl)
     }
 
     render() {
-        //console.log('in CameraPage render. reduxState:', this.props.reduxState)
         console.log('this.props.reduxState.userData.inbox:', this.props.reduxState.userData.inbox)
         return (
             <>
