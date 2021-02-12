@@ -83,56 +83,48 @@ class CameraPage extends React.Component {
     }
 
     sendImage = async () => {
-        if (this.state.uid) {
+        console.log('in sendImage')
+        if (this.props.reduxState.userID) {
             this.setState({
                 isSending: true
             })
-            let registrationToken = this.props.reduxState.registrationToken
-            console.log('token:', registrationToken)
             
             // generate filename from current time in milliseconds
-            let d = new Date();
-            let filename = d.getTime();
+            let filename = new Date().getTime();
             console.log('filename:', filename)
             const ref = storage().ref('images/' + String(filename));
             const metadata = {
                 customMetadata: {
-                    fromUid: this.state.uid,
+                    fromUid: this.props.reduxState.userID,
                     toUid: this.props.reduxState.respondingTo
                 }
             }
             await ref.putFile(this.state.capturedImageUri, metadata);
             
-            // this.setState({
-            //     isResponding: false
-            // })
             console.log('this.props.reduxState.respondingTo:', this.props.reduxState.respondingTo)
-            this.props.dispatch({
+            this.props.dispatch({  // image is sent, therefore not responding anymore 
                 type: 'SET_NOT_RESPONDING'
             })
             this.toggleReviewMode()
             this.setState({
                 isSending: false
             })
+        } else {
+            console.log('userID not found')
         }
-        
     }
 
     viewInbox = async () => {
         console.log('in viewInbox')
-        if (this.props.reduxState.inbox[0]) {
-            if (this.props.reduxState.inbox[0].url) {
-                this.props.history.push('/ViewInbox')
-            } else {
-                console.log('url not loaded')
-            }
+        if (this.props.reduxState.userData.inbox) {
+            this.props.history.push('/ViewInbox')
         } else {
             console.log('inbox is empty')
             this.setState({
                 isInboxLoading: true
             })
             await this.props.dispatch({
-                type: 'GET_INBOX'
+                type: 'GET_USER_DATA'
             })
             this.setState({
                 isInboxLoading: false
@@ -143,10 +135,10 @@ class CameraPage extends React.Component {
 
     viewFavorite = () => {
         console.log('in viewFavorite')
-        if (this.props.reduxState.favoriteUrl.name === 'none') {
-            this.toggleNoFavoriteMode()
-        } else {
+        if (this.props.reduxState.userData.favorite) {
             this.props.history.push('/favorite')
+        } else {
+            this.toggleNoFavoriteMode()
         }
     }
 
@@ -158,52 +150,34 @@ class CameraPage extends React.Component {
         }
     }
 
-    // getStorageUrl = async () => {
-    //     this.setState({
-    //         url: await storage().ref(`images/${this.props.reduxState.inbox[0]}`).getDownloadURL()
-    //     })
-    // }
-
     componentDidMount = async () => {
-        console.log('auth().currentUser:', auth().currentUser)
+        //console.log('auth().currentUser:', auth().currentUser)
+
+        console.log('this.props.reduxState.userData:', this.props.reduxState.userData)
+
         //get user ID
         let uid = JSON.parse(await AsyncStorage.getItem('user')).uid
+        console.log('uid:', uid)
         this.props.dispatch({
             type: 'SET_USER_ID',
             payload: uid
         })
 
+        //NEW SAGA SCHEME - CONSOLIDATE ALL USER INFO INTO ONE DATABASE CALL
         this.props.dispatch({
-            type: 'GET_INBOX'
+            type: 'GET_USER_DATA'
         })
-        // this.props.dispatch({
-        //     type: 'GET_INBOX_URL'
-        // })
-        this.props.dispatch({
-            type: 'GET_FAVORITE_URL'
-        })
-        this.setState({
-            uid: JSON.parse(await AsyncStorage.getItem('user')).uid
-        })
-        this.props.dispatch({
+        //NEW NEW NEW NEW
+
+        this.props.dispatch({  // updates user's divice registration token in database
             type: 'GET_REGISTRATION_TOKEN'
         })
         
         this.requestUserPermission()
-        // if (this.props.reduxState.respondingTo) {
-        //     this.setState({
-        //         isResponding: true
-        //     })
-        // } else {
-        //     this.setState({
-        //         isResponding: false
-        //     })
-        // }
-        //console.log('favoriteUrl:', this.props.reduxState.favoriteUrl)
     }
 
     render() {
-        //console.log('in CameraPage render. reduxState:', this.props.reduxState)
+        console.log('this.props.reduxState.userData.inbox:', this.props.reduxState.userData.inbox)
         return (
             <>
                 <View style={styles.container}>
@@ -273,7 +247,7 @@ class CameraPage extends React.Component {
                                                 color='black'
                                             /> 
                                         :
-                                            <Text style={styles.inboxText}>{this.props.reduxState.inbox.length}</Text>
+                                            <Text style={styles.inboxText}>{this.props.reduxState.userData.inbox ? Object.keys(this.props.reduxState.userData.inbox).length : 0}</Text>
                                         }
                                     </TouchableOpacity>
                                     <TouchableOpacity onPress={this.takePicture.bind(this)}>

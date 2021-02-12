@@ -7,6 +7,7 @@ import capturedImageReducer from './capturedImageReducer';
 import loginMessageReducer from './loginMessageReducer';
 import registrationTokenReducer from './registrationTokenReducer';
 import userIDReducer from './userIDReducer';
+import userDataReducer from './userDataReducer';
 
 const rootReducer = combineReducers({
     inbox: inboxReducer,
@@ -15,7 +16,8 @@ const rootReducer = combineReducers({
     capturedImage: capturedImageReducer,
     loginMessage: loginMessageReducer,
     registrationToken: registrationTokenReducer,
-    userID: userIDReducer
+    userID: userIDReducer,
+    userData: userDataReducer
 })
 
 export default rootReducer;

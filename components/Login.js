@@ -3,13 +3,11 @@ import { View, Text, TextInput, ActivityIndicator, Button, ImageBackground, Touc
 import { connect } from 'react-redux';
 import AsyncStorage from '@react-native-community/async-storage';
 import { Image, KeyboardAvoidingView, ScrollView, TouchableWithoutFeedback, Keyboard } from 'react-native';
-import { getPhoneNumber } from 'react-native-device-info';
 import PhoneInput from 'react-native-phone-number-input';
 
 import messaging from '@react-native-firebase/messaging';
 import database from '@react-native-firebase/database';
 import auth from '@react-native-firebase/auth';
-import { absoluteFill } from 'react-native-extended-stylesheet';
 
 import colors from '../assets/colors';
 
@@ -20,7 +18,7 @@ const Login = props => {
     const [isLoginLoading, setIsLoginLoading] = useState(false);
     const [confirm, setConfirm] = useState(null);
     const [code, setCode] = useState('');
-    const [loginMode, setLoginMode] = useState('');
+    const [loginMode, setLoginMode] = useState('phone');
     const [emailInput, setEmailInput] = useState('');
     const [passwordInput, setPasswordInput] = useState('');
 
@@ -36,20 +34,20 @@ const Login = props => {
     checkIfBanned = async (uid) => {
         console.log('in checkIfBanned. uid:', uid)
         return await database()
-        .ref(`/users/${uid}/unbanTime`)
-        .once('value')
-        .then(snapshot => {
-            const unbanTime = snapshot.val()
-            const currentTime = new Date().getTime()
-            console.log('unbanTime:', unbanTime)
-            if (currentTime < unbanTime) {
-                console.log('user is banned')
-                return true
-            } else {
-                console.log('user is not banned')
-                return false
-            }
-        })
+            .ref(`/users/${uid}/unbanTime`)
+            .once('value')
+            .then(snapshot => {
+                const unbanTime = snapshot.val()
+                const currentTime = new Date().getTime()
+                console.log('unbanTime:', unbanTime)
+                if (currentTime < unbanTime) {
+                    console.log('user is banned')
+                    return true
+                } else {
+                    console.log('user is not banned')
+                    return false
+                }
+            })
     }
 
     sendCode = async () => {
@@ -86,13 +84,15 @@ const Login = props => {
                 updateRegistrationToken(user)
                 await AsyncStorage.setItem("user", JSON.stringify(user))
                 setMessage('')
+                await props.dispatch({
+                    type: 'GET_USER_DATA',
+                    payload: user.uid
+                })
                 props.history.push('/camera')
             } else {
                 setIsLoginLoading(false)
                 setMessage('You have been temporarily banned for spreading bad vibes. Try again later.')
             }
-            
-            
         } catch (error) {
             setIsLoginLoading(false)
             console.log('Invalid code.')
@@ -172,10 +172,7 @@ const Login = props => {
     }
 
     updateRegistrationToken = async (user) => {
-        console.log('in updateRegistrationToken', user)
-        console.log('user.uid:', user.uid)
         let registrationToken = await messaging().getToken()
-        console.log('updateRegistrationToken token:', registrationToken)
         await database()
             .ref(`/users/${user.uid}`)
             .update({
@@ -245,7 +242,6 @@ const Login = props => {
     useEffect(() =>  {
         checkIfLoggedIn()
         console.log('loginMode:', loginMode)
-        // getDevicePhoneNumber() // this doesn't quite work yet. Should figure out later
     }, [])
 
     if (loginMode === '') {
@@ -377,21 +373,11 @@ const Login = props => {
 
                     {!confirm ?
                     <>    
-                        {/* <TextInput
-                            style={styles.input}
-                            onChangeText={text => setPhoneNumber(text)}
-                            placeholder='phone number'
-                            keyboardType='phone-pad'
-                            autoCapitalize='none'
-                        /> */}
                         <PhoneInput
-                            // style={styles.input}
                             ref={phoneInput}
                             onChangeText={text => setPhoneNumber(text)}
                             defaultCode={"US"}
                             placeholder={"1-800-your-mom"}
-                            //textInputProps={styles.input}
-                            //textContainerStyle={styles.phoneInputText}
                             containerStyle={styles.phoneInput}
                             layout='second'
                             autoFocus
@@ -491,7 +477,6 @@ const styles = StyleSheet.create({
         color: colors.red, 
         fontSize: 20, 
         marginHorizontal: '15%', 
-        //marginTop: Platform.OS === 'ios' ? '45%' : '35%', 
         textAlign: 'center',
         height: Platform.OS === 'ios' ? '10%' : '12%',
         fontFamily: 'Rubik-Regular'
@@ -502,11 +487,9 @@ const styles = StyleSheet.create({
         top: '35%',
         width: '100%',
         height: '18%', // 17% cuts off the q on android and 19% makes the logo wider on android
-        //marginTop: '5%',
         marginBottom: '5%'
     },
     input: { 
-        //marginBottom: 2, 
         fontSize: 20, 
         borderWidth: 0, 
         borderColor: 'black', 
@@ -514,7 +497,6 @@ const styles = StyleSheet.create({
         padding: 12, 
         width: '75%',
         height: 50,
-        //marginBottom: '3%',
         fontFamily: 'Rubik-Regular',
         textAlign: 'center'
     },
@@ -575,7 +557,6 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         marginTop: 10,
-        //marginBottom: 6
     },
     wideButtonGreen: {
         width: '80%',
@@ -587,7 +568,6 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         marginTop: 10,
-        //marginBottom: 6
     },
     wheel: {
         alignSelf: 'center',
