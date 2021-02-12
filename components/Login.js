@@ -3,13 +3,11 @@ import { View, Text, TextInput, ActivityIndicator, Button, ImageBackground, Touc
 import { connect } from 'react-redux';
 import AsyncStorage from '@react-native-community/async-storage';
 import { Image, KeyboardAvoidingView, ScrollView, TouchableWithoutFeedback, Keyboard } from 'react-native';
-import { getPhoneNumber } from 'react-native-device-info';
 import PhoneInput from 'react-native-phone-number-input';
 
 import messaging from '@react-native-firebase/messaging';
 import database from '@react-native-firebase/database';
 import auth from '@react-native-firebase/auth';
-import { absoluteFill } from 'react-native-extended-stylesheet';
 
 import colors from '../assets/colors';
 
@@ -20,7 +18,7 @@ const Login = props => {
     const [isLoginLoading, setIsLoginLoading] = useState(false);
     const [confirm, setConfirm] = useState(null);
     const [code, setCode] = useState('');
-    const [loginMode, setLoginMode] = useState('');
+    const [loginMode, setLoginMode] = useState('phone');
     const [emailInput, setEmailInput] = useState('');
     const [passwordInput, setPasswordInput] = useState('');
 

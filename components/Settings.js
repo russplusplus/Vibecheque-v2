@@ -11,17 +11,6 @@ class Report extends React.Component {
         accessToken: ''
     }
 
-    getToken = async () => {
-        try {
-            const token = await AsyncStorage.getItem("access_token")
-            console.log('getToken token:', token);
-            return token;
-        } catch (error) {
-            console.log('AsyncStorage retrieval error:', error.message);
-        }
-        return '(missing token)';
-    }
-
     async componentDidMount() {
         console.log('in Report componentDidMount')
         await this.getToken()
@@ -56,7 +45,7 @@ class Report extends React.Component {
                             textAlign:'center', 
                             fontFamily: 'Rubik-Regular'
                         }}>
-                            Bad Vibes?
+                            Settings
                         </Text>
                         <Text style={{
                             fontSize:20, 
