@@ -18,7 +18,7 @@ function* rootSaga() {
         deleteImage(),
         deleteFavorite(),
         getUserData(),
-        indicateFavorite()
+        indicateFavorite(),
     ]);
   }
 

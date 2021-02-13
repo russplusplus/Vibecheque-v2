@@ -15,7 +15,8 @@ exports.addUser = functions.auth.user().onCreate(user => {
       phoneNumber: user.phoneNumber,
       settings: {
         location: false,
-        distance: 500
+        distance: 500,
+        leftHandedMode: false
       }
   });
 });

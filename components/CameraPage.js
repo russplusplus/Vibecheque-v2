@@ -14,6 +14,7 @@ import auth from '@react-native-firebase/auth';
 import Logout from './Logout';
 import ReviewImage from './ReviewImage';
 import NoFavorite from './NoFavorite';
+import Settings from './Settings';
 
 import colors from '../assets/colors';
 
@@ -27,6 +28,7 @@ class CameraPage extends React.Component {
         isLogoutMode: false,
         isReviewMode: false,
         isNoFavoriteMode: false,
+        isSettingsMode: false,
         cameraType: RNCamera.Constants.Type.back,
         capturedImageUri: '',
         uid: '',
@@ -142,6 +144,13 @@ class CameraPage extends React.Component {
         }
     }
 
+    toggleSettingsMode = () => {
+        console.log('in toggleSettingsMode. isSettingsMode:', this.state.isSettingsMode)
+        this.setState({
+            isSettingsMode: this.state.isSettingsMode ? false : true
+        })
+    }
+
     requestUserPermission = async () => {
         const settings = await messaging().requestPermission();
 
@@ -181,9 +190,10 @@ class CameraPage extends React.Component {
         return (
             <>
                 <View style={styles.container}>
-                    <Logout visible={this.state.isLogoutMode} logout={this.logout} toggleLogoutMode={this.toggleLogoutMode}/>
-                    <ReviewImage visible={this.state.isReviewMode} sendImage={this.sendImage} toggleReviewMode={this.toggleReviewMode} capturedImageUri={this.state.capturedImageUri} isSending={this.state.isSending}/>
+                    <Logout visible={this.state.isLogoutMode} toggleLogoutMode={this.toggleLogoutMode} logout={this.logout}/>
+                    <ReviewImage visible={this.state.isReviewMode} toggleReviewMode={this.toggleReviewMode} sendImage={this.sendImage} capturedImageUri={this.state.capturedImageUri} isSending={this.state.isSending}/>
                     <NoFavorite visible={this.state.isNoFavoriteMode} toggleNoFavoriteMode={this.toggleNoFavoriteMode}/>
+                    <Settings visible={this.state.isSettingsMode} toggleSettingsMode={this.toggleSettingsMode}/>
                     <RNCamera
                         ref={ref => {
                             this.camera = ref;
@@ -222,10 +232,10 @@ class CameraPage extends React.Component {
 
                                     </Text>
                                 }
-                                <TouchableOpacity onPress={this.reverseCamera}>
+                                <TouchableOpacity onPress={this.toggleSettingsMode}>
                                     <Ionicons
-                                        name='md-reverse-camera'
-                                        style={styles.switchCameraIcon}
+                                        name='ios-settings'
+                                        style={styles.favoriteIcon}
                                     />
                                 </TouchableOpacity>
                             </View>
@@ -240,28 +250,38 @@ class CameraPage extends React.Component {
                                 </View>
                             :
                                 <View style={styles.bottomIcons}>
-                                    <TouchableOpacity onPress={this.viewInbox} style={styles.viewInbox}>
-                                        {this.state.isInboxLoading ? 
-                                            <ActivityIndicator
-                                                style={styles.wheel}
-                                                color='black'
-                                            /> 
-                                        :
-                                            <Text style={styles.inboxText}>{this.props.reduxState.userData.inbox ? Object.keys(this.props.reduxState.userData.inbox).length : 0}</Text>
-                                        }
-                                    </TouchableOpacity>
-                                    <TouchableOpacity onPress={this.takePicture.bind(this)}>
-                                        <FontAwesome
-                                            name='circle-thin'
-                                            style={styles.captureIcon}
-                                        />
-                                    </TouchableOpacity>
-                                    <TouchableOpacity onPress={this.viewFavorite} style={styles.viewFavorite}>
-                                        <Ionicons
-                                            name='md-star'
-                                            style={styles.favoriteIcon}
-                                        />
-                                    </TouchableOpacity>
+                                    <View style={styles.switchCameraContainer}>
+                                        <TouchableOpacity onPress={this.reverseCamera}>
+                                            <Ionicons
+                                                name='md-reverse-camera'
+                                                style={styles.switchCameraIcon}
+                                            />
+                                        </TouchableOpacity>
+                                    </View>
+                                    <View style={styles.bottomBottomIcons}>
+                                        <TouchableOpacity onPress={this.viewInbox} style={styles.viewInbox}>
+                                            {this.state.isInboxLoading ? 
+                                                <ActivityIndicator
+                                                    style={styles.wheel}
+                                                    color='black'
+                                                /> 
+                                            :
+                                                <Text style={styles.inboxText}>{this.props.reduxState.userData.inbox ? Object.keys(this.props.reduxState.userData.inbox).length : 0}</Text>
+                                            }
+                                        </TouchableOpacity>
+                                        <TouchableOpacity onPress={this.takePicture.bind(this)}>
+                                            <FontAwesome
+                                                name='circle-thin'
+                                                style={styles.captureIcon}
+                                            />
+                                        </TouchableOpacity>
+                                        <TouchableOpacity onPress={this.viewFavorite} style={styles.viewFavorite}>
+                                            <Ionicons
+                                                name='md-star'
+                                                style={styles.favoriteIcon}
+                                            />
+                                        </TouchableOpacity>
+                                    </View>
                                 </View>
                             }
                         </View>
@@ -288,16 +308,34 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         margin: '3%',
         marginTop: Platform.OS === 'ios' ? '8%' : '3%',
-        marginBottom: Platform.OS === 'ios' ? '5%' : '3%'
+        marginBottom: Platform.OS === 'ios' ? '5%' : '3%',
+        // borderWidth: 3,
+        // borderColor: 'pink'
     },
     topIcons: {
         flexDirection: 'row',
         justifyContent: 'space-between'
     },
     bottomIcons: {
+        flexDirection: 'column',
+        justifyContent: 'flex-end',
+        //alignItems: 'flex-end',
+        // borderWidth: 2,
+        // borderColor: 'blue'
+    },
+    switchCameraContainer: {
+        flexDirection: 'row',
+        justifyContent: 'flex-end',
+        alignItems: 'flex-start',
+        marginBottom: 2
+        //paddingRight: 3
+    },
+    bottomBottomIcons: {
         flexDirection: 'row',
         justifyContent: 'space-between',
-        alignItems: 'flex-end'
+        alignItems: 'flex-end',
+        // borderWidth: 2,
+        // borderColor: 'pink'
     },
     respondingBottomIcons: {
         flexDirection: 'row',
@@ -336,7 +374,7 @@ const styles = StyleSheet.create({
     },
     switchCameraIcon: {
         color: 'white', 
-        fontSize: 44
+        fontSize: 48
     },
     inboxText: {
         color: 'black',
