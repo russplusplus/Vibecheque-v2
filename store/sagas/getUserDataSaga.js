@@ -18,6 +18,10 @@ function* getUserData() {
         type: 'SET_USER_DATA',
         payload: snapshot.val()
     })
+    yield put({
+        type: 'SET_NEW_SETTINGS',
+        payload: snapshot.val().settings
+    })
 }
 
 function* getUserDataSaga() {

@@ -4,16 +4,50 @@ import Modal from 'react-native-modal';
 import { Switch } from 'react-native-switch';
 import colors from '../assets/colors';
 import { connect } from 'react-redux';
+import database from '@react-native-firebase/database';
 
 class Settings extends React.Component {
 
-    state = {
-        settings: this.props.reduxState.userData.settings
+    toggleLocation = (val) => {
+        console.log('in toggleLocation. val:', val)
+        this.props.dispatch({
+            type: 'SET_NEW_SETTINGS',
+            payload: {
+                ...this.props.reduxState.newSettings,
+                location: val
+            }
+        })
+    }
+
+    saveSettings = async () => {
+        console.log('in saveSettings')
+
+        // update database
+        await database()
+            .ref(`users/${this.props.reduxState.userID}/settings`)
+            .set(this.props.reduxState.newSettings)
+
+        // update redux userData, rather than doing another GET_USER_DATA
+        await this.props.dispatch({
+            type: 'SET_USER_DATA',
+            payload: {
+                ...this.props.reduxState.userData,
+                settings: this.props.reduxState.newSettings
+            }
+        })
+        this.props.toggleSettingsMode()
+    }
+
+    cancel = async () => {
+        await this.props.dispatch({
+            type: 'SET_NEW_SETTINGS',
+            payload: this.props.reduxState.userData.settings
+        })
+        this.props.toggleSettingsMode()
     }
 
     componentDidMount() {
-        console.log('settings:', this.state.settings)
-        console.log('typeOf location:', typeOf(this.state.settings.location))
+       
     }
 
     render() {
@@ -21,29 +55,31 @@ class Settings extends React.Component {
             <Modal isVisible={this.props.visible} animationIn='slideInDown' animationOut='slideOutUp'>
                 <View style={styles.container}>
                     <Text style={styles.title}>Settings</Text>
-                    <View style={styles.settingRow}>
-                        <Text style={styles.setting}>Location:</Text>
-                        <Switch 
-                            // value={this.state.settings.location}
-                            onValueChange={(val) => console.log(val)}
-                        ></Switch>
-                        {/* <Text style={styles.setting}>{this.state.settings.location ? 'On' : 'Off'}</Text> */}
-                    </View>
-                    {this.state.settings.location ? 
+                    <View>
                         <View style={styles.settingRow}>
                             <Text style={styles.setting}>Location:</Text>
-                            {/* <Text style={styles.setting}>{this.state.settings.location ? 'On' : 'Off'}</Text> */}
+                            <Switch 
+                                value={this.props.reduxState.newSettings.location}
+                                onValueChange={(val) => this.toggleLocation(val)}
+                                switchWidthMultiplier={2.2} // multipled by the `circleSize` prop to calculate total width of the Switch
+                                switchLeftPx={3} // denominator for logic when sliding to TRUE position. Higher number = more space from RIGHT of the circle to END of the slider
+                                switchRightPx={3} // denominator for logic when sliding to FALSE position. Higher number = more space from LEFT of the circle to BEGINNING of the slider
+                                backgroundActive={colors.green}
+                                innerCircleStyle={{ alignItems: "center", justifyContent: "center" }} // style for inner animated circle for what you (may) be rendering inside the circle
+                                outerCircleStyle={styles.outerCircle} // style for outer animated circle
+                                renderActiveText={true}
+                                renderInActiveText={true}
+                                useNativeDriver={true}
+                            ></Switch>
                         </View>
-                    :
-                        <View></View>
-                    }
-                    <View style={styles.settingRow}>
-                        <Text style={styles.setting}>Location:</Text>
-                        {/* <Text style={styles.setting}>{this.state.settings.location ? 'On' : 'Off'}</Text> */}
                     </View>
-
+                    {/* {this.props.reduxState.newSettings.location ?
+                    <Text>location is on</Text>
+                    :
+                    <Text>location is off</Text>
+                    } */}
                     <TouchableOpacity 
-                        onPress={() => this.props.toggleSettingsMode()} 
+                        onPress={() => this.saveSettings()} 
                         style={styles.yesButton}>
                         <Text
                             style={styles.yesButtonText}>
@@ -51,7 +87,7 @@ class Settings extends React.Component {
                         </Text>
                     </TouchableOpacity>
                     <TouchableOpacity 
-                        onPress={() => this.props.toggleSettingsMode()} 
+                        onPress={() => this.cancel()} 
                         style={styles.cancelButton}>
                         <Text
                             style={styles.cancelButtonText}>
@@ -87,9 +123,11 @@ const styles = StyleSheet.create({
         paddingBottom: '20%'
     },
     settingRow: {
-        width: '75%',
+        width: '85%',
         flexDirection: 'row',
         justifyContent: 'space-between',
+        //borderWidth: 2,
+        paddingLeft: 36
     },
     setting: {
         display: 'flex',
@@ -97,6 +135,11 @@ const styles = StyleSheet.create({
         textAlign: 'left',
         fontFamily: 'Rubik-Regular'
     },
+    outerCircle: {
+        paddingRight: 0,
+        margin: 0,
+        //borderWidth: 2,
+    }, 
     yesButton: {
         width: '75%',
         height: 40,

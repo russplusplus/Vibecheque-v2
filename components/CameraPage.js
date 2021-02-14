@@ -9,7 +9,6 @@ import AsyncStorage from '@react-native-community/async-storage';
 
 import storage from '@react-native-firebase/storage';
 import messaging from '@react-native-firebase/messaging';
-import auth from '@react-native-firebase/auth';
 
 import Logout from './Logout';
 import ReviewImage from './ReviewImage';
@@ -144,18 +143,19 @@ class CameraPage extends React.Component {
         }
     }
 
-    toggleSettingsMode = () => {
-        console.log('in toggleSettingsMode. isSettingsMode:', this.state.isSettingsMode)
+    toggleSettingsMode = async () => {
+        
+        console.log('in toggleSettingsMode. reduxState.newSettings:', this.props.reduxState.newSettings)
         this.setState({
             isSettingsMode: this.state.isSettingsMode ? false : true
         })
     }
 
     requestUserPermission = async () => {
-        const settings = await messaging().requestPermission();
+        const permissionSettings = await messaging().requestPermission();
 
-        if (settings) {
-            console.log('Permission settings:', settings);
+        if (permissionSettings) {
+            console.log('Permission settings:', permissionSettings);
         }
     }
 
@@ -172,11 +172,9 @@ class CameraPage extends React.Component {
             payload: uid
         })
 
-        //NEW SAGA SCHEME - CONSOLIDATE ALL USER INFO INTO ONE DATABASE CALL
-        this.props.dispatch({
+        await this.props.dispatch({
             type: 'GET_USER_DATA'
         })
-        //NEW NEW NEW NEW
 
         this.props.dispatch({  // updates user's divice registration token in database
             type: 'GET_REGISTRATION_TOKEN'
@@ -186,7 +184,7 @@ class CameraPage extends React.Component {
     }
 
     render() {
-        console.log('this.props.reduxState.userData.inbox:', this.props.reduxState.userData.inbox)
+        //console.log('this.props.reduxState.userData.inbox:', this.props.reduxState.userData.inbox)
         return (
             <>
                 <View style={styles.container}>
