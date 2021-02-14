@@ -8,6 +8,17 @@ import database from '@react-native-firebase/database';
 
 class Settings extends React.Component {
 
+    toggleLeftHandedMode = (val) => {
+        console.log('in toggleLeftHandedMode. val:', val)
+        this.props.dispatch({
+            type: 'SET_NEW_SETTINGS',
+            payload: {
+                ...this.props.reduxState.newSettings,
+                leftHandedMode: val
+            }
+        })
+    }
+
     toggleLocation = (val) => {
         console.log('in toggleLocation. val:', val)
         this.props.dispatch({
@@ -55,29 +66,48 @@ class Settings extends React.Component {
             <Modal isVisible={this.props.visible} animationIn='slideInDown' animationOut='slideOutUp'>
                 <View style={styles.container}>
                     <Text style={styles.title}>Settings</Text>
-                    <View>
-                        <View style={styles.settingRow}>
-                            <Text style={styles.setting}>Location:</Text>
-                            <Switch 
-                                value={this.props.reduxState.newSettings.location}
-                                onValueChange={(val) => this.toggleLocation(val)}
-                                switchWidthMultiplier={2.2} // multipled by the `circleSize` prop to calculate total width of the Switch
-                                switchLeftPx={3} // denominator for logic when sliding to TRUE position. Higher number = more space from RIGHT of the circle to END of the slider
-                                switchRightPx={3} // denominator for logic when sliding to FALSE position. Higher number = more space from LEFT of the circle to BEGINNING of the slider
-                                backgroundActive={colors.green}
-                                innerCircleStyle={{ alignItems: "center", justifyContent: "center" }} // style for inner animated circle for what you (may) be rendering inside the circle
-                                outerCircleStyle={styles.outerCircle} // style for outer animated circle
-                                renderActiveText={true}
-                                renderInActiveText={true}
-                                useNativeDriver={true}
-                            ></Switch>
-                        </View>
+                    <View style={styles.settingRow}>
+                        <Text style={styles.setting}>Left-handed mode:</Text>
+                        <Switch 
+                            value={this.props.reduxState.newSettings.leftHandedMode}
+                            onValueChange={(val) => this.toggleLeftHandedMode(val)}
+                            switchWidthMultiplier={2.2} // multipled by the `circleSize` prop to calculate total width of the Switch
+                            switchLeftPx={4} // denominator for logic when sliding to TRUE position. Higher number = more space from RIGHT of the circle to END of the slider
+                            switchRightPx={4} // denominator for logic when sliding to FALSE position. Higher number = more space from LEFT of the circle to BEGINNING of the slider
+                            backgroundActive={colors.green}
+                            innerCircleStyle={{ alignItems: "center", justifyContent: "center" }} // style for inner animated circle for what you (may) be rendering inside the circle
+                            outerCircleStyle={styles.outerCircle} // style for outer animated circle
+                            renderActiveText={true}
+                            renderInActiveText={true}
+                            useNativeDriver={true}
+                        ></Switch>
                     </View>
-                    {/* {this.props.reduxState.newSettings.location ?
-                    <Text>location is on</Text>
+                    <View style={styles.settingRow}>
+                        <Text style={styles.setting}>Location:</Text>
+                        <Switch 
+                            value={this.props.reduxState.newSettings.location}
+                            onValueChange={(val) => this.toggleLocation(val)}
+                            switchWidthMultiplier={2.2} // multipled by the `circleSize` prop to calculate total width of the Switch
+                            switchLeftPx={4} // denominator for logic when sliding to TRUE position. Higher number = more space from RIGHT of the circle to END of the slider
+                            switchRightPx={4} // denominator for logic when sliding to FALSE position. Higher number = more space from LEFT of the circle to BEGINNING of the slider
+                            backgroundActive={colors.green}
+                            innerCircleStyle={{ alignItems: "center", justifyContent: "center" }} // style for inner animated circle for what you (may) be rendering inside the circle
+                            outerCircleStyle={styles.outerCircle} // style for outer animated circle
+                            renderActiveText={true}
+                            renderInActiveText={true}
+                            useNativeDriver={true}
+                        ></Switch>
+                    </View>
+                    {this.props.reduxState.newSettings.location ?
+                    <View style={styles.settingRow}>
+                        <Text style={styles.setting}>Max distance:</Text>
+                        
+                    </View>
                     :
-                    <Text>location is off</Text>
-                    } */}
+                    <View style={styles.settingRow}>
+                        <Text style={styles.setting}> </Text>
+                    </View>
+                    }
                     <TouchableOpacity 
                         onPress={() => this.saveSettings()} 
                         style={styles.yesButton}>
@@ -123,15 +153,16 @@ const styles = StyleSheet.create({
         paddingBottom: '20%'
     },
     settingRow: {
-        width: '85%',
+        width: '100%',
         flexDirection: 'row',
         justifyContent: 'space-between',
         //borderWidth: 2,
-        paddingLeft: 36
+        paddingLeft: 0,
+        paddingBottom: 10
     },
     setting: {
         display: 'flex',
-        fontSize: 26,
+        fontSize: 20,
         textAlign: 'left',
         fontFamily: 'Rubik-Regular'
     },
