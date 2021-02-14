@@ -7,7 +7,7 @@ class Logout extends React.Component {
 
     render() {
         return (
-            <Modal isVisible={this.props.visible} animationIn='slideInUp' animationOut='slideOutDown'>
+            <Modal isVisible={this.props.visible} animationIn='slideInDown' animationOut='slideOutUp'>
                 <View style={styles.container}>
                     <Text style={styles.text}>Log out?</Text>
                     <TouchableOpacity 
