@@ -33,8 +33,7 @@ class Favorite extends React.Component {
     }
 
     componentDidMount() {
-        console.log('in ViewFavorite comonentDidMount.', String(this.props.reduxState.favoriteUrl._ref))
-        console.log('type:', typeof(this.props.reduxState.favoriteUrl))
+        
     }
     
     render() {

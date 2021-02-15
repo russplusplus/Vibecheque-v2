@@ -1,15 +1,23 @@
 import React from 'react';
-import { View, Text, TextInput, StyleSheet, Button, Platform, TouchableOpacity, ImageBackground } from 'react-native';
+import { View, Text, TextInput, StyleSheet, Button, Platform, TouchableOpacity, ActivityIndicator } from 'react-native';
 import Modal from 'react-native-modal';
-import { Switch } from 'react-native-switch';
+
+import ToggleSwitch from 'toggle-switch-react-native';
+import Slider from '@react-native-community/slider';
+
 import colors from '../assets/colors';
 import { connect } from 'react-redux';
 import database from '@react-native-firebase/database';
 
 class Settings extends React.Component {
 
+    state = {
+        isSaving: false
+    }
+
     toggleLeftHandedMode = (val) => {
         console.log('in toggleLeftHandedMode. val:', val)
+        console.log('typeof val:', typeof(val))
         this.props.dispatch({
             type: 'SET_NEW_SETTINGS',
             payload: {
@@ -30,8 +38,22 @@ class Settings extends React.Component {
         })
     }
 
+    changeDistance = (val) => {
+        console.log('in changeDistance. Math.round(val):', Math.round(val))
+        this.props.dispatch({
+            type: 'SET_NEW_SETTINGS',
+            payload: {
+                ...this.props.reduxState.newSettings,
+                distance: val
+            }
+        })
+    }
+
     saveSettings = async () => {
         console.log('in saveSettings')
+        this.setState({
+            isSaving: true
+        })
 
         // update database
         await database()
@@ -47,6 +69,9 @@ class Settings extends React.Component {
             }
         })
         this.props.toggleSettingsMode()
+        this.setState({
+            isSaving: false
+        })
     }
 
     cancel = async () => {
@@ -67,54 +92,67 @@ class Settings extends React.Component {
                 <View style={styles.container}>
                     <Text style={styles.title}>Settings</Text>
                     <View style={styles.settingRow}>
+                        <Text style={styles.setting}> </Text>
+                    </View>
+                    <View style={styles.settingRow}>
                         <Text style={styles.setting}>Left-handed mode:</Text>
-                        <Switch 
-                            value={this.props.reduxState.newSettings.leftHandedMode}
-                            onValueChange={(val) => this.toggleLeftHandedMode(val)}
-                            switchWidthMultiplier={2.2} // multipled by the `circleSize` prop to calculate total width of the Switch
-                            switchLeftPx={4} // denominator for logic when sliding to TRUE position. Higher number = more space from RIGHT of the circle to END of the slider
-                            switchRightPx={4} // denominator for logic when sliding to FALSE position. Higher number = more space from LEFT of the circle to BEGINNING of the slider
-                            backgroundActive={colors.green}
-                            innerCircleStyle={{ alignItems: "center", justifyContent: "center" }} // style for inner animated circle for what you (may) be rendering inside the circle
-                            outerCircleStyle={styles.outerCircle} // style for outer animated circle
-                            renderActiveText={true}
-                            renderInActiveText={true}
-                            useNativeDriver={true}
-                        ></Switch>
+                        <ToggleSwitch
+                            isOn={this.props.reduxState.newSettings.leftHandedMode}
+                            onColor={colors.green}
+                            offColor="grey"
+                            size="medium"
+                            onToggle={(isOn) => this.toggleLeftHandedMode(isOn)}
+                        />
                     </View>
                     <View style={styles.settingRow}>
                         <Text style={styles.setting}>Location:</Text>
-                        <Switch 
-                            value={this.props.reduxState.newSettings.location}
-                            onValueChange={(val) => this.toggleLocation(val)}
-                            switchWidthMultiplier={2.2} // multipled by the `circleSize` prop to calculate total width of the Switch
-                            switchLeftPx={4} // denominator for logic when sliding to TRUE position. Higher number = more space from RIGHT of the circle to END of the slider
-                            switchRightPx={4} // denominator for logic when sliding to FALSE position. Higher number = more space from LEFT of the circle to BEGINNING of the slider
-                            backgroundActive={colors.green}
-                            innerCircleStyle={{ alignItems: "center", justifyContent: "center" }} // style for inner animated circle for what you (may) be rendering inside the circle
-                            outerCircleStyle={styles.outerCircle} // style for outer animated circle
-                            renderActiveText={true}
-                            renderInActiveText={true}
-                            useNativeDriver={true}
-                        ></Switch>
+                        <ToggleSwitch
+                            isOn={this.props.reduxState.newSettings.location}
+                            onColor={colors.green}
+                            offColor="grey"
+                            size="medium"
+                            onToggle={(isOn) => this.toggleLocation(isOn)}
+                        />
                     </View>
                     {this.props.reduxState.newSettings.location ?
-                    <View style={styles.settingRow}>
-                        <Text style={styles.setting}>Max distance:</Text>
-                        
+                    <View style={styles.settingDistanceRow}>
+                        <View style={{
+                            flexDirection: 'row',
+                            justifyContent: 'space-between'
+                        }}>
+                            <Text style={styles.setting}>Max distance:</Text>
+                            <Text style={styles.setting}>{this.props.reduxState.newSettings.distance} miles</Text>
+                        </View>
+                        <Slider
+                            value={this.props.reduxState.newSettings.distance}
+                            onValueChange={(val) => this.changeDistance(Math.round(val))}
+                            style={{width: 300, height: 60}}
+                            minimumValue={1}
+                            maximumValue={100}
+                            minimumTrackTintColor={colors.green}
+                            maximumTrackTintColor="grey"
+                        />
                     </View>
                     :
-                    <View style={styles.settingRow}>
+                    <View style={styles.settingDistanceRow}>
                         <Text style={styles.setting}> </Text>
                     </View>
                     }
                     <TouchableOpacity 
                         onPress={() => this.saveSettings()} 
                         style={styles.yesButton}>
+                        {this.state.isSaving ?
+                        <ActivityIndicator
+                            style={styles.wheel}
+                            color='black'
+                        />
+                        :
                         <Text
                             style={styles.yesButtonText}>
                             Save
                         </Text>
+                        }
+                        
                     </TouchableOpacity>
                     <TouchableOpacity 
                         onPress={() => this.cancel()} 
@@ -154,11 +192,20 @@ const styles = StyleSheet.create({
     },
     settingRow: {
         width: '100%',
+        //height: 40,
         flexDirection: 'row',
         justifyContent: 'space-between',
         //borderWidth: 2,
         paddingLeft: 0,
-        paddingBottom: 10
+        paddingBottom: 16
+    },
+    settingDistanceRow: {
+        width: '100%',
+        height: 80,
+        flexDirection: 'column',
+        //alignItems: 'flex-start',
+        paddingLeft: 0,
+        //paddingBottom: 16,
     },
     setting: {
         display: 'flex',
@@ -200,7 +247,11 @@ const styles = StyleSheet.create({
     cancelButtonText: {
         fontSize: 26,
         fontFamily: 'Rubik-Regular'
-    }
+    },
+    wheel: {
+        alignSelf: 'center',
+        transform: Platform.OS === 'ios' ? [{ scale: 1 }] : [{ scale: 1 }]
+    },
 })
 
 const mapReduxStateToProps = reduxState => ({

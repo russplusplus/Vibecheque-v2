@@ -43,7 +43,7 @@ class CameraPage extends React.Component {
         })
     }
 
-    reverseCamera = () => {
+    switchCamera = () => {
         this.setState({
             // these might just be 1 or 0, look into that with a real device
             cameraType: this.state.cameraType === RNCamera.Constants.Type.back ? RNCamera.Constants.Type.front : RNCamera.Constants.Type.back
@@ -184,7 +184,7 @@ class CameraPage extends React.Component {
     }
 
     render() {
-        //console.log('this.props.reduxState.userData.inbox:', this.props.reduxState.userData.inbox)
+        console.log('leftHandedMode:', this.props.reduxState.userData.settings.leftHandedMode)
         return (
             <>
                 <View style={styles.container}>
@@ -248,8 +248,11 @@ class CameraPage extends React.Component {
                                 </View>
                             :
                                 <View style={styles.bottomIcons}>
-                                    <View style={styles.switchCameraContainer}>
-                                        <TouchableOpacity onPress={this.reverseCamera}>
+                                    <View style={{
+                                        alignItems: this.props.reduxState.userData.settings.leftHandedMode ? 'flex-start' : 'flex-end',
+                                        marginBottom: 2,
+                                    }}>
+                                        <TouchableOpacity onPress={this.switchCamera}>
                                             <Ionicons
                                                 name='md-reverse-camera'
                                                 style={styles.switchCameraIcon}
