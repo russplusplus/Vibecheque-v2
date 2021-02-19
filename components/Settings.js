@@ -152,7 +152,6 @@ class Settings extends React.Component {
                             Save
                         </Text>
                         }
-                        
                     </TouchableOpacity>
                     <TouchableOpacity 
                         onPress={() => this.cancel()} 
@@ -172,7 +171,7 @@ const styles = StyleSheet.create({
     container: {
         flex:1, 
         alignItems: 'center', 
-        justifyContent: 'center', 
+        justifyContent: 'flex-end', 
         marginLeft: '5%', 
         marginRight: '5%', 
         marginTop: '40%', 
@@ -188,7 +187,7 @@ const styles = StyleSheet.create({
         fontSize: 36, 
         textAlign: 'center', 
         fontFamily: 'Rubik-Regular',
-        paddingBottom: '20%'
+        //paddingBottom: '20%'
     },
     settingRow: {
         width: '100%',
