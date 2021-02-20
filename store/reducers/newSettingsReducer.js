@@ -6,7 +6,7 @@ const init = {
 
 const newSettingsReducer = (state = init, action) => {
     if (action.type === 'SET_NEW_SETTINGS') {
-        console.log('in SET_NEW_SETTINGS:', action.payload)
+        //console.log('in SET_NEW_SETTINGS:', action.payload)
         return action.payload
     } else {
         return state;

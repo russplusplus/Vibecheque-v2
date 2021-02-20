@@ -28,17 +28,6 @@ class ViewInbox extends React.Component {
     }
     
     handlePressAnywhere = () => {
-        
-        //if the recieved image is not a response, prepare for responding by dispatching to redux
-        // if (!this.props.reduxState.inbox[0].is_response) {
-        //     this.props.dispatch({                 //still need to test if this works
-        //         type: 'SET_RESPONDING',
-        //         payload: { senderId: senderId }
-        //     })
-        // }
-        
-        //console.log('senderId:', this.props.reduxState.senderId)
-
         this.props.dispatch({    //dispatch is async- if it responds before the page is changed, there will be an error because the background of the page is deleted
             type: 'DELETE_IMAGE',
             payload: {
@@ -76,8 +65,6 @@ class ViewInbox extends React.Component {
     }
 
     indicateFavorite = async () => {
-        
-        
         this.props.dispatch({
             type: 'INDICATE_FAVORITE'
         })
@@ -127,9 +114,15 @@ class ViewInbox extends React.Component {
     componentDidMount() {
         // Set response message
         if (this.props.reduxState.userData.inbox[Object.keys(this.props.reduxState.userData.inbox)[0]].isResponse) {
-            this.setState({
-                responseMessage: 'Response'
-            })
+            if (this.props.reduxState.userData.inbox[Object.keys(this.props.reduxState.userData.inbox)[0]].didTheyFavorite) {
+                this.setState({
+                    responseMessage: 'They liked your vibe!'
+                })
+            } else {
+                this.setState({
+                    responseMessage: 'Response'
+                })
+            }
             this.props.dispatch({
                 type: 'SET_NOT_RESPONDING'
             })

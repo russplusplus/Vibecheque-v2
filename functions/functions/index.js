@@ -66,7 +66,8 @@ exports.addImage = functions.storage.object('/images').onFinalize(async (object)
         from: senderUid,
         to: recipientUid,
         isResponse: isResponse,
-        url: url
+        url: url,
+        didTheyFavorite: object.metadata.didTheyFavorite
       })
 
     // send FCM

@@ -97,7 +97,8 @@ class CameraPage extends React.Component {
             const metadata = {
                 customMetadata: {
                     fromUid: this.props.reduxState.userID,
-                    toUid: this.props.reduxState.respondingTo
+                    toUid: this.props.reduxState.respondingTo,
+                    didTheyFavorite: this.props.reduxState.didTheyFavorite
                 }
             }
             await ref.putFile(this.state.capturedImageUri, metadata);
@@ -105,6 +106,10 @@ class CameraPage extends React.Component {
             console.log('this.props.reduxState.respondingTo:', this.props.reduxState.respondingTo)
             this.props.dispatch({  // image is sent, therefore not responding anymore 
                 type: 'SET_NOT_RESPONDING'
+            })
+            this.props.dispatch({  // if they favorite, this well be set back to false
+                type: 'SET_DID_THEY_FAVORITE',
+                payload: false
             })
             this.toggleReviewMode()
             this.setState({
@@ -184,7 +189,7 @@ class CameraPage extends React.Component {
     }
 
     render() {
-        console.log('leftHandedMode:', this.props.reduxState.userData.settings.leftHandedMode)
+        //console.log('leftHandedMode:', this.props.reduxState.userData.settings.leftHandedMode)
         return (
             <>
                 <View style={styles.container}>

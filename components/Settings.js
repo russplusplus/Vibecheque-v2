@@ -39,7 +39,7 @@ class Settings extends React.Component {
     }
 
     changeDistance = (val) => {
-        console.log('in changeDistance. Math.round(val):', Math.round(val))
+        //console.log('in changeDistance. Math.round(val):', Math.round(val))
         this.props.dispatch({
             type: 'SET_NEW_SETTINGS',
             payload: {

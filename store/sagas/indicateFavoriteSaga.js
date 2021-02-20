@@ -1,10 +1,15 @@
-import { select, takeEvery } from 'redux-saga/effects';
+import { select, takeEvery, put } from 'redux-saga/effects';
 import database from '@react-native-firebase/database';
 import storage from '@react-native-firebase/storage';
 
 function* indicateFavorite(action) {
     console.log('in login saga')
     let reduxState = yield select()
+
+    yield put({
+        type: 'SET_DID_THEY_FAVORITE',
+        payload: true
+    })
 
     // check if there is already a favorite, and delete it from the database if so
     if (reduxState.userData.favorite) {

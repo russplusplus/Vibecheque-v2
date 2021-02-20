@@ -7,6 +7,7 @@ import registrationTokenReducer from './registrationTokenReducer';
 import userIDReducer from './userIDReducer';
 import userDataReducer from './userDataReducer';
 import newSettingsReducer from './newSettingsReducer';
+import didTheyFavoriteReducer from './didTheyFavoriteReducer';
 
 const rootReducer = combineReducers({
     respondingTo: respondingToReducer,
@@ -15,7 +16,8 @@ const rootReducer = combineReducers({
     registrationToken: registrationTokenReducer,
     userID: userIDReducer,
     userData: userDataReducer,
-    newSettings: newSettingsReducer
+    newSettings: newSettingsReducer,
+    didTheyFavorite: didTheyFavoriteReducer
 })
 
 export default rootReducer;
