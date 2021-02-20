@@ -84,7 +84,7 @@ class CameraPage extends React.Component {
     }
 
     sendImage = async () => {
-        console.log('in sendImage')
+        console.log('in sendImage. didTheyFavorite:', this.props.reduxState.didTheyFavorite)
         if (this.props.reduxState.userID) {
             this.setState({
                 isSending: true
@@ -109,7 +109,7 @@ class CameraPage extends React.Component {
             })
             this.props.dispatch({  // if they favorite, this well be set back to false
                 type: 'SET_DID_THEY_FAVORITE',
-                payload: false
+                payload: 'false'
             })
             this.toggleReviewMode()
             this.setState({

@@ -8,7 +8,7 @@ function* indicateFavorite(action) {
 
     yield put({
         type: 'SET_DID_THEY_FAVORITE',
-        payload: true
+        payload: 'true'
     })
 
     // check if there is already a favorite, and delete it from the database if so

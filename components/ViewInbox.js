@@ -34,6 +34,12 @@ class ViewInbox extends React.Component {
                 isFavorited: this.state.isFavorited
             }
         }) // maybe we could shift the redux inbox here so it's updated right when history is pushed. It would redundantly reload but that might not be a problem
+        if (!this.state.isFavorited) {
+            this.props.dispatch({
+                type: 'SET_DID_THEY_FAVORITE',
+                payload: 'false'  //these are all strings because firebase storage metadata can't do booleans
+            })
+        }
         this.props.history.push('/camera')
     }
 
@@ -114,7 +120,7 @@ class ViewInbox extends React.Component {
     componentDidMount() {
         // Set response message
         if (this.props.reduxState.userData.inbox[Object.keys(this.props.reduxState.userData.inbox)[0]].isResponse) {
-            if (this.props.reduxState.userData.inbox[Object.keys(this.props.reduxState.userData.inbox)[0]].didTheyFavorite) {
+            if (this.props.reduxState.userData.inbox[Object.keys(this.props.reduxState.userData.inbox)[0]].didTheyFavorite === 'true') {
                 this.setState({
                     responseMessage: 'They liked your vibe!'
                 })
